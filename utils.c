@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 10:21:20 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/02/02 16:08:41 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 15:27:43 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,51 +21,92 @@ void	print_tab(char **tab)
 		printf("%s\n", tab[i]);
 }
 
-char	*can_acess(char *cmd, char **cmd_path)
+char	*dup_until_space(char *str)
 {
 	size_t	i;
-	char	*tmp;
-
-	i = -1;
-	while (cmd_path[++i])
-	{
-		tmp = ft_strjoin(cmd_path[i], "/");
-		if (!tmp)
-			return (NULL);
-		tmp = ft_strjoin(tmp, cmd);
-		if (!tmp)
-			return (NULL);
-		if (access(tmp, F_OK) == 0)
-		{
-			tmp = ft_strjoin(".", tmp);
-			printf("cmd found: %s\n", tmp);
-			return (tmp);
-		}
-		free(tmp);
-	}
-	return (NULL);
-}
-
-int	parse_env(char **env, char **av, t_pipex *list)
-{
-	size_t	i;
+	char	*ret;
 
 	i = 0;
-	(void) av;
-	while (env[i])
+	while (str[i] && str[i] != 32)
+		i++;
+	ret = malloc(sizeof(char) * (i + 1));
+	if (!ret)
+		return (NULL);
+	i = -1;
+	while (str[++i] && str[i] != 32)
+		ret[i] = str[i];
+	ret[i] = '\0';
+	return (ret);
+}
+
+char	*get_env_path(char **env)
+{
+	size_t	i;
+	char	*default_path;
+
+	default_path = "/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin";
+	i = -1;
+	while (env[++i])
 	{
-		if (ft_strncmp(env[i], "PATH=", 5) == 0)
+		if (!ft_strncmp(env[i], "PATH=", 5))
+			return (env[i] + 5);
+	}
+	return (default_path);
+}
+
+char	**get_cmd(char **av, int ac)
+{
+	size_t	i;
+	size_t	j;
+	size_t	k;
+	char	**tab;
+
+	j = 0;
+	i = 2;
+	k = 0;
+	tab = malloc(sizeof(char *) * (ac - 3));
+	while (av[i])
+	{
+		while (av[i][j] == 32 && av[i][j])
+			j++;
+		if (ft_isalpha(av[i][j]) && av[i][j])
 		{
-			list->path = ft_strdup(env[i] + 5);
-			if (!list->path)
-				return (1);
-			break ;
+			tab[k] = dup_until_space(&av[i][j]);
+			k++;
 		}
 		i++;
 	}
-	list->cmd_path = ft_split(list->path, ':');
-	if (!list->cmd_path)
-		return (1);
-	print_tab(list->cmd_path);
-	return (0);
+	tab[k] = NULL;
+	return (tab);
+}
+
+char	**get_cmd_path(char *path, char **cmd)
+{
+	ssize_t	i;
+	size_t	j;
+	size_t	k;
+	char	**temp;
+	char	**tab;
+	char	*tmp;
+
+	i = -1;
+	j = -1;
+	k = -1;
+	tab = malloc(sizeof(char *) * (ft_tablen(cmd) + 1));
+	temp = ft_split(path, ':');
+	while (cmd[i])
+	{
+		while (temp[++k])
+		{
+			tmp = ft_strjoin(temp[k], "/");
+			tmp = ft_strjoin(tmp, cmd[i]);
+			if (access(tmp, F_OK) == 0)
+				tab[++j] = ft_strdup(tmp);
+			free(tmp);
+		}
+		k = -1;
+		i++;
+	}
+	tab[j] = NULL;
+	return (tab);
 }

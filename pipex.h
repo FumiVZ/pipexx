@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 10:53:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/02/02 15:53:14 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/08 14:24:14 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,22 @@
 # include <stdio.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <fcntl.h>
 
 typedef struct s_pipex
 {
-	int		pid1;
-	int		pid2;
 	int		fd[2];
 	int		infile;
 	int		outfile;
 	char	*path;
 	char	**cmd_path;
 	char	**args;
-	char	*cmd;
+	char	**cmd;
 }	t_pipex;
 
-int		parse_env(char **env, char **av, t_pipex *list);
-char	*can_acess(char *cmd, char **cmd_path);
+void	print_tab(char **tab);
+char	*get_env_path(char **env);
+char	**get_cmd(char **av, int ac);
+char	**get_cmd_path(char *path, char **cmd);
 
 #endif
