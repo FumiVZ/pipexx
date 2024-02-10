@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 10:33:12 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/02/08 15:18:51 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/10 13:39:15 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	pipex(t_pipex *list, char **envp)
 int	main(int ac, char **av, char **env)
 {
 	t_pipex	list;
+	size_t	i;
 
 	if (ac != 5)
 		return (write(2, "Error: wrong number of arguments\n", 34), 1);
@@ -56,4 +57,6 @@ int	main(int ac, char **av, char **env)
 	ft_printf("path: %s\n", list.path);
 	print_tab(list.cmd);
 	print_tab(list.cmd_path);
+	first_fork(&list);
+	mid_fork(&list, ac);
 }

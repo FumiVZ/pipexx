@@ -2,6 +2,11 @@
 	"files.associations": {
 		"pipex.h": "c",
 		"stdio.h": "c",
-		"types.h": "c"
+		"types.h": "c",
+		"concepts": "c",
+		"cstdio": "c",
+		"type_traits": "c",
+		"new": "c",
+		"typeinfo": "c"
 	}
 }

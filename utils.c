@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 10:21:20 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/02/08 15:27:43 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/09 18:26:45 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,30 +82,28 @@ char	**get_cmd(char **av, int ac)
 
 char	**get_cmd_path(char *path, char **cmd)
 {
-	ssize_t	i;
 	size_t	j;
 	size_t	k;
 	char	**temp;
 	char	**tab;
 	char	*tmp;
 
-	i = -1;
 	j = -1;
 	k = -1;
 	tab = malloc(sizeof(char *) * (ft_tablen(cmd) + 1));
 	temp = ft_split(path, ':');
-	while (cmd[i])
+	while (*cmd)
 	{
 		while (temp[++k])
 		{
 			tmp = ft_strjoin(temp[k], "/");
-			tmp = ft_strjoin(tmp, cmd[i]);
+			tmp = ft_strjoin(tmp, *cmd);
 			if (access(tmp, F_OK) == 0)
 				tab[++j] = ft_strdup(tmp);
 			free(tmp);
 		}
 		k = -1;
-		i++;
+		cmd++;
 	}
 	tab[j] = NULL;
 	return (tab);

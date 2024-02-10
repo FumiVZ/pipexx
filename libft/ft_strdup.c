@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 14:17:34 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/01/25 16:25:41 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/09 18:22:17 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_strdup(const char *s)
 	i = 0;
 	while (s[i])
 		i++;
-	dup = malloc(i * sizeof(char) + 2);
+	dup = malloc(i * sizeof(char) + 1);
 	if (!dup)
 		return (NULL);
 	i = 0;
@@ -29,8 +29,7 @@ char	*ft_strdup(const char *s)
 		dup[i] = s[i];
 		i++;
 	}
-	dup[i] = ' ';
-	dup[i + 1] = '\0';
+	dup[i] = '\0';
 	return (dup);
 }
 
