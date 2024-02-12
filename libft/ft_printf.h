@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 14:25:31 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/01/26 11:20:35 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 15:19:48 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,10 @@
 # include <unistd.h>
 # include <stdint.h>
 
-int				ft_printf(const char *format, ...);
+int				ft_printf(int fd, const char *format, ...);
 long long int	ft_digits(long long int n);
 long long int	ft_putstrfd_count(char *str, int fd);
 long long int	ft_putcharfd_count(char c, int fd);
-long long int	printf_nbr(int nbr, char *base, int fd);
 long long int	print_pointer(size_t adress);
 long long int	ft_putnbrfd_count(long long int n, int fd);
 long long int	ft_putx(long long int nbr, char *base, int fd);

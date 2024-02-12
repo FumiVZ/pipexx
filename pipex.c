@@ -6,57 +6,100 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 10:33:12 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/02/10 13:39:15 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/12 16:37:00 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-/* 
-void	print_tab(char **tab)
+
+void	free_pipex(t_pipex pipex)
 {
 	size_t	i;
 
 	i = -1;
-	while (tab[++i])
-		printf("%s\n", tab[i]);
+	while (pipex.path[++i])
+		if (pipex.path[i])
+			free(pipex.path[i]);
+	if (pipex.path)
+		free(pipex.path);
+	i = -1;
+	while (pipex.args[++i])
+		if (pipex.args[i])
+			free(pipex.args[i]);
+	if (pipex.args)
+		free(pipex.args);
+	if (pipex.cmd)
+		free(pipex.cmd);
 }
 
 
-int	pipex(t_pipex *list, char **envp)
+char	*first_word(char *str)
 {
-	int		fd[2];
-	int		pid;
+	size_t	i;
+	char	*word;
 
-	if (pipe(fd) == -1)
-		return (write(2, "Error: fork failed\n", 19), 1);
-	pid = fork();
-	if (pid < 0)
-		return (write(2, "Error: fork failed\n", 19), 2);
-	if (pid == 0)
+	i = 0;
+	while (str[i] && str[i] != ' ')
+		i++;
+	word = malloc(sizeof(char) * (i + 1));
+	if (!word)
+		return (NULL);
+	i = -1;
+	while (str[++i] && str[i] != ' ')
+		word[i] = str[i];
+	word[i] = 0;
+	return (word);
+}
+
+void	child_process(t_pipex *pipex, char **av)
+{
+	pipex->pid1 = fork();
+	pipex->cmd = get_cmd_path(pipex->path, first_word(av[2]));
+	pipex->args = ft_split(av[2], ' ');
+	if (pipex->pid1 < 0)
+		ft_printf(1, "ERROR");
+	if (pipex->pid1 == 0)
 	{
-		dup2(fd[1], 1);
-		close(fd[0]);
-		close(fd[1]);
-		//execve();
+		dup2(pipex->infile, 0);
+		dup2(pipex->fd[1], 1);
+		close(pipex->fd[0]);
+		close(pipex->infile);
+		close(pipex->outfile);
+		execve(pipex->cmd, pipex->args, pipex->path);
 	}
-	return (0);
-} */
+}
+
+void	parrent_process(t_pipex *pipex, char **av)
+{ 
+	pipex->pid2 = fork();
+	pipex->cmd = get_cmd_path(pipex->path, first_word(av[3]));
+	pipex->args = ft_split(av[3], ' ');
+	if (pipex->pid2 < 0)
+		ft_printf(1, "ERROR");
+	if (pipex->pid2 == 0)
+	{
+		dup2(pipex->fd[0], 0);
+		dup2(pipex->outfile, 1);
+		close(pipex->fd[1]);
+		close(pipex->infile);
+		close(pipex->outfile);
+		execve(pipex->cmd, pipex->args, pipex->path);
+	}
+}
 
 int	main(int ac, char **av, char **env)
 {
-	t_pipex	list;
-	size_t	i;
+	t_pipex	pipex;
 
 	if (ac != 5)
 		return (write(2, "Error: wrong number of arguments\n", 34), 1);
-	list.infile = open(av[1], O_RDONLY);
-	list.outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	list.path = get_env_path(env);
-	list.cmd = get_cmd(av, ac);
-	list.cmd_path = get_cmd_path(list.path, list.cmd);
-	ft_printf("path: %s\n", list.path);
-	print_tab(list.cmd);
-	print_tab(list.cmd_path);
-	first_fork(&list);
-	mid_fork(&list, ac);
+	if (pipe(pipex.fd) == -1)
+		ft_printf(1, "ERROR");
+	pipex.infile = open(av[1], O_RDONLY);
+	pipex.outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	pipex.path = ft_split(get_env_path(env), ':');
+	child_process(&pipex, av);
+	parrent_process(&pipex, av);
+	free_pipex(pipex);
+	print_tab(pipex.path);
 }
