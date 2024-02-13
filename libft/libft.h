@@ -36,6 +36,7 @@ void			*ft_memset(void *s, int c, size_t n);
 char			*ft_strchr( const char *string, int searchedChar );
 char			*ft_strdup(const char *s);
 char			*ft_strjoin(char *s1, char *s2);
+char	        *ft_strjoin_free(char *s1, char *s2);
 int				ft_strncmp( const char *s1, const char *s2, size_t n );
 char			*ft_strnstr(const char *s1, const char *s2, size_t	len );
 char			*ft_strrchr( const char *string, int searchedChar );

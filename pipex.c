@@ -12,26 +12,30 @@
 
 #include "pipex.h"
 
+void	free_tab(char **tab)
+{
+	size_t	i;
+
+	i = -1;
+	while (tab[++i])
+		free(tab[i]);
+	free(tab);
+}
+
 void	free_pipex(t_pipex pipex)
 {
 	size_t	i;
 
 	i = -1;
-	while (pipex.path[++i])
-		if (pipex.path[i])
-			free(pipex.path[i]);
 	if (pipex.path)
-		free(pipex.path);
-	i = -1;
-	while (pipex.args[++i])
-		if (pipex.args[i])
-			free(pipex.args[i]);
-	if (pipex.args)
-		free(pipex.args);
-	if (pipex.cmd)
-		free(pipex.cmd);
+	{
+		while (pipex.path[++i])
+			if (pipex.path[i])
+				free(pipex.path[i]);
+		if (pipex.path)
+			free(pipex.path);
+	}
 }
-
 
 char	*first_word(char *str)
 {
@@ -54,8 +58,8 @@ char	*first_word(char *str)
 void	child_process(t_pipex *pipex, char **av)
 {
 	pipex->pid1 = fork();
-	pipex->cmd = get_cmd_path(pipex->path, first_word(av[2]));
-	pipex->args = ft_split(av[2], ' ');
+	pipex->cmd[0] = get_cmd_path(pipex->path, first_word(av[2]));
+	pipex->args[0] = ft_split(av[2], ' ');
 	if (pipex->pid1 < 0)
 		ft_printf(1, "ERROR");
 	if (pipex->pid1 == 0)
@@ -65,15 +69,17 @@ void	child_process(t_pipex *pipex, char **av)
 		close(pipex->fd[0]);
 		close(pipex->infile);
 		close(pipex->outfile);
-		execve(pipex->cmd, pipex->args, pipex->path);
+		execve(pipex->cmd[0], pipex->args[0], pipex->path);
 	}
+	free(pipex->cmd[0]);
+	free_tab(pipex->args[0]);
 }
 
 void	parrent_process(t_pipex *pipex, char **av)
 { 
 	pipex->pid2 = fork();
-	pipex->cmd = get_cmd_path(pipex->path, first_word(av[3]));
-	pipex->args = ft_split(av[3], ' ');
+	pipex->cmd[1] = get_cmd_path(pipex->path, first_word(av[3]));
+	pipex->args[1] = ft_split(av[3], ' ');
 	if (pipex->pid2 < 0)
 		ft_printf(1, "ERROR");
 	if (pipex->pid2 == 0)
@@ -83,8 +89,10 @@ void	parrent_process(t_pipex *pipex, char **av)
 		close(pipex->fd[1]);
 		close(pipex->infile);
 		close(pipex->outfile);
-		execve(pipex->cmd, pipex->args, pipex->path);
+		execve(pipex->cmd[1], pipex->args[1], pipex->path);
 	}
+	free(pipex->cmd[1]);
+	free_tab(pipex->args[1]);
 }
 
 int	main(int ac, char **av, char **env)
@@ -101,5 +109,8 @@ int	main(int ac, char **av, char **env)
 	child_process(&pipex, av);
 	parrent_process(&pipex, av);
 	free_pipex(pipex);
-	print_tab(pipex.path);
+	close(pipex.infile);
+	close(pipex.outfile);
+	close(pipex.fd[0]);
+	close(pipex.fd[1]);
 }

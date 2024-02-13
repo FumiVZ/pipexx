@@ -44,7 +44,7 @@ char	*get_cmd_path(char **path, char *cmd)
 		return (NULL);
 	if (access(cmd, X_OK) == 0)
 		return (ft_split(cmd, ' ')[0]);
-	cmd = ft_strjoin("/", cmd);
+	cmd = ft_strjoin_free("/", cmd);
 	if (!cmd)
 		return (NULL);
 	while (*path)
@@ -52,6 +52,7 @@ char	*get_cmd_path(char **path, char *cmd)
 		tmp = ft_strjoin(*path, cmd);
 		if (access(tmp, X_OK) == 0 || errno == EACCES)
 			return (free(cmd), tmp);
+		free(tmp);
 		path++;
 	}
 	return (free(cmd), NULL);

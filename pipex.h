@@ -31,8 +31,8 @@ typedef struct s_pipex
 	int		infile;
 	int		outfile;
 	char	**path;
-	char	*cmd;
-	char	**args;
+	char	*cmd[2];
+	char	**args[2];
 }	t_pipex;
 
 void	print_tab(char **tab);
