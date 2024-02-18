@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 10:53:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/02/12 16:27:03 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/18 14:30:28 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ typedef struct s_pipex
 
 void	print_tab(char **tab);
 char	*get_env_path(char **env);
-char	**get_cmd(char **av, int ac);
 char	*get_cmd_path(char **path, char *cmd);
+char	*first_word(char *str);
+void	ft_error(char *errno_v, t_pipex *pipex, char *other);
 
 #endif

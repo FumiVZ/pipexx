@@ -3,7 +3,8 @@ CFLAGS = -Wall -Wextra -Werror -MMD -MP -g3
 libft = ./libft
 CC = cc
 SRC = pipex.c \
-	utils.c 
+	utils.c \
+	error.c
 
 OBJ_DIR = obj
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))

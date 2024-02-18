@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 10:33:12 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/02/12 16:37:00 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/18 15:23:57 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,10 @@ void	child_process(t_pipex *pipex, char **av)
 	pipex->pid1 = fork();
 	pipex->cmd[0] = get_cmd_path(pipex->path, first_word(av[2]));
 	pipex->args[0] = ft_split(av[2], ' ');
+	if (pipex->args[0] == NULL)
+		ft_error(strerror(errno), pipex, "malloc failed");
 	if (pipex->pid1 < 0)
-		ft_printf(1, "ERROR");
+		ft_error(strerror(errno), pipex, "Fork failed");
 	if (pipex->pid1 == 0)
 	{
 		dup2(pipex->infile, 0);
@@ -99,16 +101,24 @@ int	main(int ac, char **av, char **env)
 {
 	t_pipex	pipex;
 
+	pipex.infile = 0;
+	pipex.outfile = 0;
 	if (ac != 5)
 		return (write(2, "Error: wrong number of arguments\n", 34), 1);
 	if (pipe(pipex.fd) == -1)
-		ft_printf(1, "ERROR");
-	pipex.infile = open(av[1], O_RDONLY);
+		return (write(2, "Error: pipe error\n", 18), 1);
+	if (access(av[1], X_OK) != 0)
+		ft_error(strerror(errno), &pipex, av[1]);
+	if (access(av[4], X_OK != 0))
+		ft_error(strerror(errno), &pipex, av[4]);
 	pipex.outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	pipex.infile = open(av[1], O_RDONLY);
 	pipex.path = ft_split(get_env_path(env), ':');
+	if (!pipex.infile || !pipex.outfile || !pipex.path)
+		ft_error(strerror(errno), &pipex, NULL);
 	child_process(&pipex, av);
 	parrent_process(&pipex, av);
-	free_pipex(pipex);
+	free_tab(pipex.path);
 	close(pipex.infile);
 	close(pipex.outfile);
 	close(pipex.fd[0]);

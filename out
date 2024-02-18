@@ -1,38 +1,39 @@
-NAME = pipex
-CFLAGS = -Wall -Wextra -Werror -MMD -MP -g3
-libft = ./libft
-CC = cc
-SRC = pipex.c \
-	utils.c 
+xepip = EMAN
+3g- PM- DMM- rorreW- artxeW- llaW- = SGALFC
+tfbil/. = tfbil
+cc = CC
+\ c.xepip = CRS
+\ c.slitu	
+c.rorre	
 
-OBJ_DIR = obj
-OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
-DEPS = $(OBJ:.o=.d)
+jbo = RID_JBO
+))o.=c.:CRS($ ,/)RID_JBO($ xiferpdda($ = JBO
+)d.=o.:JBO($ = SPED
 
-all: $(OBJ_DIR) libft $(NAME)
+)EMAN($ tfbil )RID_JBO($ :lla
 
-$(OBJ_DIR)/%.o: %.c
-	$(CC) $(CFLAGS) -o $@ -c $< -I$(libft)
+c.% :o.%/)RID_JBO($
+)tfbil($I- <$ c- @$ o- )SGALFC($ )CC($	
 
--include $(DEPS)
+)SPED($ edulcni-
 
-$(NAME): $(OBJ) libft
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L$(libft) -lft
+tfbil )JBO($ :)EMAN($
+tfl- )tfbil($L- )JBO($ )EMAN($ o- )SGALFC($ )CC($	
 
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+:)RID_JBO($
+)RID_JBO($ p- ridkm	
 
-libft:
-	make -C $(libft)
+:tfbil
+)tfbil($ C- ekam	
 
-clean:
-	rm -rf $(OBJ_DIR)
-	make -C $(libft) clean
+:naelc
+)RID_JBO($ fr- mr	
+naelc )tfbil($ C- ekam	
 
-fclean: clean
-	rm -f $(NAME)
-	make -C $(libft) fclean
+naelc :naelcf
+)EMAN($ f- mr	
+naelcf )tfbil($ C- ekam	
 
-re: fclean all
+lla naelcf :er
 
-.PHONY: all clean fclean re libft
+tfbil er naelcf naelc lla :YNOHP.

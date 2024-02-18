@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 09:07:46 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/02/08 10:01:07 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/18 14:15:11 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 		i++;
 	}
 	str[ft_strlen(s1) + i] = '\0';
-	if (s2)
-		free(s2);
+	free(s2);
 	return (str);
 }
 

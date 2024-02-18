@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 10:21:20 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/02/12 15:53:43 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/18 14:25:18 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,15 @@ char	*get_cmd_path(char **path, char *cmd)
 	char	*tmp;
 
 	if (!path || !cmd)
-		return (NULL);
+		return (free(cmd), NULL);
 	if (access(cmd, X_OK) == 0)
-		return (ft_split(cmd, ' ')[0]);
+	{
+		tmp = first_word(cmd);
+		if (!tmp)
+			return (free(cmd), NULL);
+		free(cmd);
+		return (tmp);
+	}
 	cmd = ft_strjoin_free("/", cmd);
 	if (!cmd)
 		return (NULL);
