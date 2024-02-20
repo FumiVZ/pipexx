@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 10:33:12 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/02/19 11:59:16 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/20 13:41:28 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,13 @@ void	child_process(t_pipex *pipex, char **av)
 		close(pipex->fd[0]);
 		close(pipex->infile);
 		close(pipex->outfile);
-		if (ft_strncmp(pipex->cmd[0], "/", 4) != 0)
+		if (ft_strncmp(pipex->cmd[0], "/", 1) != 0)
 			execve(pipex->cmd[0], pipex->args[0], pipex->path);
 		else
 			ft_printf(2, "pipex: command not found: %s\n", av[2]);
 	}
+	if (pipex->pid1 > 0)
+		waitpid(pipex->pid1, NULL, 0);
 	free(pipex->cmd[0]);
 	free_tab(pipex->args[0]);
 }
@@ -76,7 +78,7 @@ void	parrent_process(t_pipex *pipex, char **av)
 	if (pipex->args[1] == NULL || pipex->cmd[1] == NULL)
 		ft_error(strerror(errno), pipex, NULL);
 	pipex->pid2 = fork();
-	if (pipex->pid1 < 0)
+	if (pipex->pid2 < 0)
 		ft_error(strerror(errno), pipex, NULL);
 	if (pipex->pid2 == 0)
 	{
@@ -85,11 +87,13 @@ void	parrent_process(t_pipex *pipex, char **av)
 		close(pipex->fd[1]);
 		close(pipex->infile);
 		close(pipex->outfile);
-		if (ft_strncmp(pipex->cmd[1], "none", 4) != 0)
+		if (ft_strncmp(pipex->cmd[1], "/", 1) != 0)
 			execve(pipex->cmd[1], pipex->args[1], pipex->path);
 		else
 			ft_printf(2, "pipex: command not found: %s\n", av[3]);
 	}
+	if (pipex->pid2 > 0)
+		waitpid(pipex->pid2, NULL, 0);
 	free(pipex->cmd[1]);
 	free_tab(pipex->args[1]);
 }

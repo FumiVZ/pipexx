@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 10:21:20 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/02/19 12:18:55 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/20 15:00:15 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,22 +55,17 @@ char	*current_directory(char *cmd)
 {
 	char	*tmp;
 
-	tmp = first_word(cmd);
-	tmp = ft_strjoin_free("./", tmp);
+	tmp = ft_strjoin("./", cmd);
 	if (!tmp)
 	{
 		free(cmd);
 		ft_error(strerror(errno), NULL, NULL);
 	}
-	if (access(tmp, X_OK) == 0 && access(tmp, F_OK) == 0)
+	if (access(tmp, X_OK) == 0 && access(cmd, F_OK) == 0)
 	{
+		ft_printf(2, "cmd: %s\n", tmp);
 		free(cmd);
 		return (tmp);
-	}
-	if (access(cmd, X_OK) != 0 && access(cmd, F_OK) == 0)
-	{
-		free(tmp);
-		return (ft_strdup("/"));
 	}
 	free(tmp);
 	return (NULL);
@@ -85,7 +80,7 @@ char	*get_cmd_path(char **path, char *cmd)
 	tmp = NULL;
 	tmp = current_directory(cmd);
 	if (tmp)
-		return (current_directory(cmd));
+		return (tmp);
 	tmp = NULL;
 	free(tmp);
 	cmd = ft_strjoin_free("/", cmd);
@@ -94,7 +89,7 @@ char	*get_cmd_path(char **path, char *cmd)
 	while (*path)
 	{
 		tmp = ft_strjoin(*path, cmd);
-		if (access(tmp, X_OK) == 0)
+		if (access(tmp, X_OK) == 0 && access(cmd, F_OK) == 0)
 			return (free(cmd), tmp);
 		free(tmp);
 		path++;
