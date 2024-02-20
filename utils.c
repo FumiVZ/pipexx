@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 10:21:20 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/02/20 15:00:15 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/20 16:53:02 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ char	*current_directory(char *cmd)
 	}
 	if (access(tmp, X_OK) == 0 && access(cmd, F_OK) == 0)
 	{
-		ft_printf(2, "cmd: %s\n", tmp);
 		free(cmd);
 		return (tmp);
 	}
@@ -81,15 +80,13 @@ char	*get_cmd_path(char **path, char *cmd)
 	tmp = current_directory(cmd);
 	if (tmp)
 		return (tmp);
-	tmp = NULL;
-	free(tmp);
 	cmd = ft_strjoin_free("/", cmd);
 	if (!cmd)
 		return (NULL);
 	while (*path)
 	{
 		tmp = ft_strjoin(*path, cmd);
-		if (access(tmp, X_OK) == 0 && access(cmd, F_OK) == 0)
+		if (access(tmp, X_OK) == 0)
 			return (free(cmd), tmp);
 		free(tmp);
 		path++;

@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 10:33:12 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/02/20 13:41:28 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/20 16:52:43 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,10 @@ void	child_process(t_pipex *pipex, char **av)
 		close(pipex->fd[0]);
 		close(pipex->infile);
 		close(pipex->outfile);
-		if (ft_strncmp(pipex->cmd[0], "/", 1) != 0)
+		if (!(ft_strncmp(pipex->cmd[0], "/", 1) == 0 && \
+			ft_strlen(pipex->cmd[0]) == 1))
 			execve(pipex->cmd[0], pipex->args[0], pipex->path);
-		else
-			ft_printf(2, "pipex: command not found: %s\n", av[2]);
 	}
-	if (pipex->pid1 > 0)
-		waitpid(pipex->pid1, NULL, 0);
 	free(pipex->cmd[0]);
 	free_tab(pipex->args[0]);
 }
@@ -87,13 +84,11 @@ void	parrent_process(t_pipex *pipex, char **av)
 		close(pipex->fd[1]);
 		close(pipex->infile);
 		close(pipex->outfile);
-		if (ft_strncmp(pipex->cmd[1], "/", 1) != 0)
-			execve(pipex->cmd[1], pipex->args[1], pipex->path);
-		else
+		if (ft_strncmp(pipex->cmd[1], "/", 1) == 0 && ft_strlen(pipex->cmd[1]) == 1)
 			ft_printf(2, "pipex: command not found: %s\n", av[3]);
+		else
+			execve(pipex->cmd[1], pipex->args[1], pipex->path);
 	}
-	if (pipex->pid2 > 0)
-		waitpid(pipex->pid2, NULL, 0);
 	free(pipex->cmd[1]);
 	free_tab(pipex->args[1]);
 }
