@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 10:21:20 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/02/20 16:53:02 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/21 16:19:47 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,20 @@ void	pipex_init(t_pipex *pipex)
 	pipex->pid2 = 0;
 }
 
-void	print_tab(char **tab)
+void	init_exec(t_pipex *pipex, char **av, int i)
 {
-	size_t	i;
+	int	j;
 
-	i = -1;
-	while (tab[++i])
-		printf("%s\n", tab[i]);
+	if (i == 0)
+		j = 2;
+	else
+		j = 3;
+	pipex->cmd[i] = get_cmd_path(pipex->path, first_word(av[j]));
+	if (pipex->cmd[i] == NULL)
+		ft_error(strerror(errno), pipex, NULL);
+	pipex->args[i] = ft_split(av[j], ' ');
+	if (pipex->args[i] == NULL)
+		ft_error(strerror(errno), pipex, NULL);
 }
 
 char	*get_env_path(char **env)
@@ -86,7 +93,7 @@ char	*get_cmd_path(char **path, char *cmd)
 	while (*path)
 	{
 		tmp = ft_strjoin(*path, cmd);
-		if (access(tmp, X_OK) == 0)
+		if (access(tmp, X_OK) == 0 && access(cmd, F_OK) == 0)
 			return (free(cmd), tmp);
 		free(tmp);
 		path++;

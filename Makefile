@@ -17,7 +17,7 @@ $(OBJ_DIR)/%.o: %.c
 
 -include $(DEPS)
 
-$(NAME): $(OBJ) libft
+$(NAME): $(OBJ)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L$(libft) -lft
 
 $(OBJ_DIR):
