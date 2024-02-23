@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 15:38:48 by vincent           #+#    #+#             */
-/*   Updated: 2024/02/19 10:38:24 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/23 15:45:58 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,12 @@ void	ft_error(char *errno_v, t_pipex *pipex, char *other)
 		ft_printf(2, "pipex: %s\n", errno_v);
 	if (pipex->cmd[0])
 		free(pipex->cmd[0]);
-	else if (pipex->cmd[1])
+	if (pipex->cmd[1])
 		free(pipex->cmd[1]);
+	if (pipex->args[0])
+		free_tab(pipex->args[0]);
+	if (pipex->args[1])
+		free_tab(pipex->args[1]);
 	if (pipex->path)
 		free_tab(pipex->path);
 	if (pipex->infile)
