@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 10:33:12 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/02/26 10:00:03 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/03/04 17:42:35 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,6 @@ char	*first_word(char *str)
 	return (word);
 }
 
-void	free_child(t_pipex *pipex)
-{
-	if (pipex->cmd[0])
-		free(pipex->cmd[0]);
-	if (pipex->args[0])
-		free_tab(pipex->args[0]);
-	free_tab(pipex->path);
-	close(0);
-	close(1);
-}
-
 void	child_process(t_pipex *pipex, char **av)
 {
 	init_exec(pipex, av, 0);
@@ -49,23 +38,27 @@ void	child_process(t_pipex *pipex, char **av)
 		ft_error(strerror(errno), pipex, NULL);
 	if (pipex->pid1 == 0)
 	{
+		pipex->infile = open(av[1], O_RDONLY);
+		if (pipex->infile == -1)
+			ft_error(strerror(errno), pipex, av[1]);
 		dup2(pipex->infile, 0);
 		dup2(pipex->fd[1], 1);
 		close(pipex->fd[0]);
+		close(pipex->fd[1]);
 		close(pipex->infile);
-		close(pipex->outfile);
-		if (pipex->cmd[0] && access(pipex->cmd[0], X_OK) == 0)
-			execve(pipex->cmd[0], pipex->args[0], pipex->path);
-		else
+		if (!(pipex->cmd[0] && access(pipex->cmd[0], X_OK) == 0))
 		{
 			ft_printf(2, "pipex: command not found: %s\n", av[2]);
 			free_child(pipex);
-			exit(1);
+			exit(127);
 		}
+		execve(pipex->cmd[0], pipex->args[0], pipex->path);
+		free_child(pipex);
+		exit(1);
 	}
 }
 
-void	parrent_process(t_pipex *pipex, char **av)
+void	child2_process(t_pipex *pipex, char **av)
 {
 	init_exec(pipex, av, 1);
 	pipex->pid2 = fork();
@@ -73,21 +66,23 @@ void	parrent_process(t_pipex *pipex, char **av)
 		ft_error(strerror(errno), pipex, NULL);
 	if (pipex->pid2 == 0)
 	{
+		pipex->outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (pipex->outfile == -1)
+			ft_error(strerror(errno), pipex, av[4]);
 		dup2(pipex->fd[0], 0);
 		dup2(pipex->outfile, 1);
+		close(pipex->fd[0]);
 		close(pipex->fd[1]);
-		close(pipex->infile);
 		close(pipex->outfile);
-		if (pipex->cmd[1] && access(pipex->cmd[1], X_OK) == 0)
-			execve(pipex->cmd[1], pipex->args[1], pipex->path);
-		else
+		if (!(pipex->cmd[1] && access(pipex->cmd[1], X_OK) == 0))
 		{
 			ft_printf(2, "pipex: command not found: %s\n", av[3]);
-			free_child(pipex);
-			free(pipex->cmd[1]);
-			free_tab(pipex->args[1]);
-			exit(1);
+			free_child2(pipex);
+			exit(127);
 		}
+		execve(pipex->cmd[1], pipex->args[1], pipex->path);
+		free_child2(pipex);
+		exit(1);
 	}
 }
 
@@ -102,20 +97,19 @@ int	main(int ac, char **av, char **env)
 		return (write(2, "Error: wrong number of arguments\n", 34), 1);
 	if (pipe(pipex.fd) == -1)
 		ft_error(strerror(errno), &pipex, NULL);
-	pipex.outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	pipex.infile = open(av[1], O_RDONLY);
 	pipex.path = ft_split(get_env_path(env), ':');
-	if (!pipex.infile || pipex.outfile < 0 || !pipex.path)
+	if (!pipex.path)
 		ft_error(strerror(errno), &pipex, NULL);
 	child_process(&pipex, av);
-	parrent_process(&pipex, av);
-	free(pipex.cmd[1]);
-	free_tab(pipex.args[1]);
-	free_child(&pipex);
-	if (pipex.pid1 == 0)
-		waitpid(pipex.pid1, &status, 0);
-	if (pipex.pid2 == 0)
-		waitpid(pipex.pid2, &status, 0);
+	child2_process(&pipex, av);
+	close(pipex.fd[0]);
+	close(pipex.fd[1]);
+	close(pipex.infile);
+	close(pipex.outfile);
+	waitpid(pipex.pid1, &status, 0);
+	waitpid(pipex.pid2, &status, 0);
+	free_child2(&pipex);
 	if (WIFEXITED(status))
 		return (status);
 }
+head -n -1 original_file.txt > new_file.txt

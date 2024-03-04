@@ -1,49 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/14 15:38:48 by vincent           #+#    #+#             */
-/*   Updated: 2024/02/28 18:28:48 by vzuccare         ###   ########lyon.fr   */
+/*   Created: 2024/02/28 18:03:36 by vzuccare          #+#    #+#             */
+/*   Updated: 2024/03/04 13:26:56 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	is_cmd(char *str)
+void	free_child(t_pipex *pipex)
 {
-	if (str[0] == '-' || str[0] == '.')
-		return (0);
-	return (1);
-}
-
-void	ft_error(char *errno_v, t_pipex *pipex, char *other)
-{
-	if (other)
-		ft_printf(2, "pipex: %s: %s\n", other, errno_v);
-	else
-		ft_printf(2, "pipex: %s\n", errno_v);
+	close(0);
+	close(1);
 	if (pipex->cmd[0])
 		free(pipex->cmd[0]);
-	if (pipex->cmd[1])
-		free(pipex->cmd[1]);
 	if (pipex->args[0])
 		free_tab(pipex->args[0]);
-	if (pipex->args[1])
-		free_tab(pipex->args[1]);
-	if (pipex->path)
-		free_tab(pipex->path);
-	if (pipex->infile != -1)
-		close(pipex->infile);
-	if (pipex->outfile != -1)
-		close(pipex->outfile);
+	free_tab(pipex->path);
+}
+
+void	free_child2(t_pipex *pipex)
+{
+	free_child(pipex);
 	if (pipex->fd[0] != -1)
 		close(pipex->fd[0]);
 	if (pipex->fd[1] != -1)
 		close(pipex->fd[1]);
-	close(0);
-	close(1);
-	exit (1);
+	if (pipex->infile != -1)
+		close(pipex->infile);
+	if (pipex->outfile != -1)
+		close(pipex->outfile);
+	if (pipex->cmd[1])
+		free(pipex->cmd[1]);
+	if (pipex->args[1])
+		free_tab(pipex->args[1]);
 }

@@ -1,5 +1,5 @@
 NAME = libft.a
-CFLAGS = -Wall -Wextra -Werror -MMD -MP
+CFLAGS = -Wall -Wextra -Werror
 CC = cc
 SRC =   ft_atoi.c \
         ft_itoa.c \
@@ -45,14 +45,11 @@ SRC =   ft_atoi.c \
 OBJ_DIR = obj
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
-DEPS = $(addprefix $(OBJ_DIR)/, $(OBJ:.o=.d))
 
 all: $(OBJ_DIR) $(DEPS_DIR) $(NAME)
 
-$(OBJ_DIR)/%.o: %.c
+$(OBJ_DIR)/%.o: %.c libft.h | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -o $@ -c $<
-
--include $(DEPS)
 
 $(NAME): $(OBJ)
 	ar crs $(NAME) $(OBJ)

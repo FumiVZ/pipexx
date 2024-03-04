@@ -4,7 +4,8 @@ libft = ./libft
 CC = cc
 SRC = pipex.c \
 	utils.c \
-	error.c
+	error.c \
+	free.c
 
 OBJ_DIR = obj
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
@@ -12,7 +13,7 @@ DEPS = $(OBJ:.o=.d)
 
 all: $(OBJ_DIR) libft $(NAME)
 
-$(OBJ_DIR)/%.o: %.c
+$(OBJ_DIR)/%.o: %.c libft/libft.a
 	$(CC) $(CFLAGS) -o $@ -c $< -I$(libft)
 
 -include $(DEPS)

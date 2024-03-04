@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 10:53:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/02/23 15:52:05 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/02/28 18:12:20 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,9 @@ char	*first_word(char *str);
 void	ft_error(char *errno_v, t_pipex *pipex, char *other);
 void	pipex_init(t_pipex *pipex);
 void	free_tab(char **tab);
+void	child_process(t_pipex *pipex, char **av);
+void	child2_process(t_pipex *pipex, char **av);
+void	free_child(t_pipex *pipex);
+void	free_child2(t_pipex *pipex);
 
 #endif
