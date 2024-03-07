@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 15:38:48 by vincent           #+#    #+#             */
-/*   Updated: 2024/02/28 18:28:48 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/03/07 16:45:47 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,9 @@ int	is_cmd(char *str)
 	return (1);
 }
 
-void	ft_error(char *errno_v, t_pipex *pipex, char *other)
+void	ft_error(t_pipex *pipex)
 {
-	if (other)
-		ft_printf(2, "pipex: %s: %s\n", other, errno_v);
-	else
-		ft_printf(2, "pipex: %s\n", errno_v);
+	perror("pipex");
 	if (pipex->cmd[0])
 		free(pipex->cmd[0]);
 	if (pipex->cmd[1])

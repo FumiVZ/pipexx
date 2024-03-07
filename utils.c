@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 10:21:20 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/03/04 13:31:57 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/03/07 16:42:44 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	init_exec(t_pipex *pipex, char **av, int i)
 		return ;
 	pipex->args[i] = ft_split(av[j], ' ');
 	if (pipex->args[i] == NULL)
-		ft_error(strerror(errno), pipex, NULL);
+		ft_error(pipex);
 }
 
 char	*get_env_path(char **env)
@@ -77,10 +77,10 @@ char	*get_cmd_path(char **path, char *cmd)
 	tmp = NULL;
 	if (cmd[0] == '/' || ft_strncmp(cmd, "./", 2) == 0)
 	{
-		if (access(cmd, X_OK) == 0)
+		if (access(tmp, F_OK) == 0 && access(cmd, X_OK) == 0)
 			return (cmd);
 		else
-			ft_error(strerror(errno), NULL, cmd);
+			return (free(cmd), NULL);
 	}
 	cmd = ft_strjoin_free("/", cmd);
 	if (!cmd)
@@ -88,7 +88,7 @@ char	*get_cmd_path(char **path, char *cmd)
 	while (*path)
 	{
 		tmp = ft_strjoin(*path, cmd);
-		if (access(tmp, X_OK) == 0)
+		if (access(tmp, F_OK) == 0 && access(tmp, X_OK) == 0)
 			return (free(cmd), tmp);
 		free(tmp);
 		path++;
