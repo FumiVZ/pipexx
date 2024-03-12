@@ -1,0 +1,53 @@
+NAME = minishell
+CFLAGS = -Wall -Wextra -Werror -g
+CC = cc
+BUILD_DIR = build
+
+SRC =	$(wildcard code/*/*.c) \
+		$(wildcard builtins/*/*.c) \
+		main.c
+
+LIBFT = libft/libft.a
+LIB_PATH = libft
+
+OBJECTS = $(SRC:%.c=$(BUILD_DIR)/%.o)
+
+all: $(BUILD_DIR) $(LIBFT) $(NAME)
+
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
+	mkdir -p $(BUILD_DIR)/code
+	mkdir -p $(BUILD_DIR)/bonus
+	mkdir -p $(BUILD_DIR)/builtins
+	mkdir -p $(BUILD_DIR)/builtins/echo
+	mkdir -p $(BUILD_DIR)/builtins/cd
+	mkdir -p $(BUILD_DIR)/builtins/pwd
+	mkdir -p $(BUILD_DIR)/builtins/export
+	mkdir -p $(BUILD_DIR)/builtins/unset
+	mkdir -p $(BUILD_DIR)/builtins/env
+	mkdir -p $(BUILD_DIR)/builtins/exit
+	mkdir -p $(BUILD_DIR)/builtins/history
+	mkdir -p $(BUILD_DIR)/code/split_line
+	mkdir -p $(BUILD_DIR)/code/split_command
+
+
+$(NAME): $(OBJECTS)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME) $(LIBFT) -lreadline
+
+$(BUILD_DIR)/%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@ -I$(LIB_PATH)
+
+$(LIBFT):
+	$(MAKE) -C $(LIB_PATH) 
+
+clean:
+	rm -rf $(BUILD_DIR)
+	$(MAKE) -C $(LIB_PATH) clean
+
+fclean: clean
+	rm -rf $(NAME)
+	$(MAKE) -C $(LIB_PATH) fclean
+
+re: fclean all
+
+.PHONY: all clean fclean re 
