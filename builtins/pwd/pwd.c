@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:15:47 by machrist          #+#    #+#             */
-/*   Updated: 2024/02/22 18:17:38 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/13 15:29:09 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,6 @@ void	ft_pwd(void)
 	char	*pwd;
 
 	pwd = getcwd(NULL, 0);
-	ft_putendl_fd(pwd, 1);
+	printf("%s\n", pwd);
 	free(pwd);
 }

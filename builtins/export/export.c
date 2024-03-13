@@ -6,48 +6,43 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:45:49 by machrist          #+#    #+#             */
-/*   Updated: 2024/02/22 18:57:35 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/13 16:05:51 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-size_t	ft_strlen_env(const char *s)
+void	ft_export_env(t_env *env, char *var)
 {
+	t_envp	*tmp;
 	size_t	i;
 
+	tmp = env->envp;
+	while (tmp)
+	{
+		if (!ft_strncmp(tmp->name, var, ft_strlen(var) + 1))
+		{
+			free(tmp->value);
+			tmp->value = ft_strdup(var + ft_strlen(tmp->name) + 1);
+			return ;
+		}
+		tmp = tmp->next;
+	}
 	i = 0;
-	while (s[i] && s[i] != '=')
+	while (var[i] && var[i] != '=')
 		++i;
-	if (s[i] == '=')
-		++i;
-	return (i);
+	var[i] = '\0';
+	ft_add_envp(env, var, var + i + 1);
 }
 
-void	ft_export(char *str, t_env *env)
+void	ft_export(t_env *env, char **cmd)
 {
-	char	**new_envp;
 	size_t	i;
 
-	i = 0;
-	while (env->envp[i])
-		++i;
-	new_envp = malloc(sizeof(char *) * (i + 2));
-	if (!new_envp)
-		return ;
-	i = 0;
-	while (env->envp[i])
+	i = 1;
+	while (cmd[i])
 	{
-		if (!ft_strncmp(env->envp[i], str, ft_strlen_env(str)))
-		{
-			free(env->envp[i]);
-			env->envp[i] = str;
-		}
-		new_envp[i] = env->envp[i];
+		ft_export_env(env, cmd[i]);
 		++i;
 	}
-	new_envp[i] = str;
-	new_envp[i + 1] = NULL;
-	free(env->envp);
-	env->envp = new_envp;
 }

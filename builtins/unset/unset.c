@@ -6,36 +6,60 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:47:33 by machrist          #+#    #+#             */
-/*   Updated: 2024/02/22 18:48:49 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/13 15:22:17 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	ft_unset_env(t_env *env, char *var)
+void	ft_unset_envp(t_env *env, char *var)
 {
-	size_t	i;
-	size_t	j;
-	size_t	len;
+	t_envp	*tmp;
+	t_envp	*prev;
 
-	i = 0;
-	while (env->envp[i])
+	tmp = env->envp;
+	prev = NULL;
+	while (tmp)
 	{
-		len = ft_strlen(var);
-		j = 0;
-		while (env->envp[i][j] && env->envp[i][j] == var[j])
-			++j;
-		if (env->envp[i][j] == '=' && j == len)
+		if (!ft_strncmp(tmp->name, var, ft_strlen(var) + 1))
 		{
-			free(env->envp[i]);
-			while (env->envp[i])
-			{
-				env->envp[i] = env->envp[i + 1];
-				++i;
-			}
+			if (prev)
+				prev->next = tmp->next;
+			else
+				env->envp = tmp->next;
+			free(tmp->name);
+			free(tmp->value);
+			free(tmp);
 			return ;
 		}
-		++i;
+		prev = tmp;
+		tmp = tmp->next;
+	}
+
+}
+
+void	ft_unset_set(t_env *env, char *var)
+{
+	t_set	*tmp;
+	t_set	*prev;
+
+	tmp = env->set;
+	prev = NULL;
+	while (tmp)
+	{
+		if (!ft_strncmp(tmp->name, var, ft_strlen(var) + 1))
+		{
+			if (prev)
+				prev->next = tmp->next;
+			else
+				env->set = tmp->next;
+			free(tmp->name);
+			free(tmp->value);
+			free(tmp);
+			return ;
+		}
+		prev = tmp;
+		tmp = tmp->next;
 	}
 }
 
@@ -48,7 +72,8 @@ void	ft_unset(t_env *env, char **cmd)
 	i = 1;
 	while (cmd[i])
 	{
-		ft_unset_env(env, cmd[i]);
+		ft_unset_envp(env, cmd[i]);
+		ft_unset_set(env, cmd[i]);
 		++i;
 	}
 }
