@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/13 15:48:52 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/14 12:14:55 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,31 @@ typedef struct s_env
 	t_set				*set;
 	t_envp				*envp;
 }						t_env;
+
+/**
+ * @brief Enumeration representing different types of separators.
+ * END: No separator
+ * HEREDOC: Here doc (<<) separator
+ * APPEND: Append (>>) redirection separator
+ * IN: Input (<) redirection separator
+ * OUT: Output (>) redirection separator
+ * PIPE: Pipe (|) separator
+ * AND: AND (&&) separator
+ * OR: OR (||) separator
+ */
+
+enum e_sep
+{
+	END,
+	HERE_DOC,
+	APPEND,
+	IN,
+	OUT,
+	PIPE,
+	AND,
+	OR
+};
+
 
 int						has_bs(const char *s, size_t i);
 int						ft_len_word(char const *s, char c, size_t i);

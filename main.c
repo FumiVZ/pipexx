@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:03:30 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/13 16:35:33 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/14 12:15:04 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,44 +106,41 @@ void	ft_init_env(t_env *env, char **envp)
 // c'est un vieux wildcard dans le makefile aussi 
 // je te laisse faire les tests pour voir si ca marche bien
 
+int	is_sep(char *s)
+{
+	if (ft_strncmp(s, "&&", 2) == 0)
+		return (AND);
+	if (ft_strncmp(s, "||", 2) == 0)
+		return (OR);
+	if (ft_strncmp(s, ">>", 2) == 0)
+		return (APPEND);
+	if (ft_strncmp(s, "<<", 2) == 0)
+		return (HERE_DOC);
+	if (ft_strncmp(s, ">", 1) == 0)
+		return (OUT);
+	if (ft_strncmp(s, "<", 1) == 0)
+		return (IN);
+	if (ft_strncmp(s, "|", 1) == 0)
+		return (PIPE);
+	return (END);
+}
 
 void	minishell(char *line, t_env *env)
 {
 	char	**cmd;
+	size_t	i;
 
+	(void)	env;
+	i = 0;
 	cmd = ft_split(line, ' ');
-	if (!ft_strncmp(cmd[0], "exit", 4))
+	if (!cmd)
+		return ;
+	while (cmd[i])
 	{
-		ft_exit(env, cmd);
-	}
-	else if (!ft_strncmp(cmd[0], "env", 3))
-	{
-		ft_env(env);
-	}
-	else if (!ft_strncmp(cmd[0], "echo", 4))
-	{
-		ft_echo(cmd);
-	}
-	else if (!ft_strncmp(cmd[0], "pwd", 3))
-	{
-		ft_pwd();
-	}
-	else if (!ft_strncmp(cmd[0], "cd", 2))
-	{
-		ft_cd(cmd, env);
-	}
-	else if (!ft_strncmp(cmd[0], "export", 6))
-	{
-		ft_export(env, cmd);
-	}
-	else if (!ft_strncmp(cmd[0], "unset", 5))
-	{
-		ft_unset(env, cmd);
-	}
-	else
-	{
-		ft_putstr_fd("minishell: command not found: ", 1);
-		ft_putendl_fd(line, 1);
+		if (is_sep(cmd[i]))
+		{
+			printf("sep: %d\n", is_sep(cmd[i]));
+		}
 	}
 	free_split(cmd, ft_strstrlen(cmd));
 }
