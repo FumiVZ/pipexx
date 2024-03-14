@@ -6,7 +6,7 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:03:30 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/14 12:15:04 by vincent          ###   ########.fr       */
+/*   Updated: 2024/03/14 15:03:29 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,22 +127,27 @@ int	is_sep(char *s)
 
 void	minishell(char *line, t_env *env)
 {
-	char	**cmd;
 	size_t	i;
+	t_redir	redir;
 
-	(void)	env;
 	i = 0;
-	cmd = ft_split(line, ' ');
-	if (!cmd)
+	env->redir = malloc(sizeof(t_redir));
+	if (!env->redir)
+		printf("malloc error\n");
+	redir = *env->redir;
+	init_redir(redir);
+	env->cmds = ft_split(line, ' ');
+	if (!(env->cmds))
 		return ;
-	while (cmd[i])
+	while (env->cmds[i])
 	{
-		if (is_sep(cmd[i]))
-		{
-			printf("sep: %d\n", is_sep(cmd[i]));
-		}
+		if (is_sep(env->cmds[i]))
+			env->redir = is_sep(env->cmds[i]);
+		i++;
+		redir.cmd = env->cmds[i];
+		redirection(env);
 	}
-	free_split(cmd, ft_strstrlen(cmd));
+	free_split(env->cmds, ft_strstrlen(env->cmds));
 }
 
 int	main(int ac, char **av, char **envp)

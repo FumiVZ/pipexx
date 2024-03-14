@@ -6,7 +6,7 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/14 12:14:55 by vincent          ###   ########.fr       */
+/*   Updated: 2024/03/14 14:57:08 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,24 @@ typedef struct s_envp
 	struct s_envp		*next;
 }						t_envp;
 
+typedef struct s_redir
+{
+	char				*cmd;
+	int					prev_pid;
+	int					sep;
+	int 				next_sep;
+	int					fd_in;
+	int					fd_out;
+	char				*paths;
+}						t_redir;
+
 typedef struct s_env
 {
 	t_set				*set;
 	t_envp				*envp;
+	t_redir				*redir;
+	char				**cmds;
+	int					status;
 }						t_env;
 
 /**
@@ -87,5 +101,7 @@ void					ft_cd(char **args, t_env *env);
 void					ft_export(t_env *env, char **cmd);
 void					ft_add_envp(t_env *env, char *name, char *value);
 void					ft_unset(t_env *env, char **cmd);
+void					init_redir(t_redir *redir);
+void					redirection(t_env *env);
 
 #endif
