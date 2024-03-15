@@ -5,7 +5,8 @@ BUILD_DIR = build
 
 SRC =	$(wildcard code/*/*.c) \
 		$(wildcard builtins/*/*.c) \
-		main.c
+		main.c \
+		redirection.c
 
 LIBFT = libft/libft.a
 LIB_PATH = libft

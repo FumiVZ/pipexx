@@ -1,5 +1,5 @@
 NAME = libft.a
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 CC = cc
 BUILD_DIR = build
 HEADER_DIR = libft.h GNL/gnl.h

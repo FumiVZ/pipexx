@@ -6,7 +6,7 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:03:30 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/14 15:03:29 by vincent          ###   ########.fr       */
+/*   Updated: 2024/03/15 19:22:22 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,25 +86,6 @@ void	ft_init_env(t_env *env, char **envp)
 		i++;
 	}
 }
-//il faut que tu modfies cette partie pour y a jouter l'exec de la command avec aussi les appel de fonction builtins normalement elles marchent toutes 
-//je vais t'envoyer la command comme split juste avec le bon parthing avec les parenthese et tout
-//et tu devras juste l'executer avec execve
-//pour le path tu vas en avoir un dans envp si on l'a pas enlever de l'env 
-//sinon tu l'auras dans set qui sera par defaut
-//tu auras juste a chercher dans le name tu as meme pas besoin d'enlever le = il est enlever par defaut 
-//si tu te demandes pourquoi j'ai mis env et set fait juste les commandes dans bash et tu vas comprendre la difference
-// tu as pas besoin de free la command c'est fait automatiquement dans le parent mais dans le child oui
-// tu peux si c'est plus simple rajouter la cmd dans la struct env pour la free plus facilement dans tes childs
-// pareil la ligne est gerer par l'history donc pas besoin de le free 
-// j'ai pas verfier les malloc donc c'est pas proteger 
-// tu as la fonction ft_free dans exit qui s'occupe de free tout ce que j'ai creer dans l'env
-// tu peux changer le nom des fonction minishell
-// essaies de mettre tout les fonctions que tu pas dans le header en static histoire d'eviter les probleme de compatibilite 
-// la struct c'est juste une liste chaine donc juste tu te deplace dedans
-// j'ai pas de fonction pour les utiliser proprement mais tu peux les faire toi meme
-// pareil si tu veux reogarniser les fichier fait toi plaisir je t'avou que j'ai fait ca de maniere degu
-// c'est un vieux wildcard dans le makefile aussi 
-// je te laisse faire les tests pour voir si ca marche bien
 
 int	is_sep(char *s)
 {
@@ -128,24 +109,18 @@ int	is_sep(char *s)
 void	minishell(char *line, t_env *env)
 {
 	size_t	i;
-	t_redir	redir;
 
 	i = 0;
-	env->redir = malloc(sizeof(t_redir));
-	if (!env->redir)
-		printf("malloc error\n");
-	redir = *env->redir;
-	init_redir(redir);
 	env->cmds = ft_split(line, ' ');
 	if (!(env->cmds))
 		return ;
 	while (env->cmds[i])
 	{
-		if (is_sep(env->cmds[i]))
-			env->redir = is_sep(env->cmds[i]);
-		i++;
-		redir.cmd = env->cmds[i];
-		redirection(env);
+		if (!ft_strncmp(env->cmds[0], "echo", 5))
+			ft_echo(env->cmds + i);
+		env->clean_cmds = create_cmd(env->cmds + i);
+		i += ft_strstrlen(env->clean_cmds);
+		printf("i = %ld\n", i);
 	}
 	free_split(env->cmds, ft_strstrlen(env->cmds));
 }

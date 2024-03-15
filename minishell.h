@@ -6,7 +6,7 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/14 14:57:08 by vincent          ###   ########.fr       */
+/*   Updated: 2024/03/15 19:07:02 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ typedef struct s_envp
 typedef struct s_redir
 {
 	char				*cmd;
+	char				*cmd_paths;
 	int					prev_pid;
 	int					sep;
-	int 				next_sep;
 	int					fd_in;
 	int					fd_out;
 	char				*paths;
@@ -55,6 +55,7 @@ typedef struct s_env
 	t_envp				*envp;
 	t_redir				*redir;
 	char				**cmds;
+	char				**clean_cmds;
 	int					status;
 }						t_env;
 
@@ -101,7 +102,9 @@ void					ft_cd(char **args, t_env *env);
 void					ft_export(t_env *env, char **cmd);
 void					ft_add_envp(t_env *env, char *name, char *value);
 void					ft_unset(t_env *env, char **cmd);
-void					init_redir(t_redir *redir);
+int						is_sep(char *s);
+void					init_redir(t_env *env);
 void					redirection(t_env *env);
+char					**create_cmd(char **cmds);
 
 #endif
