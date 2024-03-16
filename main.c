@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:03:30 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/15 19:22:22 by vincent          ###   ########.fr       */
+/*   Updated: 2024/03/16 16:48:30 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,19 @@ int	is_sep(char *s)
 	return (END);
 }
 
+void	print_tab(char **tab)
+{
+	size_t	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		ft_putstr_fd(tab[i], 1);
+		ft_putstr_fd("\n", 1);
+		i++;
+	}
+}
+
 void	minishell(char *line, t_env *env)
 {
 	size_t	i;
@@ -114,13 +127,19 @@ void	minishell(char *line, t_env *env)
 	env->cmds = ft_split(line, ' ');
 	if (!(env->cmds))
 		return ;
+	env->redir = malloc(sizeof(t_redir));
+	if (!env->redir)
+		printf("malloc error\n"); // TODO handle error
 	while (env->cmds[i])
 	{
 		if (!ft_strncmp(env->cmds[0], "echo", 5))
 			ft_echo(env->cmds + i);
+		if (!ft_strncmp(env->cmds[0], "exit", 5))
+			ft_exit(env, env->cmds + i);
 		env->clean_cmds = create_cmd(env->cmds + i);
 		i += ft_strstrlen(env->clean_cmds);
-		printf("i = %ld\n", i);
+		env->status = exec_cmd(env);
+		free_split(env->clean_cmds, ft_strstrlen(env->clean_cmds));
 	}
 	free_split(env->cmds, ft_strstrlen(env->cmds));
 }
