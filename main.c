@@ -6,14 +6,11 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:03:30 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 16:48:30 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/03/16 17:12:57 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include <readline/history.h>
-#include <readline/readline.h>
-#include <stdio.h>
+#include <minishell.h>
 
 void	ft_init_pwd(t_env *env)
 {
@@ -123,13 +120,14 @@ void	minishell(char *line, t_env *env)
 {
 	size_t	i;
 
-	i = 0;
-	env->cmds = ft_split(line, ' ');
+	env->cmds = ft_word_spliting(line);
+	if (!env->cmds)
+		return ;
+	pattern_matching(env->cmds);
 	if (!(env->cmds))
 		return ;
+	i = 0;
 	env->redir = malloc(sizeof(t_redir));
-	if (!env->redir)
-		printf("malloc error\n"); // TODO handle error
 	while (env->cmds[i])
 	{
 		if (!ft_strncmp(env->cmds[0], "echo", 5))

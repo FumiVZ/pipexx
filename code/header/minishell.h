@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 16:43:02 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/03/16 17:06:04 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <string.h>
+# include <readline/history.h>
+# include <readline/readline.h>
 
 # define ERR_FILE "minishell: %s: %s\n"
 # define ERR_INPUT "Invalid number of arguments."
@@ -116,8 +118,13 @@ void					ft_export(t_env *env, char **cmd);
 void					ft_add_envp(t_env *env, char *name, char *value);
 void					ft_unset(t_env *env, char **cmd);
 int						is_sep(char *s);
-void					init_redir(t_env *env);
 int						exec_cmd(t_env *env);
+size_t					len_cmd(char **cmd);
+char					**sep_case(char **cmds);
 char					**create_cmd(char **cmds);
+char					**create_cmd(char **cmds);
+void					pattern_matching(char **str);
+char					**ft_word_spliting(char const *s);
+void					quote_removal(char **str);
 
 #endif

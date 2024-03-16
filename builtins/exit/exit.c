@@ -6,11 +6,11 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:46:38 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/13 15:33:11 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/16 14:59:29 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include <minishell.h>
 
 void	ft_exit(t_env *env, char **cmd)
 {

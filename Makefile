@@ -10,8 +10,10 @@ SRC =	$(wildcard code/*/*.c) \
 
 LIBFT = libft/libft.a
 LIB_PATH = libft
+HEADER_PATH = code/header
 
 OBJECTS = $(SRC:%.c=$(BUILD_DIR)/%.o)
+HEADER = $(wildcard code/header/*.h)
 
 all: $(BUILD_DIR) $(LIBFT) $(NAME)
 
@@ -35,8 +37,8 @@ $(BUILD_DIR):
 $(NAME): $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME) $(LIBFT) -lreadline
 
-$(BUILD_DIR)/%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ -I$(LIB_PATH)
+$(BUILD_DIR)/%.o: %.c $(HEADER)
+	$(CC) $(CFLAGS) -c $< -o $@ -I$(HEADER_PATH) -I$(LIB_PATH)
 
 $(LIBFT):
 	$(MAKE) -C $(LIB_PATH) 

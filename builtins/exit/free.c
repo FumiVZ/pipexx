@@ -6,11 +6,11 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:47:09 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/13 14:46:15 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/16 14:59:31 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include <minishell.h>
 
 void	ft_free(t_env *env)
 {

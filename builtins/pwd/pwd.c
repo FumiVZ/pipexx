@@ -6,11 +6,11 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:15:47 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/13 15:29:09 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/16 14:59:38 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include <minishell.h>
 
 void	ft_pwd(void)
 {
