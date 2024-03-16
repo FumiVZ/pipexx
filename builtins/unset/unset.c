@@ -6,61 +6,51 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:47:33 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 14:59:41 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/16 20:51:41 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	ft_unset_envp(t_env *env, char *var)
+static char	**new_envp(t_env *env, char *var)
 {
-	t_envp	*tmp;
-	t_envp	*prev;
+	char	**new;
+	size_t	i;
+	size_t	j;
 
-	tmp = env->envp;
-	prev = NULL;
-	while (tmp)
+	new = malloc(sizeof(char *) * (ft_strstrlen(env->envp)));
+	if (!new)
+		exit(1);
+	i = 0;
+	j = 0;
+	while (env->envp[i])
 	{
-		if (!ft_strncmp(tmp->name, var, ft_strlen(var) + 1))
+		if (ft_strncmp(env->envp[i], var, ft_strlen(var) + 1))
 		{
-			if (prev)
-				prev->next = tmp->next;
-			else
-				env->envp = tmp->next;
-			free(tmp->name);
-			free(tmp->value);
-			free(tmp);
-			return ;
+			new[j] = ft_strdup(env->envp[i]);
+			j++;
 		}
-		prev = tmp;
-		tmp = tmp->next;
+		i++;
 	}
-
+	new[j] = NULL;
+	free_split(env->envp, ft_strstrlen(env->envp));
+	return (new);
 }
 
-void	ft_unset_set(t_env *env, char *var)
+static char	**ft_unset_envp(t_env *env, char *var)
 {
-	t_set	*tmp;
-	t_set	*prev;
+	size_t	i;
 
-	tmp = env->set;
-	prev = NULL;
-	while (tmp)
+	i = 0;
+	while (env->envp[i])
 	{
-		if (!ft_strncmp(tmp->name, var, ft_strlen(var) + 1))
+		if (!ft_strncmp(env->envp[i], var, ft_strlen(var) + 1))
 		{
-			if (prev)
-				prev->next = tmp->next;
-			else
-				env->set = tmp->next;
-			free(tmp->name);
-			free(tmp->value);
-			free(tmp);
-			return ;
+			return (new_envp(env, var));
 		}
-		prev = tmp;
-		tmp = tmp->next;
+		i++;
 	}
+	return (env->envp);
 }
 
 void	ft_unset(t_env *env, char **cmd)
@@ -72,8 +62,7 @@ void	ft_unset(t_env *env, char **cmd)
 	i = 1;
 	while (cmd[i])
 	{
-		ft_unset_envp(env, cmd[i]);
-		ft_unset_set(env, cmd[i]);
+		env->envp = ft_unset_envp(env, cmd[i]);
 		++i;
 	}
 }

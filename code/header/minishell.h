@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 17:06:04 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/03/16 21:52:50 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,6 @@
 # define ERR_ACCESS "minishell: %s: permission denied\n"
 # define ERR_ACCESS_EMPTY "minishell: permission denied\n"
 
-typedef struct s_set
-{
-	char				*name;
-	char				*value;
-	struct s_set		*next;
-}						t_set;
-
-typedef struct s_envp
-{
-	char				*name;
-	char				*value;
-	struct s_envp		*next;
-}						t_envp;
-
 typedef struct s_redir
 {
 	char				*cmd;
@@ -66,8 +52,7 @@ typedef struct s_redir
 
 typedef struct s_env
 {
-	t_set				*set;
-	t_envp				*envp;
+	char				**envp;
 	t_redir				*redir;
 	char				**cmds;
 	char				**clean_cmds;
@@ -98,33 +83,26 @@ enum e_sep
 	OR
 };
 
-
-int						has_bs(const char *s, size_t i);
-int						ft_len_word(char const *s, char c, size_t i);
-int						len_word(char const *s, char c, size_t i);
-int						len_word_tot(char const *s, char c, size_t i);
-char					**ft_split_command(char const *s);
 void					ft_exit(t_env *env, char **cmd);
-void					ft_exit_error(t_env *env);
-void					ft_free(t_env *env);
-int						command_end(char c);
-char					**ft_split_line(char const *s);
-int						has_bs(const char *s, size_t i);
+void					ft_exit_error(t_env *env, int status);
 void					ft_env(t_env *env);
 void					ft_echo(char **args);
 void					ft_pwd(void);
 void					ft_cd(char **args, t_env *env);
 void					ft_export(t_env *env, char **cmd);
-void					ft_add_envp(t_env *env, char *name, char *value);
 void					ft_unset(t_env *env, char **cmd);
 int						is_sep(char *s);
-int						exec_cmd(t_env *env);
+int						exec_cmd(t_env *env, t_redir *redir);
 size_t					len_cmd(char **cmd);
 char					**sep_case(char **cmds);
-char					**create_cmd(char **cmds);
 char					**create_cmd(char **cmds);
 void					pattern_matching(char **str);
 char					**ft_word_spliting(char const *s);
 void					quote_removal(char **str);
+void					ft_free_child(t_env *env);
+void					ft_free_parent(t_env *env);
+char					**ft_init_env(char **envp);
+char					**ft_export_env(t_env *env, char *var);
+void					open_redir(t_env *env);
 
 #endif

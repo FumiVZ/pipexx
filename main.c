@@ -3,86 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:03:30 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 17:12:57 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/03/16 22:53:04 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+#include <signal.h>
 
-void	ft_init_pwd(t_env *env)
-{
-	char	*pwd;
-
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
-	{
-		ft_putstr_fd("minishell: ", 1);
-		ft_putstr_fd(strerror(errno), 1);
-		ft_putstr_fd("\n", 1);
-	}
-	else
-	{
-		env->envp = malloc(sizeof(t_envp *));
-		if (!env->envp)
-			exit(1);
-		env->envp->name = malloc(4);
-		if (!env->envp->name)
-			exit(1);
-		env->envp->name = "PWD";
-		env->envp->value = pwd;
-		env->envp->next = NULL;
-	}
-}
-
-void	ft_add_envp(t_env *env, char *name, char *value)
-{
-	t_envp	*new;
-	t_envp	*tmp;
-
-	new = malloc(sizeof(t_envp));
-	if (!new)
-		exit(1);
-	new->name = malloc(ft_strlen(name) + 1);
-	ft_strlcpy(new->name, name, (size_t)(ft_strlen(name) + 1));
-	new->value = malloc(ft_strlen(value) + 1);
-	ft_strlcpy(new->value, value, (size_t)(ft_strlen(value) + 1));
-	new->next = NULL;
-	if (!env->envp)
-	{
-		env->envp = new;
-		return ;
-	}
-	tmp = env->envp;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new;
-}
-
-void	ft_init_env(t_env *env, char **envp)
-{
-	size_t	i;
-	size_t	j;
-
-	if (!envp)
-	{
-		ft_init_pwd(env);
-		return ;
-	}
-	env->envp = NULL;
-	i = 0;
-	while (envp[i])
-	{
-		j = 0;
-		while (envp[i][j] && envp[i][j] != '=')
-			++j;
-		envp[i][j] = '\0';
-		ft_add_envp(env, envp[i], envp[i] + j + 1);
-		i++;
-	}
-}
+t_env	*g_env;
 
 int	is_sep(char *s)
 {
@@ -110,8 +41,7 @@ void	print_tab(char **tab)
 	i = 0;
 	while (tab[i])
 	{
-		ft_putstr_fd(tab[i], 1);
-		ft_putstr_fd("\n", 1);
+		printf("%s\n", tab[i]);
 		i++;
 	}
 }
@@ -119,6 +49,7 @@ void	print_tab(char **tab)
 void	minishell(char *line, t_env *env)
 {
 	size_t	i;
+	t_redir	redir;
 
 	env->cmds = ft_word_spliting(line);
 	if (!env->cmds)
@@ -127,41 +58,73 @@ void	minishell(char *line, t_env *env)
 	if (!(env->cmds))
 		return ;
 	i = 0;
-	env->redir = malloc(sizeof(t_redir));
 	while (env->cmds[i])
 	{
+		env->clean_cmds = create_cmd(env->cmds + i);
 		if (!ft_strncmp(env->cmds[0], "echo", 5))
 			ft_echo(env->cmds + i);
-		if (!ft_strncmp(env->cmds[0], "exit", 5))
+		else if (!ft_strncmp(env->cmds[0], "exit", 5))
 			ft_exit(env, env->cmds + i);
-		env->clean_cmds = create_cmd(env->cmds + i);
+		else
+		{
+			i += ft_strstrlen(env->clean_cmds);
+			free_split(env->clean_cmds, ft_strstrlen(env->clean_cmds));
+			env->clean_cmds = create_cmd(env->cmds + i);
+			env->status = exec_cmd(env, &redir);
+		}
+		print_tab(env->clean_cmds);
 		i += ft_strstrlen(env->clean_cmds);
-		env->status = exec_cmd(env);
 		free_split(env->clean_cmds, ft_strstrlen(env->clean_cmds));
 	}
 	free_split(env->cmds, ft_strstrlen(env->cmds));
 }
+void	signal_handler(int signal);
+
+void	ft_readline(t_env *env)
+{
+	char				*line;
+	struct sigaction	sa;
+
+	sa.sa_handler = signal_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	if (sigaction(SIGINT, &sa, NULL) == -1 || sigaction(SIGQUIT, &sa,
+			NULL) == -1)
+		printf("Error: signal\n");
+	while (1)
+	{
+		line = readline("minishell$ ");
+		add_history(line);
+		minishell(line, env);
+	}
+}
+
+void	signal_handler(int signal)
+{
+	if (signal == SIGINT)
+	{
+		if (signal == SIGINT)
+		{
+			printf("\nminishell$ ");
+		}
+		else
+			ft_exit(g_env, NULL);
+	}
+	if (signal == SIGQUIT)
+	{
+		ft_putstr_fd("\b\b  \b\b", 1);
+	}
+}
 
 int	main(int ac, char **av, char **envp)
 {
-	char	*line;
 	t_env	env;
-	char	*pwd;
 
 	(void)ac;
 	(void)av;
-	env.set = NULL;
-	ft_init_env(&env, envp);
-	while (1)
-	{
-		pwd = getcwd(NULL, 0);
-		printf("%s minishell$ ", pwd);
-		free(pwd);
-		line = readline(NULL);
-		if (!line)
-			return (ft_exit_error(&env), 1);
-		add_history(line);
-		minishell(line, &env);
-	}
+	env.envp = ft_init_env(envp);
+	g_env = &env;
+	print_tab(g_env->envp);
+	ft_readline(&env);
 	return (0);
 }

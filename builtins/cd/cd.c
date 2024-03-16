@@ -6,29 +6,11 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:19:20 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 14:59:15 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/16 21:00:58 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-void	ft_setenv(char *name, char *value, t_env *env)
-{
-	t_envp	*tmp;
-
-	tmp = env->envp;
-	while (tmp)
-	{
-		if (!ft_strncmp(tmp->name, name, ft_strlen(name) + 1))
-		{
-			free(tmp->value);
-			tmp->value = ft_strdup(value);
-			return ;
-		}
-		tmp = tmp->next;
-	}
-	ft_add_envp(env, name, value);
-}
 
 void	ft_cd(char **args, t_env *env)
 {
@@ -42,8 +24,8 @@ void	ft_cd(char **args, t_env *env)
 		return ;
 	}
 	pwd = getcwd(NULL, 0);
-	ft_setenv("OLDPWD", oldpwd, env);
-	ft_setenv("PWD", pwd, env);
+	ft_export_env(env, ft_strjoin("OLDPWD=", oldpwd));
+	ft_export_env(env, ft_strjoin("PWD=", pwd));
 	free(oldpwd);
 	free(pwd);
 }

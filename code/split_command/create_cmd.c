@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 14:52:58 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 14:58:42 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/16 21:37:29 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@ char	**sep_case(char **cmds)
 	if (is_sep(*cmds) <= 4)
 	{
 		cmd = malloc(sizeof(char *) * 3);
-		cmd[0] = ft_strdup(*cmds);
-		cmd[1] = ft_strdup(*cmds + 1);
+		cmd[0] = ft_strdup(cmds[0]);
+		cmd[1] = ft_strdup(cmds[1]);
 		cmd[2] = NULL;
+		quote_removal(cmd);
 		return (cmd);
 	}
 	len = len_cmd(cmds) + 1;
@@ -46,6 +47,7 @@ char	**sep_case(char **cmds)
 		j++;
 	}
 	cmd[len] = NULL;
+	quote_removal(cmd);
 	return (cmd);
 }
 
@@ -55,12 +57,6 @@ char	**create_cmd(char **cmds)
 	size_t	len;
 	char	**cmd;
 
-	if (!cmds)
-		return (NULL);
-	if (!*cmds)
-		return (NULL);
-	if (!**cmds)
-		return (NULL);
 	j = 0;
 	if (is_sep(cmds[j]))
 		return (sep_case(cmds));
@@ -74,5 +70,6 @@ char	**create_cmd(char **cmds)
 		j++;
 	}
 	cmd[len] = NULL;
+	quote_removal(cmd);
 	return (cmd);
 }

@@ -3,25 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 14:13:52 by vincent           #+#    #+#             */
-/*   Updated: 2024/03/16 17:13:34 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/03/16 21:36:25 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*find_path(t_envp *envp)
+char	*find_path(char **envp)
 {
-	t_envp	*tmp;
+	size_t	i;
 
-	tmp = envp;
-	while (tmp)
+	i = 0;
+	while (envp[i])
 	{
-		if (!ft_strncmp(tmp->name, "PATH", 4))
-			return (tmp->value);
-		tmp = tmp->next;
+		if (!ft_strncmp(envp[i], "PATH", 4))
+			return (envp[i] + 5);
+		i++;
 	}
 	return (NULL);
 }
@@ -35,7 +35,17 @@ void	open_redir(t_env *env)
 		env->redir->outfile = open(env->clean_cmds[1], O_WRONLY \
 			| O_TRUNC | O_CREAT, 0644);
 	if (is_sep(env->clean_cmds[0]) == IN)
+	{
 		env->redir->infile = open(env->clean_cmds[1], O_RDONLY);
+		if (env->redir->infile == -1)
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(env->clean_cmds[1], 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+			env->status = 1;
+			return ;
+		}
+	}
 }
 
 char	*find_cmd_path(char *cmd, char **path)
@@ -44,10 +54,9 @@ char	*find_cmd_path(char *cmd, char **path)
 
 	if (cmd[0] == '/' || ft_strncmp(cmd, "./", 2) == 0)
 	{
-		if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
+		if (access(cmd, X_OK) == 0 || errno == EACCES)
 			return (cmd);
-		else
-			return (NULL);
+		return (NULL);
 	}
 	tmp = ft_strdup(cmd);
 	if (!tmp)
@@ -59,7 +68,7 @@ char	*find_cmd_path(char *cmd, char **path)
 	while (*path)
 	{
 		tmp = ft_strjoin(*path, cmd);
-		if (access(tmp, F_OK) == 0 && access(tmp, X_OK) == 0)
+		if (access(tmp, X_OK) == 0 || errno == EACCES)
 			return (free(cmd), tmp);
 		free(tmp);
 		path++;
@@ -67,18 +76,22 @@ char	*find_cmd_path(char *cmd, char **path)
 	return (free(cmd), NULL);
 }
 
-int	exec_cmd(t_env *env)
+int	exec_cmd(t_env *env, t_redir *redir)
 {
-	t_redir	*redir;
 	size_t	i;
 
 	i = 0;
-	redir = env->redir;
+	env->redir = redir;
 	redir->pid = fork();
+	redir->infile = 0;
+	redir->outfile = 0;
 	if (redir->pid == -1)
 		return (1);
 	if (redir->pid == 0)
 	{
+		if (is_sep(env->clean_cmds[0]) < 5 && is_sep(env->clean_cmds[0]))
+				open_redir(env);
+		
 		if (is_sep(env->clean_cmds[0]))
 		{
 			redir->sep = is_sep(env->clean_cmds[0]);
@@ -87,7 +100,17 @@ int	exec_cmd(t_env *env)
 		redir->args = env->clean_cmds;
 		redir->paths = ft_split(find_path(env->envp), ':');
 		redir->cmd_paths = find_cmd_path(env->clean_cmds[i], redir->paths);
+		if (!redir->cmd_paths || errno == EACCES)
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(env->clean_cmds[i], 2);
+			ft_putstr_fd(": command not found\n", 2);
+			ft_free_child(env);
+			exit(127);
+		}
 		execve(redir->cmd_paths, redir->args, NULL);
+		ft_free_child(env);
+		exit(126);
 	}
 	if (redir->infile)
 		close(redir->infile);

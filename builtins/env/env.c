@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 17:53:18 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 14:59:26 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/16 20:04:49 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void	ft_env(t_env *env)
 {
-	t_envp	*tmp_envp;
+	size_t	i;
 
-	tmp_envp = env->envp;
-	while (tmp_envp)
+	i = 0;
+	while (env->envp[i])
 	{
-		printf("%s=%s\n", tmp_envp->name, tmp_envp->value);
-		tmp_envp = tmp_envp->next;
+		printf("%s\n", env->envp[i]);
+		i++;
 	}
 }

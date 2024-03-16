@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:14:22 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 14:58:58 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/16 17:50:37 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,21 @@ static size_t	len_word(char *str)
 	return (len);
 }
 
-static void	check_quote(char *str, size_t *i, bool *quote, bool *dquote)
+static bool	check_quote(char *str, size_t *i, bool *quote, bool *dquote)
 {
 	if (str[*i] == '\'' && !*dquote)
 	{
 		*quote = !*quote;
 		(*i)++;
+		return (true);
 	}
 	if (str[*i] == '\"' && !*quote)
 	{
 		*dquote = !*dquote;
 		(*i)++;
+		return (true);
 	}
+	return (false);
 }
 
 static char	*quote_removal_world(char *str, char *tmp)
@@ -72,7 +75,8 @@ static char	*quote_removal_world(char *str, char *tmp)
 	pos = 0;
 	while (str[j])
 	{
-		check_quote(str, &j, &quote, &dquote);
+		while (str[j] && check_quote(str, &j, &quote, &dquote))
+			;
 		tmp[pos++] = str[j];
 		if (str[j])
 			j++;
