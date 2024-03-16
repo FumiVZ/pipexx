@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:03:30 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/15 19:22:22 by vincent          ###   ########.fr       */
+/*   Updated: 2024/03/15 19:50:20 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,6 @@ void	minishell(char *line, t_env *env)
 			ft_echo(env->cmds + i);
 		env->clean_cmds = create_cmd(env->cmds + i);
 		i += ft_strstrlen(env->clean_cmds);
-		printf("i = %ld\n", i);
 	}
 	free_split(env->cmds, ft_strstrlen(env->cmds));
 }

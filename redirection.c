@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 14:13:52 by vincent           #+#    #+#             */
-/*   Updated: 2024/03/15 19:26:17 by vincent          ###   ########.fr       */
+/*   Updated: 2024/03/15 19:50:16 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ size_t	len_cmd(char **cmd)
 	i = 0;
 	while (cmd[i] && !is_sep(cmd[i]))
 		i++;
-	printf("len = %ld\n", i);
 	return (i);
 }
 
@@ -90,11 +89,11 @@ char	**create_cmd(char **cmds)
 	char	**cmd;
 
 	if (!cmds)
-		return(NULL);
+		return (NULL);
 	if (!*cmds)
 		return (NULL);
 	if (!**cmds)
-		return(NULL);
+		return (NULL);
 	j = 0;
 	if (is_sep(cmds[j]))
 		return (sep_case(cmds));
