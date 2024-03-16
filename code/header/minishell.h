@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/15 19:07:02 by vincent          ###   ########.fr       */
+/*   Updated: 2024/03/16 15:07:51 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <string.h>
+# include <readline/history.h>
+# include <readline/readline.h>
 
 typedef struct s_set
 {
@@ -106,5 +108,8 @@ int						is_sep(char *s);
 void					init_redir(t_env *env);
 void					redirection(t_env *env);
 char					**create_cmd(char **cmds);
+void					pattern_matching(char **str);
+char					**ft_word_spliting(char const *s);
+void					quote_removal(char **str);
 
 #endif

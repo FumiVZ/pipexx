@@ -6,14 +6,11 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:03:30 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/15 19:50:20 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/16 15:20:07 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include <readline/history.h>
-#include <readline/readline.h>
-#include <stdio.h>
+#include <minishell.h>
 
 void	ft_init_pwd(t_env *env)
 {
@@ -110,14 +107,19 @@ void	minishell(char *line, t_env *env)
 {
 	size_t	i;
 
-	i = 0;
-	env->cmds = ft_split(line, ' ');
+	env->cmds = ft_word_spliting(line);
+	if (!env->cmds)
+		return ;
+	pattern_matching(env->cmds);
 	if (!(env->cmds))
 		return ;
+	i = 0;
 	while (env->cmds[i])
 	{
 		if (!ft_strncmp(env->cmds[0], "echo", 5))
 			ft_echo(env->cmds + i);
+		if (!ft_strncmp(env->cmds[0], "exit", 5))
+			ft_exit(env, env->cmds + i);
 		env->clean_cmds = create_cmd(env->cmds + i);
 		i += ft_strstrlen(env->clean_cmds);
 	}

@@ -6,11 +6,11 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:45:49 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/13 16:23:22 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/16 14:59:35 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include <minishell.h>
 
 void	ft_export_env(t_env *env, char *var)
 {

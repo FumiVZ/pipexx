@@ -1,36 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   parthing.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/22 17:55:35 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 14:59:23 by machrist         ###   ########.fr       */
+/*   Created: 2024/03/15 14:44:21 by machrist          #+#    #+#             */
+/*   Updated: 2024/03/16 14:55:27 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#ifndef PARTHING_H
+# define PARTHING_H
 
-void	ft_echo(char **args)
-{
-	size_t	i;
+# include <libft.h>
+# include <stdbool.h>
+# include <dirent.h>
+# include <stdio.h>
 
-	i = 1;
-	if (!args[1])
-	{
-		ft_putchar_fd('\n', 1);
-		return ;
-	}
-	if (!ft_strncmp(args[1], "-n", 3))
-		++i;
-	while (args[i])
-	{
-		ft_putstr_fd(args[i], 1);
-		if (args[i + 1])
-			ft_putchar_fd(' ', 1);
-		++i;
-	}
-	if (ft_strncmp(args[1], "-n", 3))
-		ft_putchar_fd('\n', 1);
-}
+char	*wildcard_match(const char *pattern);
+char	**ft_word_spliting(char const *s);
+void	pattern_matching(char **str);
+bool	is_space(char c);
+bool	is_special(char c);
+bool	is_special_cpt(char const *c, size_t *i);
+char	*crt_is_special(char const *s, size_t *j);
+
+#endif
