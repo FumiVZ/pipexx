@@ -6,12 +6,11 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:03:30 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/17 15:40:29 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/17 18:21:49 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-#include <signal.h>
 
 t_env	*g_env;
 
@@ -32,18 +31,6 @@ int	is_sep(char *s)
 	if (ft_strncmp(s, "|", 1) == 0)
 		return (PIPE);
 	return (END);
-}
-
-void	print_tab(char **tab)
-{
-	size_t	i;
-
-	i = 0;
-	while (tab[i])
-	{
-		printf("%s\n", tab[i]);
-		i++;
-	}
 }
 
 void	minishell(char *line, t_env *env)
@@ -78,6 +65,7 @@ void	ft_readline(t_env *env)
 {
 	char				*line;
 	struct sigaction	sa;
+	char				*str;
 
 	sa.sa_handler = signal_handler;
 	sigemptyset(&sa.sa_mask);
@@ -87,10 +75,19 @@ void	ft_readline(t_env *env)
 		printf("Error: signal\n");
 	while (1)
 	{
-		line = readline("minishell$ ");
+		str = ft_color();
+		line = readline(str);
+		free(str);
 		add_history(line);
 		minishell(line, env);
 	}
+}
+
+int ft_putchar(int c)
+{
+    char ch = (char)c;
+    write(1, &ch, 1);
+    return c; // Retournez le caractère, ou -1 en cas d'erreur
 }
 
 void	signal_handler(int signal)
@@ -99,7 +96,7 @@ void	signal_handler(int signal)
 	{
 		if (signal == SIGINT)
 		{
-			printf("\nminishell$ ");
+			ft_putstr_fd("\nminishell $ ", 1);
 		}
 		else
 			ft_exit(g_env, NULL);

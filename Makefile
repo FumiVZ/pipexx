@@ -1,5 +1,5 @@
 NAME = minishell
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g  
 CC = cc
 BUILD_DIR = build
 
@@ -32,10 +32,11 @@ $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)/builtins/history
 	mkdir -p $(BUILD_DIR)/code/split_line
 	mkdir -p $(BUILD_DIR)/code/split_command
+	mkdir -p $(BUILD_DIR)/code/color
 
 
 $(NAME): $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME) $(LIBFT) -lreadline
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(NAME) $(LIBFT) -lreadline -lncurses
 
 $(BUILD_DIR)/%.o: %.c $(HEADER)
 	$(CC) $(CFLAGS) -c $< -o $@ -I$(HEADER_PATH) -I$(LIB_PATH)

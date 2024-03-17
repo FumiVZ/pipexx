@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/17 15:39:58 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/17 18:07:31 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <string.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <signal.h>
 
 # define ERR_FILE "minishell: %s: %s\n"
 # define ERR_INPUT "Invalid number of arguments."
@@ -104,5 +105,6 @@ void					ft_free_parent(t_env *env);
 char					**ft_init_env(char **envp);
 char					**ft_export_env(t_env *env, char *var);
 void					open_redir(t_env *env);
+char					*ft_color(void);
 
 #endif
