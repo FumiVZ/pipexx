@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:03:30 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 23:22:05 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/17 15:40:29 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	minishell(char *line, t_env *env)
 	env->cmds = ft_word_spliting(line);
 	if (!env->cmds)
 		return ;
-	pattern_matching(env->cmds);
+	pattern_matching(env->cmds, env->envp);
 	if (!(env->cmds))
 		return ;
 	i = 0;
@@ -78,7 +78,6 @@ void	ft_readline(t_env *env)
 {
 	char				*line;
 	struct sigaction	sa;
-	char				*pwd;
 
 	sa.sa_handler = signal_handler;
 	sigemptyset(&sa.sa_mask);
@@ -88,11 +87,7 @@ void	ft_readline(t_env *env)
 		printf("Error: signal\n");
 	while (1)
 	{
-		pwd = getcwd(NULL, 0);
-		if (!pwd)
-			ft_exit_error(env, 1);
-		line = readline(ft_strjoin(pwd, "\033[41m\033[5mmi\033[7mni\033[4;32mshell$ \033[1;33m"));
-		free(pwd);
+		line = readline("minishell$ ");
 		add_history(line);
 		minishell(line, env);
 	}
