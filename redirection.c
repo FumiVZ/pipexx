@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 14:13:52 by vincent           #+#    #+#             */
-/*   Updated: 2024/03/16 21:36:25 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/17 00:24:39 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,6 @@ int	exec_cmd(t_env *env, t_redir *redir)
 		return (1);
 	if (redir->pid == 0)
 	{
-		if (is_sep(env->clean_cmds[0]) < 5 && is_sep(env->clean_cmds[0]))
-				open_redir(env);
-		
 		if (is_sep(env->clean_cmds[0]))
 		{
 			redir->sep = is_sep(env->clean_cmds[0]);
@@ -108,7 +105,7 @@ int	exec_cmd(t_env *env, t_redir *redir)
 			ft_free_child(env);
 			exit(127);
 		}
-		execve(redir->cmd_paths, redir->args, NULL);
+		execve(redir->cmd_paths, redir->args, env->envp);
 		ft_free_child(env);
 		exit(126);
 	}

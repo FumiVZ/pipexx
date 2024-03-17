@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:03:30 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 22:53:04 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/16 23:22:05 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,7 @@ void	minishell(char *line, t_env *env)
 		else if (!ft_strncmp(env->cmds[0], "exit", 5))
 			ft_exit(env, env->cmds + i);
 		else
-		{
-			i += ft_strstrlen(env->clean_cmds);
-			free_split(env->clean_cmds, ft_strstrlen(env->clean_cmds));
-			env->clean_cmds = create_cmd(env->cmds + i);
 			env->status = exec_cmd(env, &redir);
-		}
-		print_tab(env->clean_cmds);
 		i += ft_strstrlen(env->clean_cmds);
 		free_split(env->clean_cmds, ft_strstrlen(env->clean_cmds));
 	}
@@ -84,6 +78,7 @@ void	ft_readline(t_env *env)
 {
 	char				*line;
 	struct sigaction	sa;
+	char				*pwd;
 
 	sa.sa_handler = signal_handler;
 	sigemptyset(&sa.sa_mask);
@@ -93,7 +88,11 @@ void	ft_readline(t_env *env)
 		printf("Error: signal\n");
 	while (1)
 	{
-		line = readline("minishell$ ");
+		pwd = getcwd(NULL, 0);
+		if (!pwd)
+			ft_exit_error(env, 1);
+		line = readline(ft_strjoin(pwd, "\033[41m\033[5mmi\033[7mni\033[4;32mshell$ \033[1;33m"));
+		free(pwd);
 		add_history(line);
 		minishell(line, env);
 	}
@@ -124,7 +123,6 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	env.envp = ft_init_env(envp);
 	g_env = &env;
-	print_tab(g_env->envp);
 	ft_readline(&env);
 	return (0);
 }
