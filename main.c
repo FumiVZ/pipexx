@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:03:30 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/17 18:21:49 by machrist         ###   ########.fr       */
+/*   Updated: 2024/03/17 18:34:30 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,13 +81,6 @@ void	ft_readline(t_env *env)
 		add_history(line);
 		minishell(line, env);
 	}
-}
-
-int ft_putchar(int c)
-{
-    char ch = (char)c;
-    write(1, &ch, 1);
-    return c; // Retournez le caractère, ou -1 en cas d'erreur
 }
 
 void	signal_handler(int signal)
