@@ -6,27 +6,27 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/04/24 15:29:30 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/24 22:31:00 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <libft.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <sys/stat.h>
-# include <fcntl.h>
 # include <errno.h>
-# include <string.h>
+# include <fcntl.h>
+# include <libft.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdbool.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <unistd.h>
 
 # define ERR_FILE "minishell: %s: %s\n"
 # define ERR_INPUT "Invalid number of arguments."
@@ -40,26 +40,26 @@
 
 typedef struct s_redir
 {
-	char				*cmd;
-	char				**args;
-	char				*cmd_paths;
-	int					pipefd[2];
-	int					prev_pid;
-	int					sep;
-	int					infile;
-	int					outfile;
-	pid_t				pid;
-	char				**paths;
-}						t_redir;
+	char	*cmd;
+	char	**args;
+	char	*cmd_paths;
+	int		pipefd[2];
+	int		prev_pid;
+	int		sep;
+	int		infile;
+	int		outfile;
+	pid_t	pid;
+	char	**paths;
+}			t_redir;
 
 typedef struct s_env
 {
-	char				**envp;
-	t_redir				*redir;
-	char				**cmds;
-	char				**clean_cmds;
-	int					status;
-}						t_env;
+	char	**envp;
+	t_redir	*redir;
+	char	**cmds;
+	char	**clean_cmds;
+	int		status;
+}			t_env;
 
 /**
  * @brief Enumeration representing different types of separators.
@@ -73,7 +73,7 @@ typedef struct s_env
  * OR: OR (||) separator
  */
 
-enum e_sep
+enum		e_sep
 {
 	END,
 	HERE_DOC,
@@ -85,28 +85,28 @@ enum e_sep
 	OR
 };
 
-void					ft_exit(t_env *env, char **cmd);
-void					ft_exit_error(t_env *env, int status);
-void					ft_env(t_env *env);
-void					ft_echo(char **args);
-void					ft_pwd(void);
-void					ft_cd(char **args, t_env *env);
-void					ft_export(t_env *env, char **cmd);
-void					ft_unset(t_env *env, char **cmd);
-int						is_sep(char *s);
-int						exec_cmd(t_env *env, t_redir *redir);
-size_t					len_cmd(char **cmd);
-char					**sep_case(char **cmds);
-char					**create_cmd(char **cmds);
-void					pattern_matching(char **str, char **env);
-char					**ft_word_spliting(char const *s);
-void					quote_removal(char **str);
-void					ft_free_child(t_env *env);
-void					ft_free_parent(t_env *env);
-char					**ft_init_env(char **envp);
-char					**ft_export_env(t_env *env, char *var);
-void					open_redir(t_env *env);
-bool  					check_syntax(char *str);
-char					*ft_color(void);
+void		ft_exit(t_env *env, char **cmd);
+void		ft_exit_error(t_env *env, int status);
+void		ft_env(t_env *env);
+void		ft_echo(char **args);
+void		ft_pwd(void);
+void		ft_cd(char **args, t_env *env);
+void		ft_export(t_env *env, char **cmd);
+void		ft_unset(t_env *env, char **cmd);
+int			is_sep(char *s);
+int			exec_cmd(t_env *env, t_redir *redir);
+size_t		len_cmd(char **cmd);
+char		**sep_case(char **cmds);
+char		**create_cmd(char **cmds);
+void		pattern_matching(char **str, char **env);
+char		**ft_word_spliting(char const *s);
+void		quote_removal(char **str);
+void		ft_free_child(t_env *env);
+void		ft_free_parent(t_env *env);
+char		**ft_init_env(char **envp);
+char		**ft_export_env(t_env *env, char *var);
+void		open_redir(t_env *env);
+bool		check_syntax(char *str);
+char		*ft_color(void);
 
 #endif

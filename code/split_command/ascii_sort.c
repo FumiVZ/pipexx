@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 17:28:09 by machrist          #+#    #+#             */
-/*   Updated: 2024/04/24 22:22:06 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/24 22:29:00 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	ascii_sort(char **tab)
 static char	*set_result(char *result, char **tab)
 {
 	size_t	i;
-    char	*tmp;
+	char	*tmp;
 
 	i = 1;
 	result = ft_strjoin(tab[0], " ");
@@ -76,7 +76,7 @@ char	*sort_result(char *result)
 		result = ft_strdup("");
 		if (!result)
 			return (msg_err_ptr(MALLOC));
-        return (result);
+		return (result);
 	}
 	tab = ft_split(result, ' ');
 	free(result);
@@ -84,6 +84,6 @@ char	*sort_result(char *result)
 		return (msg_err_ptr(MALLOC));
 	ascii_sort(tab);
 	result = set_result(result, tab);
-    free_split(tab, ft_strstrlen(tab));
+	free_split(tab, ft_strstrlen(tab));
 	return (result);
 }
