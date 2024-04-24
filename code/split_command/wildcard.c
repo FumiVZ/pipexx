@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:57:00 by machrist          #+#    #+#             */
-/*   Updated: 2024/04/24 22:04:06 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/24 22:18:01 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,11 +132,6 @@ char	*wildcard_match(const char *pattern)
 				return (NULL);
 			}
 		entry = readdir(dir);
-	}
-	if (!result)
-	{
-		closedir(dir);
-		return (ft_strdup(""));
 	}
 	closedir(dir);
 	result = sort_result(result);
