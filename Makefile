@@ -33,6 +33,7 @@ $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)/code/split_line
 	mkdir -p $(BUILD_DIR)/code/split_command
 	mkdir -p $(BUILD_DIR)/code/color
+	mkdir -p $(BUILD_DIR)/code/error
 
 
 $(NAME): $(OBJECTS)
