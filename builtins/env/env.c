@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 17:53:18 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 20:04:49 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/25 16:35:53 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,5 @@ void	ft_env(t_env *env)
 		printf("%s\n", env->envp[i]);
 		i++;
 	}
+	env->status = 0;
 }

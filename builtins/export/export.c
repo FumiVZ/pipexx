@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:45:49 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 21:00:51 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/25 15:05:49 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ static char	**new_envp(t_env *env, char *var)
 
 	new = malloc(sizeof(char *) * (ft_strstrlen(env->envp) + 2));
 	if (!new)
-		exit(1);
+	{
+		perror("minishell: error malloc");
+		return (NULL);
+	}
 	i = 0;
 	while (env->envp[i])
 	{

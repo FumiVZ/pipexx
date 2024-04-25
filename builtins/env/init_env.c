@@ -6,11 +6,31 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 18:06:32 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 20:56:08 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/25 17:15:17 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+char	*ft_getenv(char **envp, char *name)
+{
+	size_t	i;
+	size_t	len;
+
+	i = 0;
+	len = ft_strlen(name);
+	while (envp[i])
+	{
+		if (!ft_strncmp(envp[i], name, len - 1))
+		{
+			if (envp[i][len] != '=')
+				return (NULL);
+			return (envp[i] + len + 1);
+		}
+		i++;
+	}
+	return (NULL);
+}
 
 static char	**ft_init_pwd(void)
 {
@@ -47,7 +67,10 @@ char	**ft_init_env(char **envp)
 	}
 	new = malloc(sizeof(char *) * (ft_strstrlen(envp) + 1));
 	if (!new)
+	{
+		perror("minishell: error malloc");
 		exit(1);
+	}
 	i = 0;
 	while (envp[i])
 	{

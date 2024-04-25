@@ -5,7 +5,6 @@ BUILD_DIR = build
 
 SRC =	$(wildcard code/*/*.c) \
 		$(wildcard builtins/*/*.c) \
-		main.c \
 		redirection.c
 
 LIBFT = libft/libft.a
@@ -32,8 +31,8 @@ $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)/builtins/history
 	mkdir -p $(BUILD_DIR)/code/split_line
 	mkdir -p $(BUILD_DIR)/code/split_command
-	mkdir -p $(BUILD_DIR)/code/color
 	mkdir -p $(BUILD_DIR)/code/error
+	mkdir -p $(BUILD_DIR)/code/prompt
 
 
 $(NAME): $(OBJECTS)

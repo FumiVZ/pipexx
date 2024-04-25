@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/04/24 22:31:00 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/25 17:43:49 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <termios.h>
 # include <unistd.h>
 
 # define ERR_FILE "minishell: %s: %s\n"
@@ -85,12 +86,12 @@ enum		e_sep
 	OR
 };
 
-void		ft_exit(t_env *env, char **cmd);
+void		ft_exit(t_env *env);
 void		ft_exit_error(t_env *env, int status);
 void		ft_env(t_env *env);
-void		ft_echo(char **args);
-void		ft_pwd(void);
-void		ft_cd(char **args, t_env *env);
+void		ft_echo(t_env *env, char **args);
+void		ft_pwd(t_env *env);
+void		ft_cd(t_env *env, char **args);
 void		ft_export(t_env *env, char **cmd);
 void		ft_unset(t_env *env, char **cmd);
 int			is_sep(char *s);
@@ -107,6 +108,8 @@ char		**ft_init_env(char **envp);
 char		**ft_export_env(t_env *env, char *var);
 void		open_redir(t_env *env);
 bool		check_syntax(char *str);
-char		*ft_color(void);
+void		ft_readline(t_env *env);
+char		*ft_getenv(char **envp, char *name);
+void		msg_perror(t_env *env, char *err);
 
 #endif

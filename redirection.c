@@ -6,11 +6,30 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 14:13:52 by vincent           #+#    #+#             */
-/*   Updated: 2024/03/17 00:24:39 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/25 13:57:50 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	is_sep(char *s)
+{
+	if (ft_strncmp(s, "&&", 2) == 0)
+		return (AND);
+	if (ft_strncmp(s, "||", 2) == 0)
+		return (OR);
+	if (ft_strncmp(s, ">>", 2) == 0)
+		return (APPEND);
+	if (ft_strncmp(s, "<<", 2) == 0)
+		return (HERE_DOC);
+	if (ft_strncmp(s, ">", 1) == 0)
+		return (OUT);
+	if (ft_strncmp(s, "<", 1) == 0)
+		return (IN);
+	if (ft_strncmp(s, "|", 1) == 0)
+		return (PIPE);
+	return (END);
+}
 
 char	*find_path(char **envp)
 {

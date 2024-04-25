@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:47:33 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 20:51:41 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/25 14:50:44 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ static char	**new_envp(t_env *env, char *var)
 
 	new = malloc(sizeof(char *) * (ft_strstrlen(env->envp)));
 	if (!new)
-		exit(1);
+	{
+		perror("minishell: error malloc");
+		return (NULL);
+	}
 	i = 0;
 	j = 0;
 	while (env->envp[i])
@@ -40,13 +43,21 @@ static char	**new_envp(t_env *env, char *var)
 static char	**ft_unset_envp(t_env *env, char *var)
 {
 	size_t	i;
+	char	**new;
 
 	i = 0;
 	while (env->envp[i])
 	{
 		if (!ft_strncmp(env->envp[i], var, ft_strlen(var) + 1))
 		{
-			return (new_envp(env, var));
+			new = new_envp(env, var);
+			if (new)
+				return (new);
+			else
+			{
+				env->status = 1;
+				return (env->envp);
+			}
 		}
 		i++;
 	}
@@ -56,13 +67,16 @@ static char	**ft_unset_envp(t_env *env, char *var)
 void	ft_unset(t_env *env, char **cmd)
 {
 	size_t	i;
+	char	**new;
 
 	if (!cmd[1])
 		return ;
 	i = 1;
 	while (cmd[i])
 	{
-		env->envp = ft_unset_envp(env, cmd[i]);
+		new = ft_unset_envp(env, cmd[i]);
+		if (!new)
+			return ;
 		++i;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 18:42:59 by machrist          #+#    #+#             */
-/*   Updated: 2024/04/24 22:28:49 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/25 13:43:20 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,18 @@ static bool	check_par(char *str, bool quote, bool dquote)
 	while (str[i])
 	{
 		if (str[i] == '$' && str[i + 1] == '(' && !quote && !dquote)
-			return (false);
+			return (msg_err(ERR_UNDEFINE));
 		if (str[i] == '(' && !quote && !dquote)
 			nb_par_open++;
 		if (str[i] == ')' && !quote && !dquote)
 			nb_par_close++;
 		check_quote(str[i], &quote, &dquote);
 		if (nb_par_close > nb_par_open)
-			return (false);
+			return (msg_err(ERR_PAR));
 		i++;
 	}
 	if (nb_par_close != nb_par_open)
-		return (false);
+		return (msg_err(ERR_PAR));
 	return (true);
 }
 
@@ -64,16 +64,16 @@ static bool	check_special(char *str, bool quote, bool dquote)
 		if (is_special_no_par(str[i]) && !quote && !dquote)
 		{
 			if (str[i] == '&' && str[i + 1] != '&')
-				return (false);
+				return (msg_err(ERR_TOKEN));
 			if (is_special_no_par(str[i + 1]))
 				if (str[i] != str[i + 1] || is_special_no_par(str[i + 2]))
-					return (false);
+					return (msg_err(ERR_TOKEN));
 		}
 		check_quote(str[i], &quote, &dquote);
 		i++;
 	}
 	if (is_special_no_par(str[i - 1]) && !quote && !dquote)
-		return (false);
+		return (msg_err(ERR_TOKEN));
 	return (true);
 }
 

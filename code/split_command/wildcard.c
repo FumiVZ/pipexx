@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:57:00 by machrist          #+#    #+#             */
-/*   Updated: 2024/04/24 22:29:35 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/25 13:05:39 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,16 +126,16 @@ char	*wildcard_match(const char *pattern)
 	while (entry != NULL)
 	{
 		if (match(entry->d_name, pattern, entry->d_name))
+		{
 			if (!set_result(&result, entry, pattern))
 			{
 				closedir(dir);
 				return (NULL);
 			}
+		}
 		entry = readdir(dir);
 	}
 	closedir(dir);
 	result = sort_result(result);
-	if (!result)
-		return (NULL);
 	return (result);
 }

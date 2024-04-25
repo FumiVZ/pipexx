@@ -6,13 +6,13 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 17:55:35 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 14:59:23 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/25 14:47:18 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	ft_echo(char **args)
+void	ft_echo(t_env *env, char **args)
 {
 	size_t	i;
 
@@ -20,6 +20,7 @@ void	ft_echo(char **args)
 	if (!args[1])
 	{
 		ft_putchar_fd('\n', 1);
+		env->status = 0;
 		return ;
 	}
 	if (!ft_strncmp(args[1], "-n", 3))
@@ -33,4 +34,5 @@ void	ft_echo(char **args)
 	}
 	if (ft_strncmp(args[1], "-n", 3))
 		ft_putchar_fd('\n', 1);
+	env->status = 0;
 }
