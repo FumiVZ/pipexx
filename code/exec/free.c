@@ -5,21 +5,47 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/21 18:47:09 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/01 18:58:14 by vincent          ###   ########.fr       */
+/*   Created: 2024/01/21 17:53:23 by machrist          #+#    #+#             */
+/*   Updated: 2024/05/01 19:08:45 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include "../header/child.h"
 
-void	ft_free_child(t_env *env)
+
+
+void	parent_free(t_pipex *pipex)
 {
-	free_split(env->envp, ft_strstrlen(env->envp));
-	free_split(env->cmds, ft_strstrlen(env->cmds));
-	free_split(env->clean_cmds, ft_strstrlen(env->clean_cmds));
+	int	i;
+
+	if (!pipex)
+		return ;
+	if (pipex->paths)
+	{
+		i = 0;
+		while (pipex->paths[i])
+			free(pipex->paths[i++]);
+		free(pipex->paths);
+	}
+	if (pipex->cmd)
+		free_split(pipex->cmd, ft_strstrlen(pipex->cmd));
+	if (pipex->cmds)
+		free_l(pipex->cmds);
+	free(pipex);
 }
 
-void	ft_free_parent(t_env *env)
+void	child_free(t_pipex *pipex)
 {
-	free_split(env->envp, ft_strstrlen(env->envp));
+	parent_free(pipex);
+	free(pipex->pid);
+	close(0);
+	close(1);
+}
+
+
+void	malloc_failed(t_pipex *pipex)
+{
+	ft_printf_fd(2, "pipex: malloc failed\n");
+	parent_free(pipex);
+	exit (EXIT_FAILURE);
 }
