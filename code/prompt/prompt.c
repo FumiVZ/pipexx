@@ -6,11 +6,12 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:30:59 by machrist          #+#    #+#             */
-/*   Updated: 2024/04/25 15:03:53 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/30 19:24:03 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+#include <signal.h>
 
 static bool	ft_builtins(t_env *env, char **args)
 {
@@ -43,7 +44,7 @@ static void	minishell(t_env *env, char *line)
 		ft_putstr_fd("minishell: syntax error\n", 2);
 		return ;
 	}
-	env->cmds = ft_word_spliting(line);
+	env->cmds = ft_word_spliting(line, " \t");
 	if (!env->cmds)
 		return ;
 	pattern_matching(env->cmds, env->envp);
@@ -65,12 +66,10 @@ static void	signal_handler(int signal)
 {
 	if (signal == SIGINT)
 	{
-		if (signal == SIGINT)
-			ft_putstr_fd("\nminishell$ ", 1);
-	}
-	if (signal == SIGQUIT)
-	{
-		printf("\r");
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 	}
 }
 
@@ -83,8 +82,11 @@ void	ft_readline(t_env *env)
 		line = readline("minishell$ ");
 		if (!line)
 			ft_exit_error(env, 0);
-		add_history(line);
-		minishell(env, line);
+		if (*line)
+		{
+			add_history(line);
+			minishell(env, line);
+		}
 	}
 }
 
@@ -98,9 +100,9 @@ int	main(int ac, char **av, char **envp)
 	sa.sa_handler = &signal_handler;
 	sa.sa_flags = SA_RESTART;
 	sigemptyset(&sa.sa_mask);
-	if (sigaction(SIGINT, &sa, NULL) == -1
-		|| sigaction(SIGQUIT, &sa, NULL) == -1)
+	if (sigaction(SIGINT, &sa, NULL) == -1)
 		printf("Error: signal\n");
+	signal(SIGQUIT, SIG_IGN);
 	env.envp = ft_init_env(envp);
 	ft_readline(&env);
 	return (0);

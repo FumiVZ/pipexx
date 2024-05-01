@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:40:28 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 15:18:09 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/30 19:27:02 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	check_quote(char c, bool *quote, bool *dquote)
 		*dquote = !*dquote;
 }
 
-static int	count_word(char const *s)
+static int	count_word(char const *s, char *arg)
 {
 	size_t	i;
 	size_t	res;
@@ -33,11 +33,11 @@ static int	count_word(char const *s)
 	dquote = false;
 	while (s[i])
 	{
-		while (s[i] && is_space(s[i]))
+		while (s[i] && is_space(s[i], arg))
 			i++;
 		if (s[i])
 			++res;
-		while (s[i] && (!is_space(s[i]) || quote || dquote))
+		while (s[i] && (!is_space(s[i], arg) || quote || dquote))
 		{
 			check_quote(s[i], &quote, &dquote);
 			if (!dquote && !quote && is_special_cpt(s, &i))
@@ -48,7 +48,7 @@ static int	count_word(char const *s)
 	return (res);
 }
 
-static size_t	len_word(char const *s)
+static size_t	len_word(char const *s, char *arg)
 {
 	size_t	i;
 	size_t	len;
@@ -59,7 +59,7 @@ static size_t	len_word(char const *s)
 	len = 0;
 	quote = false;
 	dquote = false;
-	while (s[i] && (!is_space(s[i]) || quote || dquote))
+	while (s[i] && (!is_space(s[i], arg) || quote || dquote))
 	{
 		check_quote(s[i], &quote, &dquote);
 		if (!dquote && !quote && is_special_cpt(s, &i))
@@ -70,13 +70,13 @@ static size_t	len_word(char const *s)
 	return (len);
 }
 
-static char	*crt_word(char const *s, size_t *j)
+static char	*crt_word(char const *s, size_t *j, char *arg)
 {
 	size_t	i;
 	size_t	len;
 	char	*word;
 
-	len = len_word(s);
+	len = len_word(s, arg);
 	word = malloc(sizeof(char) * len + 1);
 	if (!word)
 		return (NULL);
@@ -91,23 +91,23 @@ static char	*crt_word(char const *s, size_t *j)
 	return (word);
 }
 
-char	**ft_word_spliting(char const *s)
+char	**ft_word_spliting(char const *s, char *arg)
 {
 	char	**str;
 	size_t	i;
 	size_t	pos;
 
-	str = malloc(sizeof(char *) * (count_word(s) + 1));
+	str = malloc(sizeof(char *) * (count_word(s, arg) + 1));
 	if (!str)
 		return (NULL);
 	i = 0;
 	pos = 0;
 	while (s[i])
 	{
-		while (s[i] && is_space(s[i]))
+		while (s[i] && is_space(s[i], arg))
 			++i;
 		if (s[i] && !is_special(s[i]))
-			str[pos++] = crt_word(s + i, &i);
+			str[pos++] = crt_word(s + i, &i, arg);
 		else if (s[i])
 			str[pos++] = crt_is_special(s + i, &i);
 		if (s[i] && !str[pos - 1])

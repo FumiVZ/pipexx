@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:44:21 by machrist          #+#    #+#             */
-/*   Updated: 2024/04/25 17:44:51 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/30 19:25:51 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@
 # define ERR_TOKEN "minishell: syntax error near unexpected token"
 
 char	*wildcard_match(const char *pattern);
-char	**ft_word_spliting(char const *s);
+char	**ft_word_spliting(char const *s, char *arg);
 void	pattern_matching(char **str, char **env);
-bool	is_space(char c);
+bool	is_space(char c, char *arg);
 bool	is_special(char c);
 bool	is_special_cpt(char const *c, size_t *i);
 char	*crt_is_special(char const *s, size_t *j);

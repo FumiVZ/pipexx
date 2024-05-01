@@ -6,15 +6,24 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 14:27:24 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/16 14:41:46 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/30 19:22:25 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parthing.h"
 
-bool	is_space(char c)
+bool	is_space(char c, char *arg)
 {
-	return (c == ' ' || c == '\t' || c == '\n');
+	size_t	i;
+
+	i = 0;
+	while (arg[i])
+	{
+		if (arg[i] == c)
+			return (true);
+		++i;
+	}
+	return (false);
 }
 
 bool	is_special(char c)

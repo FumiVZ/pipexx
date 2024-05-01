@@ -1,0 +1,4 @@
+test_*
+a.out
+.vscode
+.vscode/settings.json

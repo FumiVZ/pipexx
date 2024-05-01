@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:45:49 by machrist          #+#    #+#             */
-/*   Updated: 2024/04/25 15:05:49 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/30 19:50:26 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	**new_envp(t_env *env, char *var)
 	if (!new)
 	{
 		perror("minishell: error malloc");
-		return (NULL);
+		return (env->envp);
 	}
 	i = 0;
 	while (env->envp[i])
@@ -38,16 +38,17 @@ static char	**new_envp(t_env *env, char *var)
 char	**ft_export_env(t_env *env, char *var)
 {
 	size_t	i;
+	size_t	len;
 
-	i = 0;
-	while (var[i] && var[i] != '=')
-		i++;
-	if (!var[i])
+	len = 0;
+	while (var[len] && var[len] != '=')
+		len++;
+	if (!var[len])
 		return (env->envp);
 	i = 0;
 	while (env->envp[i])
 	{
-		if (!ft_strncmp(env->envp[i], var, ft_strlen(var) + 1))
+		if (!ft_strncmp(env->envp[i], var, len))
 		{
 			free(env->envp[i]);
 			env->envp[i] = ft_strdup(var);

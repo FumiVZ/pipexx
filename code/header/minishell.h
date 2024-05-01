@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/04/25 17:43:49 by machrist         ###   ########.fr       */
+/*   Updated: 2024/04/30 19:23:39 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ size_t		len_cmd(char **cmd);
 char		**sep_case(char **cmds);
 char		**create_cmd(char **cmds);
 void		pattern_matching(char **str, char **env);
-char		**ft_word_spliting(char const *s);
+char		**ft_word_spliting(char const *s, char *arg);
 void		quote_removal(char **str);
 void		ft_free_child(t_env *env);
 void		ft_free_parent(t_env *env);
