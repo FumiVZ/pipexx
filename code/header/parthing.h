@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:44:21 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/04 05:56:10 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/04 06:43:17 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define ERR_WAITPID "waitpid failed"
 
 # define ERR_PAR "minishell: syntax error near unexpected token `('"
-# define ERR_UNDEFINE "syntax error near $() undefine behavior"
+# define ERR_UNDEFINE "syntax error undefine behavior\n"
 # define ERR_TOKEN "minishell: syntax error near unexpected token"
 
 char	*wildcard_match(const char *pattern);
