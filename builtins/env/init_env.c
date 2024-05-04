@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 18:06:32 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/01 15:43:44 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/01 16:59:47 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	**ft_init_env(char **envp)
 			perror("minishell: error malloc");
 			exit(1);
 		}
-		ft_strlcpy(new[i], envp[i], ft_strlen(envp[i]) + 1));
+		ft_strlcpy(new[i], envp[i], ft_strlen(envp[i]) + 1);
 		i++;
 	}
 	new[i] = NULL;

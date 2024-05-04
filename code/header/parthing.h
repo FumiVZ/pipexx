@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:44:21 by machrist          #+#    #+#             */
-/*   Updated: 2024/04/30 19:25:51 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/04 05:56:10 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <dirent.h>
 # include <libft.h>
+# include <minishell.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <sys/stat.h>
@@ -30,25 +31,28 @@
 # define ERR_FORK "fork failed"
 # define ERR_EXECVE "execve failed"
 # define ERR_WAITPID "waitpid failed"
-# define ERR_ACCESS "permission denied"
-# define ERR_CMD "command not found"
-# define ERR_CMD_EMPTY "command not found"
+
 # define ERR_PAR "minishell: syntax error near unexpected token `('"
 # define ERR_UNDEFINE "syntax error near $() undefine behavior"
 # define ERR_TOKEN "minishell: syntax error near unexpected token"
 
 char	*wildcard_match(const char *pattern);
 char	**ft_word_spliting(char const *s, char *arg);
-void	pattern_matching(char **str, char **env);
+char	**pattern_matching(char **str, char **env, t_env *envp);
 bool	is_space(char c, char *arg);
 bool	is_special(char c);
 bool	is_special_cpt(char const *c, size_t *i);
 char	*crt_is_special(char const *s, size_t *j);
 size_t	get_len_name(char *str);
-char	*get_value(char *str, char **env);
-char	*new_str(char *str, char *value, size_t len);
+char	*get_value(char *str, char **env, t_env *envp);
+char	*add_var_env(char *str, char *value, size_t len, size_t pos);
 char	*sort_result(char *result);
 int		msg_err(char *err);
 void	*msg_err_ptr(char *err);
+int		count_word(char const *s, char *arg);
+char	*ifs_value(char **env);
+size_t	pos_var(char *str);
+int		check_env_var(char *str);
+char	*check_pattern_word(char *str);
 
 #endif

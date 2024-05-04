@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:30:59 by machrist          #+#    #+#             */
-/*   Updated: 2024/04/30 19:24:03 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/01 20:05:47 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	minishell(t_env *env, char *line)
 	env->cmds = ft_word_spliting(line, " \t");
 	if (!env->cmds)
 		return ;
-	pattern_matching(env->cmds, env->envp);
+	env->cmds = pattern_matching(env->cmds, env->envp, env);
 	if (!(env->cmds))
 		return ;
 	i = 0;
@@ -103,6 +103,7 @@ int	main(int ac, char **av, char **envp)
 	if (sigaction(SIGINT, &sa, NULL) == -1)
 		printf("Error: signal\n");
 	signal(SIGQUIT, SIG_IGN);
+	env.status = 0;
 	env.envp = ft_init_env(envp);
 	ft_readline(&env);
 	return (0);
