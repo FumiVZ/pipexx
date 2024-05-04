@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 18:42:59 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/04 06:40:40 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/04 18:05:13 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static bool	check_par(char *str, bool quote, bool dquote)
 	nb_par_open = 0;
 	while (str[i])
 	{
-		if (str[i] == '$' && (str[i + 1] == '(' || str[i + 1] == '*') && !quote
+		if (str[i] == '$' && str[i + 1] == '(' && !quote
 			&& !dquote)
 			return (msg_err(ERR_UNDEFINE));
 		if (str[i] == '(' && !quote && !dquote)

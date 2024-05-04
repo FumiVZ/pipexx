@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:39:48 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/04 06:43:35 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/04 18:04:43 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,12 +118,24 @@ static char	**variable_env(char **str, char **envp, t_env *env)
 char	**pattern_matching(char **str, char **envp, t_env *env)
 {
 	size_t	i;
+	char	*tmp;
 
 	str = variable_env(str, envp, env);
 	i = 0;
 	while (str[i])
 	{
-		str[i] = check_pattern_word(str[i]);
+		tmp = check_pattern_word(str[i]);
+		if (!tmp)
+		{
+			free_split(str, ft_strstrlen(str));
+			msg_err(MALLOC);
+			return (NULL);
+		}
+		if (ft_strncmp(tmp, str[i], ft_strlen(str[i]) + 1))
+		{
+			free(str[i]);
+			str[i] = tmp;
+		}
 		i++;
 	}
 	return (str);
