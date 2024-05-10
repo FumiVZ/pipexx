@@ -6,7 +6,7 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 22:04:48 by vincent           #+#    #+#             */
-/*   Updated: 2024/05/01 19:37:00 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/05 16:21:07 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,10 @@ static void	get_infiles(t_pipex *pipex, char **cmd, t_cmd *cmds)
 			cmds->infiles_name[j] = ft_strdup(cmd[i + 1]);
 			cmds->infiles[j] = open(cmd[i + 1], O_RDONLY, 0644);
 			if (cmds->infiles[j] < 0)
-				msg_error_infile(ERR_FILE, *pipex, *cmds); 
+			{
+				msg_error_infile(ERR_FILE, *pipex, cmds->infiles_name[j]);
+				pipex->env->status = 1;
+			}
 			j++;
 		}
 		cmds->infiles[j] = -1;
@@ -131,7 +134,10 @@ static void	get_outfiles(t_pipex *pipex, char **cmd, t_cmd *cmds)
 			cmds->outfiles_name[j] = ft_strdup(cmd[i + 1]);
 			cmds->outfiles[j] = open_outfiles(pipex, cmd[i], cmd[i + 1]);
 			if (cmds->outfiles[j] < 0)
-				msg_error_outfile(ERR_FILE, *pipex, *cmds);
+			{
+				msg_error_outfile(ERR_FILE, *pipex, cmds->infiles_name[j]);
+				pipex->env->status = 1;
+			}
 			j++;
 		}
 		cmds->outfiles[j] = -1; 
@@ -206,50 +212,77 @@ void	create_new_nodes(t_pipex *pipex, t_cmd *cmds)
 	tmp->args = get_args(pipex, &pipex->cmd[pipex->i]);
 	tmp->pipeid = cmds->pipeid + 1;
 	get_infiles(pipex, &pipex->cmd[pipex->i], tmp);
+	if (pipex->env->status == 0)
 	get_outfiles(pipex, &pipex->cmd[pipex->i], tmp);
 	tmp->next = NULL;
 	cmds->next = tmp;
-	pipex->i += ft_strstrlen(tmp->args) + ft_strstrlen(tmp->infiles_name) + ft_strstrlen(tmp->outfiles_name);
+	while (pipex->cmd[pipex->i] && !(chre(pipex->cmd[pipex->i], "&&") || \
+		chre(pipex->cmd[pipex->i], "||")) && !chre(pipex->cmd[pipex->i], "|"))
+		pipex->i++;
 	if (pipex->cmd[pipex->i] && chre(pipex->cmd[pipex->i], "|"))
 		pipex->i++;
 }
 
+bool	delete_parenthesies(t_pipex *pipex)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (pipex->cmd[i])
+	{
+		if (pipex->cmd[i][0] == '(')
+		{
+			
+		}
+		if (j < 0)
+			return (false);
+		i++;
+	}
+	if (j)
+		return (false);
+	return (true);
+}
+
+
 void	parse_cmd(t_pipex *pipex, t_cmd *cmds)
 {
-	t_cmd	*tmp;
+		t_cmd   *tmp;
 
-	if (!cmds)
-		msg_error(ERR_MALLOC, pipex);
-	list_init(cmds);
-	pipex->cmd_nmbs = 0;
-/* 	check_for_parentheses(pipex); */
-	cmds->args = get_args(pipex, &pipex->cmd[pipex->i]);
-	get_infiles(pipex, &pipex->cmd[pipex->i], cmds);
-	get_outfiles(pipex, &pipex->cmd[pipex->i], cmds);
-	while (pipex->cmd[pipex->i] && !(chre(pipex->cmd[pipex->i], "&&") || \
-		chre(pipex->cmd[pipex->i], "||")) && !chre(pipex->cmd[pipex->i], "|"))
-		pipex->i++;
-	if (pipex->cmd[pipex->i] && (chre(pipex->cmd[pipex->i], "||") || chre(pipex->cmd[pipex->i], "&&")))
-	{
+		if (!cmds)
+				msg_error(ERR_MALLOC, pipex);
+		list_init(cmds);
+		pipex->cmd_nmbs = 0;
+/*      check_for_parentheses(pipex); */
+		cmds->args = get_args(pipex, &pipex->cmd[pipex->i]);
+		get_infiles(pipex, &pipex->cmd[pipex->i], cmds);
+		get_outfiles(pipex, &pipex->cmd[pipex->i], cmds);
+		while (pipex->cmd[pipex->i] && !(chre(pipex->cmd[pipex->i], "&&") || \
+				chre(pipex->cmd[pipex->i], "||")) && !chre(pipex->cmd[pipex->i], "|"))
+				pipex->i++;
+		if (!pipex->cmd[pipex->i] || (chre(pipex->cmd[pipex->i], "||") || chre(pipex->cmd[pipex->i], "&&")))
+		{
+				tmp = cmds;
+				while (cmds->next)
+						cmds = cmds->next;
+				pipex->nb_pipes = 2 * (pipex->cmd_nmbs - 1);
+				cmds = tmp;
+				printf("cmd_nmbs = %d\n", pipex->cmd_nmbs);
+				pipex->pid = malloc(sizeof(pid_t) * (pipex->cmd_nmbs));
+				return ;
+		}
+		if (pipex->cmd[pipex->i])
+				pipex->i++;
+		while (pipex->cmd[pipex->i] && !(chre(pipex->cmd[pipex->i], "&&") \
+				|| chre(pipex->cmd[pipex->i], "||")))
+				create_new_nodes(pipex, cmds);
 		tmp = cmds;
 		while (cmds->next)
-			cmds = cmds->next;
+				cmds = cmds->next;
 		pipex->nb_pipes = 2 * (pipex->cmd_nmbs - 1);
 		cmds = tmp;
 		pipex->pid = malloc(sizeof(pid_t) * (pipex->cmd_nmbs));
-		return ;
-	}
-	if (pipex->cmd[pipex->i])
-		pipex->i++;
-	while (pipex->cmd[pipex->i] && !(chre(pipex->cmd[pipex->i], "&&") \
-		|| chre(pipex->cmd[pipex->i], "||")))
-		create_new_nodes(pipex, cmds);
-	tmp = cmds;
-	while (cmds->next)
-		cmds = cmds->next;
-	pipex->nb_pipes = 2 * (pipex->cmd_nmbs - 1);
-	cmds = tmp;
-	pipex->pid = malloc(sizeof(pid_t) * (pipex->cmd_nmbs));
-	if (!pipex->pid)
-		msg_error(ERR_MALLOC, pipex);
+		if (!pipex->pid)
+				msg_error(ERR_MALLOC, pipex);
 }

@@ -6,7 +6,7 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 19:23:42 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/01 16:39:49 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/04 17:25:23 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,11 @@ int	wait_execve(t_pipex *pipex)
 	{
 		waitpid(pipex->pid[i], &status, 0);
 		if (WIFEXITED(status))
-		{
-			printf("status: %d\n", WEXITSTATUS(status));
 			pipex->env->status = WEXITSTATUS(status);
-		}
 		i++;
 	}
 	if (WIFEXITED(status))
-	{
 		pipex->env->status = WEXITSTATUS(status);
-	}
-	free(pipex->pid);
 	return (status);
 }
 
@@ -82,6 +76,7 @@ void	init_pipex(t_env *env)
 		malloc_failed(pipex);
 	pipex->cmd = env->cmds;
 	pipex->i = 0;
+	pipex->pid = NULL;
 	pipex->paths = ft_split(find_path(env->envp), ':');
 	pipex->cmds = NULL;
 	if (!pipex->paths)
@@ -90,7 +85,7 @@ void	init_pipex(t_env *env)
 	if (!pipex->paths)
 		malloc_failed(pipex);
 	while (pipex->cmd[pipex->i])
-		pipex->i = child_crt(*pipex, env->envp);
+		pipex->i = child_crt(pipex, env->envp);
 	parent_free(pipex);
 }
 

@@ -6,7 +6,7 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:30:59 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/01 16:24:22 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/04 17:36:02 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,12 @@
 
 static void	minishell(t_env *env, char *line)
 {
-	if (!check_syntax(line))
+/* 	if (!check_syntax(line))
 	{
 		ft_putstr_fd("minishell: syntax error\n", 2);
 		return ;
-	}
+	} */
 	env->cmds = ft_word_spliting(line, " \t");
-	if (!env->cmds)
-		return ;
-	pattern_matching(env->cmds, env->envp);
 	if (!(env->cmds))
 		return ;
 	init_pipex(env);
@@ -66,6 +63,7 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	sa.sa_handler = &signal_handler;
 	sa.sa_flags = SA_RESTART;
+	env.status = 0;
 	sigemptyset(&sa.sa_mask);
 	if (sigaction(SIGINT, &sa, NULL) == -1)
 		printf("Error: signal\n");

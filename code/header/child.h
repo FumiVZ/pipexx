@@ -6,7 +6,7 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:47 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/01 18:52:09 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/05 16:10:52 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <libft.h>
 # include <fcntl.h>
 
-void	child_free(t_pipex *pipex);
+void	child_free(t_pipex *pipex, char **env);
 int		msg(char *err);
 void	open_redir(t_env *env);
 void	msg_error_cmd(char *err, t_cmd cmds);

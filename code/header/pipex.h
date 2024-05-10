@@ -6,7 +6,7 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:18:11 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/01 18:52:25 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/01 21:02:53 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	**command_get(t_pipex *pipex);
 void	msg_error(char *err, t_pipex *pipex);
 int		msg(char *err);
 void	parent_free(t_pipex *pipex);
-int		child_crt(t_pipex pipex, char **env);
+int		child_crt(t_pipex *pipex, char **env);
 char	*find_path(char **env);
 void	malloc_failed(t_pipex *pipex);
 int		flags(char *str);

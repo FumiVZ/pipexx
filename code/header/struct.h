@@ -6,7 +6,7 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:20:40 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/01 19:33:30 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/01 20:04:32 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	close_files(t_pipex	*pipex, t_cmd *cmd);
 void	pipe_handle(t_pipex *pipex, t_cmd *cmd);
 void	crt_pipes(t_pipex *pipex, t_cmd *cmd);
 void	parent_free(t_pipex *pipex);
-void	msg_error_outfile(char *err, t_pipex pipex, t_cmd cmds);
-void	msg_error_infile(char *err, t_pipex pipex, t_cmd cmds);
+void	msg_error_outfile(char *err, t_pipex pipex, char *outfiles_name);
+void	msg_error_infile(char *err, t_pipex pipex, char *infile_name);
 
 #endif
