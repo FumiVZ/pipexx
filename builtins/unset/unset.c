@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:47:33 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/15 12:03:14 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/15 12:29:08 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ void	ft_unset(t_env *env, char **cmd)
 		return ;
 	clean_cmd = ft_clean_cmd(env->envp, cmd + 1);
 	new = ft_unset_envp(env->envp, clean_cmd);
+	free(clean_cmd);
 	if (!new)
 		return ;
-	free(clean_cmd);
 	free(env->envp);
 	env->envp = new;
 }
