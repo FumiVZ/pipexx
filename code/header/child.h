@@ -6,7 +6,7 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:47 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/05 16:10:52 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/15 04:20:22 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	parent_free(t_pipex *pipex);
 void	close_pipes(t_pipex *pipex, t_cmd *cmd);
 void	parse_cmd(t_pipex *pipex, t_cmd *cmds);
 void	ft_exit(t_env *env, t_pipex *pipex);
+int		here_doc(t_pipex *pipex, t_cmd *cmds, char **cmd);
 
 
 #endif
