@@ -6,33 +6,59 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:09:04 by vincent           #+#    #+#             */
-/*   Updated: 2024/05/15 04:23:04 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/20 02:36:42 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-/* int	here_doc(t_pipex *pipex, t_cmd *cmds, char **cmd)
+char *collect_heredoc_input(char *delimiter)
 {
-	int		i;
-	int		fd;
-	char	*line;
+	char *line;
+	char *tmp;
+	char *tmp2;
 
-	i = -1;
-	fd = 0;
-	while (!chre(line, cmds->infiles_name[]))
+	tmp = ft_strdup("");
+	if (!tmp)
+		ft_exit_error(NULL, 1);
+	while (1)
 	{
-		get_next_line(&line);
-		if (!line)
-			break ;
-		if (fd)
-			close(fd);
+		line = get_next_line(0);
+		if (!line || ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
+		{
+			if (!line)
+			{
+				ft_printf_fd(2, "minishell: syntax error\n");
+				free(tmp);
+				ft_exit_error(NULL, 1);
+			}
+			free(line);
+			break;
+		}
+		tmp2 = ft_strjoin(tmp, line);
+		free(tmp);
+		tmp = tmp2;
 		free(line);
-		break ;
 	}
-	ft_putendl_fd(line, fd);
-	free(line);
-	close(fd);
-	j++;
-	return (fd);
-} */
+	return (tmp);
+}
+
+int here_doc(t_pipex *pipex, char *infile_name)
+{
+	int pipefd[2];
+	char *input;
+
+	if (pipe(pipefd) == -1)
+	{
+		perror("pipe");
+		ft_exit_error(pipex->env, 1);
+	}
+	input = collect_heredoc_input(infile_name);
+	if (!input)
+		ft_exit_error(pipex->env, 1);
+	write(pipefd[1], input, ft_strlen(input));
+	close(pipefd[1]);
+	free(input);
+
+	return pipefd[0];
+}

@@ -6,7 +6,7 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 22:04:48 by vincent           #+#    #+#             */
-/*   Updated: 2024/05/15 04:22:45 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/20 02:32:40 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,18 +76,17 @@ static void	malloc_outfiles(t_pipex *pipex, t_cmd *cmds, char **cmd)
 	}
 }
 
-int		open_infiles(t_pipex *pipex, char *cmd, char *file)
+int		open_infiles(t_pipex *pipex, char *cmd, char *file, char *infile_name)
 {
 	int	fd;
 
-	(void)pipex;
-	if (chre(cmd, "<"))
+	if (ft_strncmp(cmd, "<<", 2))
 		fd = open(file, O_RDONLY);
-/* 	else
+	else
 	{
-		fd = here_doc(pipex, file);
-		return (0);
-	} */
+		ft_printf_fd(2, "here_doc\n");
+		fd = here_doc(pipex, infile_name);
+	}
 	return (fd);
 }
 
@@ -104,10 +103,10 @@ static void	get_infiles(t_pipex *pipex, char **cmd, t_cmd *cmds)
 	while (cmd[++i] && !(chre(cmd[i], "&&") \
 		|| chre(cmd[i], "||") || chre(cmd[i], "|")))
 	{
-		if (chre(cmd[i], "<"))
+		if (chre(cmd[i], "<") || chre(cmd[i], "<<"))
 		{
 			cmds->infiles_name[j] = ft_strdup(cmd[i + 1]);
-			cmds->infiles[j] = open_infiles(pipex, cmd[i], cmd[i + 1]);
+			cmds->infiles[j] = open_infiles(pipex, cmd[i], cmd[i + 1], cmds->infiles_name[j]);
 			if (cmds->infiles[j] < 0)
 			{
 				msg_error_infile(ERR_FILE, *pipex, cmds->infiles_name[j]);
