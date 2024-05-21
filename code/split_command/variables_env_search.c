@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 13:31:29 by machrist          #+#    #+#             */
-/*   Updated: 2024/03/17 15:17:17 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/21 16:08:33 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,20 @@
 static bool	is_valid_char(char c)
 {
 	return (ft_isalnum(c) || c == '_');
+}
+
+char	*ifs_value(char **env)
+{
+	size_t	i;
+
+	i = 0;
+	while (env[i])
+	{
+		if (!ft_strncmp(env[i], "IFS=", 4))
+			return (env[i] + 4);
+		i++;
+	}
+	return (" \t\n");
 }
 
 size_t	get_len_name(char *str)
@@ -29,7 +43,7 @@ size_t	get_len_name(char *str)
 	return (len);
 }
 
-char	*get_value(char *str, char **env)
+char	*get_value(char *str, char **env, t_env *envp)
 {
 	size_t	i;
 	size_t	len;
@@ -37,7 +51,7 @@ char	*get_value(char *str, char **env)
 
 	i = 0;
 	if (str[0] == '?')
-		return (ft_itoa(0));
+		return (ft_itoa(envp->status));
 	while (env[i])
 	{
 		if (!ft_strncmp(env[i], str, get_len_name(str)))
@@ -57,7 +71,7 @@ char	*get_value(char *str, char **env)
 	return (ft_strdup(""));
 }
 
-char	*new_str(char *str, char *value, size_t len)
+char	*add_var_env(char *str, char *value, size_t len, size_t pos)
 {
 	char	*new;
 	size_t	i;
@@ -72,11 +86,11 @@ char	*new_str(char *str, char *value, size_t len)
 	j = 0;
 	while (str[i])
 	{
-		if (str[i] == '$' && get_len_name(str + i + 1) == len)
+		if (i == pos - 1)
 		{
 			ft_strlcpy(new + i, value, ft_strlen(value) + 1);
 			j += ft_strlen(value);
-			i += len + 1;
+			i += len;
 		}
 		else
 			new[j++] = str[i++];

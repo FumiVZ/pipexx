@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 19:23:42 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/04 17:25:23 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/21 17:24:48 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,11 @@ int	wait_execve(t_pipex *pipex)
 	{
 		waitpid(pipex->pid[i], &status, 0);
 		if (WIFEXITED(status))
-			pipex->env->status = WEXITSTATUS(status);
+			pipex->env->status = status;
 		i++;
 	}
 	if (WIFEXITED(status))
-		pipex->env->status = WEXITSTATUS(status);
+		pipex->env->status = status;
 	return (status);
 }
 
@@ -69,7 +69,7 @@ void	print_tab(char **tab)
 void	init_pipex(t_env *env)
 {
 	t_pipex	*pipex;
-	
+
 	pipex = malloc(sizeof(t_pipex));
 	pipex->env = env;
 	if (!pipex)

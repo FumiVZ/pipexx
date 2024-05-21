@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:53:23 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/05 16:10:38 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/21 17:30:20 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/child.h"
-
-
 
 void	parent_free(t_pipex *pipex)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 16:46:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/01 22:17:19 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/21 17:17:20 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	crt_pipes(t_pipex *pipex, t_cmd *cmd)
 	i = 0;
 	if (pipex->cmd_nmbs < 2)
 		return ;
-	ft_printf_fd(2, "%d\n", pipex->cmd_nmbs);
 	cmd->pipe = malloc(sizeof(int) * 2 * (pipex->cmd_nmbs - 1));
 	if (!cmd->pipe)
 		msg_error(ERR_PIPE, pipex);

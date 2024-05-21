@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/01 18:55:36 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/21 15:59:22 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void		ft_pwd(t_env *env);
 void		ft_cd(t_env *env, char **args);
 void		ft_export(t_env *env, char **cmd);
 void		ft_unset(t_env *env, char **cmd);
-void		pattern_matching(char **str, char **env);
+char		**pattern_matching(char **str, char **env, t_env *envp);
 char		**ft_word_spliting(char const *s, char *arg);
 void		quote_removal(char **str);
 void		ft_free_child(t_env *env);
@@ -63,5 +63,6 @@ void		ft_readline(t_env *env);
 char		*ft_getenv(char **envp, char *name);
 void		msg_perror(t_env *env, char *err);
 void		init_pipex(t_env *env);
+char		*wildcard_match(const char *pattern);
 
 #endif

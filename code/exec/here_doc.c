@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:09:04 by vincent           #+#    #+#             */
-/*   Updated: 2024/05/20 02:36:42 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/21 15:47:33 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char *collect_heredoc_input(char *delimiter)
 	while (1)
 	{
 		line = get_next_line(0);
-		if (!line || ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
+		if (!line || !ft_strncmp(line, delimiter, ft_strlen(delimiter)))
 		{
 			if (!line)
 			{

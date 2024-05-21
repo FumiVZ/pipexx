@@ -6,77 +6,81 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:47:33 by machrist          #+#    #+#             */
-/*   Updated: 2024/04/25 14:50:44 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/21 17:08:55 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static char	**new_envp(t_env *env, char *var)
+static char	**ft_unset_envp(char **envp, char **cmd)
 {
-	char	**new;
 	size_t	i;
 	size_t	j;
+	size_t	k;
+	char	**new;
 
-	new = malloc(sizeof(char *) * (ft_strstrlen(env->envp)));
-	if (!new)
-	{
-		perror("minishell: error malloc");
-		return (NULL);
-	}
 	i = 0;
 	j = 0;
-	while (env->envp[i])
+	new = malloc(sizeof(char *) * (ft_strstrlen(envp) + 1 - ft_strstrlen(cmd)));
+	if (!new)
+		return (free(cmd), NULL);
+	while (envp[i])
 	{
-		if (ft_strncmp(env->envp[i], var, ft_strlen(var) + 1))
+		k = 0;
+		while (cmd[k])
 		{
-			new[j] = ft_strdup(env->envp[i]);
+			if (!ft_strncmp(envp[i], cmd[k], ft_strlen(cmd[k]))
+				&& envp[i][ft_strlen(cmd[k])] == '=')
+				free(envp[i++]);
+			k++;
+		}
+		if (envp[i])
+			new[j++] = envp[i++];
+	}
+	new[j] = NULL;
+	return (new);
+}
+
+static char	**ft_clean_cmd(char **envp, char **cmd)
+{
+	size_t	i;
+	size_t	j;
+	size_t	k;
+	char	**new;
+
+	new = malloc(sizeof(char *) * (ft_strstrlen(cmd) + 1));
+	if (!new)
+		return (NULL);
+	i = 0;
+	k = 0;
+	while (envp[i])
+	{
+		j = 0;
+		while (cmd[j])
+		{
+			if (!ft_strncmp(envp[i], cmd[j], ft_strlen(cmd[j]))
+				&& envp[i][ft_strlen(cmd[j])] == '=')
+				new[k++] = cmd[j];
 			j++;
 		}
 		i++;
 	}
-	new[j] = NULL;
-	free_split(env->envp, ft_strstrlen(env->envp));
+	new[k] = NULL;
 	return (new);
-}
-
-static char	**ft_unset_envp(t_env *env, char *var)
-{
-	size_t	i;
-	char	**new;
-
-	i = 0;
-	while (env->envp[i])
-	{
-		if (!ft_strncmp(env->envp[i], var, ft_strlen(var) + 1))
-		{
-			new = new_envp(env, var);
-			if (new)
-				return (new);
-			else
-			{
-				env->status = 1;
-				return (env->envp);
-			}
-		}
-		i++;
-	}
-	return (env->envp);
 }
 
 void	ft_unset(t_env *env, char **cmd)
 {
-	size_t	i;
 	char	**new;
+	char	**clean_cmd;
 
 	if (!cmd[1])
 		return ;
-	i = 1;
-	while (cmd[i])
-	{
-		new = ft_unset_envp(env, cmd[i]);
-		if (!new)
-			return ;
-		++i;
-	}
+	clean_cmd = ft_clean_cmd(env->envp, cmd + 1);
+	new = ft_unset_envp(env->envp, clean_cmd);
+	free(clean_cmd);
+	if (!new)
+		return ;
+	free(env->envp);
+	env->envp = new;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:06 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/05 16:11:27 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/21 17:48:45 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,17 +82,15 @@ static void	child_exec(t_pipex *pipex, t_cmd *cmds, char **env)
 	close_files(pipex, pipex->cmds);
 	close_pipes(pipex, pipex->cmds);
 	pipex->cmd_paths = get_cmd_with_path(pipex, cmds, env);
+	ft_printf_fd(2, "cmd_paths: %s\n", pipex->cmd_paths);
 	if (!pipex->cmd_paths || errno == EACCES)
 	{
-		if (!ft_builtins(pipex->env, pipex, cmds->args))
-		{
-			if (errno == EACCES)
-				msg_error_cmd(ERR_ACCESS, *cmds);
-			else
-				msg_error_cmd(ERR_CMD, *cmds);
-			child_free(pipex, env);
-			exit (EXIT_FAILURE);
-		}
+		if (errno == EACCES)
+			msg_error_cmd(ERR_ACCESS, *cmds);
+		else
+			msg_error_cmd(ERR_CMD, *cmds);
+		child_free(pipex, env);
+		exit (EXIT_FAILURE);
 	}
 	execve(pipex->cmd_paths, cmds->args, env);
 	child_free(pipex, env);
@@ -101,19 +99,21 @@ static void	child_exec(t_pipex *pipex, t_cmd *cmds, char **env)
 
 int	single_command(t_pipex *pipex, t_cmd *cmds, char **env)
 {
-	int status;
+	int	status;
 
 	if (cmds->args && cmds->args[0] && !ft_strncmp(cmds->args[0], "exit", 5))
 		ft_exit(pipex->env, pipex);
-	pattern_matching(cmds->args, env);
+	cmds->args = pattern_matching(cmds->args, env, pipex->env);
 	quote_removal(cmds->args);
+	if (ft_builtins(pipex->env, pipex, cmds->args))
+		return (pipex->env->status);
 	pipex->pid[0] = fork();
-	if (pipex->pid[0] == -1)
+	if (pipex->pid[0] == -1)	
 		msg_error(ERR_FORK, pipex);
 	if (pipex->pid[0] == 0 && pipex->env->status == 0)
 		child_exec(pipex, cmds, env);
 	close_files(pipex, pipex->cmds);
- 	status = wait_execve(pipex);
+	status = wait_execve(pipex);
 	return (status);
 }
 
@@ -127,8 +127,10 @@ int	multiple_command(t_pipex *pipex, t_cmd *cmds, char **env)
 	{
 		if (cmds->args && cmds->args[0] && !ft_strncmp(cmds->args[0], "exit", 5))
 			ft_exit(pipex->env, pipex);
-		pattern_matching(cmds->args, env);
+		cmds->args = pattern_matching(cmds->args, env, pipex->env);
 		quote_removal(cmds->args);
+		if (ft_builtins(pipex->env, pipex, cmds->args))
+			return (pipex->env->status);
 		if (pipex->env->status == 0)
 			pipex->pid[i] = fork();
 		if (pipex->pid[i] == -1)
@@ -143,7 +145,6 @@ int	multiple_command(t_pipex *pipex, t_cmd *cmds, char **env)
 	}
 	close_files(pipex, pipex->cmds);
 	close_pipes(pipex, pipex->cmds);
-	free_split(cmds->args, ft_strstrlen(cmds->args));
 	i = wait_execve(pipex);
 	return (i);
 }
@@ -152,7 +153,6 @@ int	child_crt(t_pipex *pipex, char **env)
 {
 	t_cmd	*cmds;
 
-	pipex->env->status = 0;
 	cmds = malloc(sizeof(t_cmd));
 	parse_cmd(pipex, cmds);
 	pipex->cmds = cmds;
@@ -162,6 +162,8 @@ int	child_crt(t_pipex *pipex, char **env)
 		single_command(pipex, cmds, env);
 	if (pipex->cmd[pipex->i])
 		pipex->i++;
+	ft_printf_fd(2, "status: %d\n", pipex->env->status);
+	ft_printf_fd(2, "cmd%s\n", pipex->cmd[pipex->i]);
 	if (pipex->env->status != 0 && pipex->cmd[pipex->i - 1] && chre(pipex->cmd[pipex->i - 1], "&&"))
 		while (pipex->cmd[pipex->i] && !(chre(pipex->cmd[pipex->i], "&&") || chre(pipex->cmd[pipex->i], "||")))
 			pipex->i++;

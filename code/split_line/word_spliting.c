@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 17:40:28 by machrist          #+#    #+#             */
-/*   Updated: 2024/04/30 19:27:02 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/21 16:10:31 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	check_quote(char c, bool *quote, bool *dquote)
 		*dquote = !*dquote;
 }
 
-static int	count_word(char const *s, char *arg)
+int	count_word(char const *s, char *arg)
 {
 	size_t	i;
 	size_t	res;

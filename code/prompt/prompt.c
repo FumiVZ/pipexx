@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:30:59 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/04 17:36:02 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/21 16:00:56 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	sa.sa_handler = &signal_handler;
 	sa.sa_flags = SA_RESTART;
-	env.status = 0;
 	sigemptyset(&sa.sa_mask);
 	if (sigaction(SIGINT, &sa, NULL) == -1)
 		printf("Error: signal\n");
 	signal(SIGQUIT, SIG_IGN);
+	env.status = 0;
 	env.envp = ft_init_env(envp);
 	ft_readline(&env);
 	return (0);
