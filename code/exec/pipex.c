@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 19:23:42 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/21 17:24:48 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/21 19:04:12 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	init_pipex(t_env *env)
 	pipex->env = env;
 	if (!pipex)
 		malloc_failed(pipex);
+	pipex->cmd_nmbs = 0;
 	pipex->cmd = env->cmds;
 	pipex->i = 0;
 	pipex->pid = NULL;

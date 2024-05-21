@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:06 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/21 17:48:45 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/21 19:08:23 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,16 +108,16 @@ int	single_command(t_pipex *pipex, t_cmd *cmds, char **env)
 	if (ft_builtins(pipex->env, pipex, cmds->args))
 		return (pipex->env->status);
 	pipex->pid[0] = fork();
-	if (pipex->pid[0] == -1)	
+	if (pipex->pid[0] == -1)
 		msg_error(ERR_FORK, pipex);
-	if (pipex->pid[0] == 0 && pipex->env->status == 0)
+	if (pipex->pid[0] == 0)
 		child_exec(pipex, cmds, env);
 	close_files(pipex, pipex->cmds);
 	status = wait_execve(pipex);
 	return (status);
 }
 
-int	multiple_command(t_pipex *pipex, t_cmd *cmds, char **env)
+void	multiple_command(t_pipex *pipex, t_cmd *cmds, char **env)
 {
 	int	i;
 
@@ -130,9 +130,8 @@ int	multiple_command(t_pipex *pipex, t_cmd *cmds, char **env)
 		cmds->args = pattern_matching(cmds->args, env, pipex->env);
 		quote_removal(cmds->args);
 		if (ft_builtins(pipex->env, pipex, cmds->args))
-			return (pipex->env->status);
-		if (pipex->env->status == 0)
-			pipex->pid[i] = fork();
+			return ;
+		pipex->pid[i] = fork();
 		if (pipex->pid[i] == -1)
 			msg_error(ERR_FORK, pipex);
 		if (pipex->pid[i] == 0)
@@ -145,8 +144,7 @@ int	multiple_command(t_pipex *pipex, t_cmd *cmds, char **env)
 	}
 	close_files(pipex, pipex->cmds);
 	close_pipes(pipex, pipex->cmds);
-	i = wait_execve(pipex);
-	return (i);
+	wait_execve(pipex);
 }
 
 int	child_crt(t_pipex *pipex, char **env)
@@ -156,19 +154,17 @@ int	child_crt(t_pipex *pipex, char **env)
 	cmds = malloc(sizeof(t_cmd));
 	parse_cmd(pipex, cmds);
 	pipex->cmds = cmds;
-	if (cmds->next && pipex->env->status == 0)
+	if (cmds->next)
 		multiple_command(pipex, cmds, env);
 	else
 		single_command(pipex, cmds, env);
 	if (pipex->cmd[pipex->i])
 		pipex->i++;
-	ft_printf_fd(2, "status: %d\n", pipex->env->status);
-	ft_printf_fd(2, "cmd%s\n", pipex->cmd[pipex->i]);
-	if (pipex->env->status != 0 && pipex->cmd[pipex->i - 1] && chre(pipex->cmd[pipex->i - 1], "&&"))
-		while (pipex->cmd[pipex->i] && !(chre(pipex->cmd[pipex->i], "&&") || chre(pipex->cmd[pipex->i], "||")))
-			pipex->i++;
-	else if (pipex->env->status == 0 && pipex->cmd[pipex->i - 1] && chre(pipex->cmd[pipex->i - 1], "||"))
-		while (pipex->cmd[pipex->i] && !(chre(pipex->cmd[pipex->i], "&&") || chre(pipex->cmd[pipex->i], "||")))
+	if (pipex->cmd[pipex->i] && !(((pipex->env->status == 0 && \
+		chre(pipex->cmd[pipex->i - 1], "&&"))) || (pipex->env->status != 0 \
+				&& chre(pipex->cmd[pipex->i - 1], "||"))))
+		while (pipex->cmd[pipex->i] && (!(chre(pipex->cmd[pipex->i], "&&")) \
+			|| !(chre(pipex->cmd[pipex->i], "||"))))
 			pipex->i++;
 	return (pipex->i);
 }
