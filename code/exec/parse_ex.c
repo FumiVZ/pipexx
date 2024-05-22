@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_ex.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 22:04:48 by vincent           #+#    #+#             */
-/*   Updated: 2024/05/21 16:27:17 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/22 19:10:22 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ static void	malloc_infiles(t_pipex *pipex, t_cmd *cmds, char **cmd)
 		cmds->infiles = malloc(sizeof(int) * (j + 1));
 		if (!cmds->infiles)
 			msg_error(ERR_MALLOC, pipex);
-		cmds->infiles_name = malloc(sizeof(char *) * (j + 1));
+		else
+			cmds->infiles_name = malloc(sizeof(char *) * (j + 1));
 		if (!cmds->infiles_name)
 			msg_error(ERR_MALLOC, pipex);
 		cmds->infiles_name[j] = NULL;
@@ -83,10 +84,7 @@ int	open_infiles(t_pipex *pipex, char *cmd, char *file, char *infile_name)
 	if (ft_strncmp(cmd, "<<", 2))
 		fd = open(file, O_RDONLY);
 	else
-	{
-		ft_printf_fd(2, "here_doc\n");
 		fd = here_doc(pipex, infile_name);
-	}
 	return (fd);
 }
 
@@ -112,6 +110,18 @@ static void	get_infiles(t_pipex *pipex, char **cmd, t_cmd *cmds)
 			{
 				msg_error_infile(ERR_FILE, *pipex, cmds->infiles_name[j]);
 				pipex->env->status = 1;
+				j = -1;
+				while (cmds->infiles[++j] != -1)
+				{
+					close(cmds->infiles[j]);
+					free(cmds->infiles_name[j]);
+				}
+				free(cmds->infiles);
+				free(cmds->infiles_name);
+				cmds->infiles = NULL;
+				cmds->infiles_name = NULL;
+				cmds->exec = 0;
+				break ;
 			}
 			j++;
 		}
@@ -150,8 +160,20 @@ static void	get_outfiles(t_pipex *pipex, char **cmd, t_cmd *cmds)
 			cmds->outfiles[j] = open_outfiles(pipex, cmd[i], cmd[i + 1]);
 			if (cmds->outfiles[j] < 0)
 			{
-				msg_error_outfile(ERR_FILE, *pipex, cmds->infiles_name[j]);
+				msg_error_outfile(ERR_FILE, *pipex, cmds->outfiles_name[j]);
 				pipex->env->status = 1;
+				j = -1;
+				while (cmds->outfiles[++j] != -1)
+				{
+					close(cmds->outfiles[j]);
+					free(cmds->outfiles_name[j]);
+				}
+				free(cmds->outfiles);
+				free(cmds->outfiles_name);
+				cmds->outfiles = NULL;
+				cmds->outfiles_name = NULL;
+				cmds->exec = 0;
+				break ;
 			}
 			j++;
 		}
@@ -268,7 +290,7 @@ void	parse_cmd(t_pipex *pipex, t_cmd *cmds)
 		msg_error(ERR_MALLOC, pipex);
 	list_init(cmds);
 	pipex->cmd_nmbs = 0;
-	/*      check_for_parentheses(pipex); */
+/* 	check_for_parentheses(pipex); */
 	cmds->args = get_args(pipex, &pipex->cmd[pipex->i]);
 	get_infiles(pipex, &pipex->cmd[pipex->i], cmds);
 	get_outfiles(pipex, &pipex->cmd[pipex->i], cmds);

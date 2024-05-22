@@ -3,27 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:09:04 by vincent           #+#    #+#             */
-/*   Updated: 2024/05/21 15:47:33 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/22 19:49:09 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
+static char *ft_strjoin_free(char *s1, char *s2)
+{
+	char *tmp;
+
+	tmp = ft_strjoin(s1, s2);
+	free(s1);
+	free(s2);
+	return (tmp);
+}
+
 char *collect_heredoc_input(char *delimiter)
 {
 	char *line;
 	char *tmp;
-	char *tmp2;
 
 	tmp = ft_strdup("");
 	if (!tmp)
 		ft_exit_error(NULL, 1);
 	while (1)
 	{
-		line = get_next_line(0);
+		line = readline("> ");
 		if (!line || !ft_strncmp(line, delimiter, ft_strlen(delimiter)))
 		{
 			if (!line)
@@ -33,11 +42,11 @@ char *collect_heredoc_input(char *delimiter)
 				ft_exit_error(NULL, 1);
 			}
 			free(line);
-			break;
+			break ;
 		}
-		tmp2 = ft_strjoin(tmp, line);
-		free(tmp);
-		tmp = tmp2;
+		tmp = ft_strjoin_free(tmp, line);
+		if (!tmp)
+			ft_exit_error(NULL, 1);
 		free(line);
 	}
 	return (tmp);

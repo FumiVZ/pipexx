@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 17:20:05 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/01 15:36:26 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/22 18:00:35 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	list_init(t_cmd *head)
 	head->next = NULL;
 	head->pipe = NULL;
 	head->pipeid = 0;
+	head->exec = 1;
 }
 
 void	print_list(t_cmd *head)

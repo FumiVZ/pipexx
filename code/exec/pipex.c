@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 19:23:42 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/21 19:04:12 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/22 17:55:49 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ int	wait_execve(t_pipex *pipex)
 	status = 0;
 	while (i < pipex->cmd_nmbs)
 	{
-		waitpid(pipex->pid[i], &status, 0);
+		if (pipex->pid[i] != -1)
+			waitpid(pipex->pid[i], &status, 0);
 		if (WIFEXITED(status))
 			pipex->env->status = status;
 		i++;

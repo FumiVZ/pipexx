@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 16:46:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/21 17:17:20 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/22 18:03:32 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,16 +96,22 @@ void	redirect(t_pipex *pipex, t_cmd *cmd)
 	{
 		while (cmd->infiles[i] != -1)
 			i++;
-		dup2(cmd->infiles[i - 1], STDIN_FILENO);
-		close(cmd->infiles[i - 1]);
+		if (access(cmd->infiles_name[i - 1], R_OK) == 0)
+		{
+			dup2(cmd->infiles[i - 1], STDIN_FILENO);
+			close(cmd->infiles[i - 1]);
+		}
 	}
 	if (cmd->outfiles)
 	{
 		i = 0;
 		while (cmd->outfiles[i] != - 1)
 			i++;
-		dup2(cmd->outfiles[i - 1], STDOUT_FILENO);
-		close(cmd->outfiles[i - 1]);
+		if (access(cmd->outfiles_name[i - 1], W_OK) == 0)
+		{
+			dup2(cmd->outfiles[i - 1], STDOUT_FILENO);
+			close(cmd->outfiles[i - 1]);
+		}
 	}
 }
 
