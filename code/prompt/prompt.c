@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:30:59 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/22 19:18:02 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/22 21:05:50 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,20 @@ static void	minishell(t_env *env, char *line)
 	init_pipex(env);
 }
 
-static void	signal_handler(int signal)
+static void	signal_handler(int signal, siginfo_t *info, void *context)
 {
+	(void)context;
 	if (signal == SIGINT)
 	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		if (info->si_pid != 0)
+		{
+			printf("\n");
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			rl_redisplay();
+		}
+		else
+			write(1, "\n", 1);
 	}
 }
 
@@ -61,8 +67,8 @@ int	main(int ac, char **av, char **envp)
 
 	(void)ac;
 	(void)av;
-	sa.sa_handler = &signal_handler;
-	sa.sa_flags = SA_RESTART;
+	sa.sa_sigaction = &signal_handler;
+	sa.sa_flags = SA_SIGINFO;
 	sigemptyset(&sa.sa_mask);
 	if (sigaction(SIGINT, &sa, NULL) == -1)
 		printf("Error: signal\n");
