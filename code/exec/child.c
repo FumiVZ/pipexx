@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:06 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/21 19:08:23 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/22 19:10:04 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 static bool	ft_builtins(t_env *env, t_pipex *pipex, char **args)
 {
+	if (!args || !args[0])
+		return (0);
 	if (!ft_strncmp(args[0], "echo", 5))
 		ft_echo(env, args);
 	else if (!ft_strncmp(args[0], "exit", 5))
@@ -61,8 +63,6 @@ static char	*get_cmd(char **paths, char **cmd_args)
 
 static char	*get_cmd_with_path(t_pipex *pipex, t_cmd *cmds, char **env)
 {
-	if (!cmds->args)
-		return (NULL);
 	if (cmds->args[0][0] == '/' || !ft_strncmp(*cmds->args, "./", 2))
 	{
 		if (access(cmds->args[0], X_OK) == 0 || errno == EACCES)
@@ -81,8 +81,12 @@ static void	child_exec(t_pipex *pipex, t_cmd *cmds, char **env)
 	redirect(pipex, cmds);
 	close_files(pipex, pipex->cmds);
 	close_pipes(pipex, pipex->cmds);
+	if (!cmds->args || !cmds->args[0])
+	{
+		child_free(pipex, env);
+		exit (EXIT_FAILURE);
+	}
 	pipex->cmd_paths = get_cmd_with_path(pipex, cmds, env);
-	ft_printf_fd(2, "cmd_paths: %s\n", pipex->cmd_paths);
 	if (!pipex->cmd_paths || errno == EACCES)
 	{
 		if (errno == EACCES)
@@ -101,17 +105,20 @@ int	single_command(t_pipex *pipex, t_cmd *cmds, char **env)
 {
 	int	status;
 
-	if (cmds->args && cmds->args[0] && !ft_strncmp(cmds->args[0], "exit", 5))
-		ft_exit(pipex->env, pipex);
 	cmds->args = pattern_matching(cmds->args, env, pipex->env);
 	quote_removal(cmds->args);
 	if (ft_builtins(pipex->env, pipex, cmds->args))
 		return (pipex->env->status);
-	pipex->pid[0] = fork();
-	if (pipex->pid[0] == -1)
-		msg_error(ERR_FORK, pipex);
-	if (pipex->pid[0] == 0)
-		child_exec(pipex, cmds, env);
+	if (cmds->exec == 1)
+	{
+		pipex->pid[0] = fork();
+		if (pipex->pid[0] == -1)
+			msg_error(ERR_FORK, pipex);
+		if (pipex->pid[0] == 0 && cmds->exec == 1)
+			child_exec(pipex, cmds, env);
+	}
+	else
+		pipex->pid[0] = -1;
 	close_files(pipex, pipex->cmds);
 	status = wait_execve(pipex);
 	return (status);
@@ -125,20 +132,23 @@ void	multiple_command(t_pipex *pipex, t_cmd *cmds, char **env)
 	crt_pipes(pipex, cmds);
 	while (cmds)
 	{
-		if (cmds->args && cmds->args[0] && !ft_strncmp(cmds->args[0], "exit", 5))
-			ft_exit(pipex->env, pipex);
 		cmds->args = pattern_matching(cmds->args, env, pipex->env);
 		quote_removal(cmds->args);
 		if (ft_builtins(pipex->env, pipex, cmds->args))
 			return ;
-		pipex->pid[i] = fork();
-		if (pipex->pid[i] == -1)
-			msg_error(ERR_FORK, pipex);
-		if (pipex->pid[i] == 0)
+		if (cmds->exec == 1)
 		{
-			pipe_handle(pipex, cmds);
-			child_exec(pipex, cmds, env);
+			pipex->pid[i] = fork();
+			if (pipex->pid[i] == -1)
+				msg_error(ERR_FORK, pipex);
+			if (pipex->pid[i] == 0)
+			{
+				pipe_handle(pipex, cmds);
+				child_exec(pipex, cmds, env);
+			}
 		}
+		else
+			pipex->pid[i] = -1;
 		cmds = cmds->next;
 		i++;
 	}
