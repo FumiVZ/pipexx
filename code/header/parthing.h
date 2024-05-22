@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:44:21 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/04 06:43:17 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/22 20:31:19 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,7 @@ char	*ifs_value(char **env);
 size_t	pos_var(char *str);
 int		check_env_var(char *str);
 char	*check_pattern_word(char *str);
+char	**clean_str(char **str, size_t pos);
+char	**check_str(char **str, size_t *pos);
 
 #endif
