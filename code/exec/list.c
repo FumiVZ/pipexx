@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 17:20:05 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/22 18:00:35 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/23 16:14:18 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	list_init(t_cmd *head)
 	head->exec = 1;
 }
 
-void	print_list(t_cmd *head)
+/* void	print_list(t_cmd *head)
 {
 	t_cmd	*tmp;
 	int		i;
@@ -114,4 +114,4 @@ void	print_list(t_cmd *head)
 		printf("len: %d\n", len);
 		tmp = tmp->next;
 	}
-}
+}*/

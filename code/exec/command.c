@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 16:46:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/23 13:47:49 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/23 16:13:21 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,17 @@
 //previous command to the input of the next command
 //the number of pipe is equal to the number of node in the linked list
 
+void	backup_fd(t_pipex *pipex)
+{
+	pipex->old0 = dup(STDIN_FILENO);
+	pipex->old1 = dup(STDOUT_FILENO);
+}
+
 void	close_files(t_pipex	*pipex, t_cmd *cmd)
 {
 	int	i;
 
 	i = -1;
-
 	(void) pipex;
 	if (!cmd)
 		return ;
@@ -92,8 +97,7 @@ void	redirect(t_pipex *pipex, t_cmd *cmd)
 	int		i;
 
 	i = 0;
-	pipex->old0 = dup(STDIN_FILENO);
-	pipex->old1 = dup(STDOUT_FILENO);
+	backup_fd(pipex);
 	if (cmd->infiles)
 	{
 		while (cmd->infiles[i] != -1)
@@ -116,4 +120,3 @@ void	redirect(t_pipex *pipex, t_cmd *cmd)
 		}
 	}
 }
-

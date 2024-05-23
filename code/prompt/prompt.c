@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/05/23 15:00:39 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/23 15:36:02 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ static void	minishell(t_env *env, char *line)
 	env->cmds = ft_word_spliting(line, " \t");
 	if (!(env->cmds))
 		return ;
-	print_tab(env->cmds);
 	init_pipex(env);
 }
 
