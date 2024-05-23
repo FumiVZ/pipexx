@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:47 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/21 15:27:11 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/23 12:27:52 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # include <fcntl.h>
 
 void	child_free(t_pipex *pipex, char **env);
-void	open_redir(t_env *env);int		msg(char *err);
-
+void	open_redir(t_env *env);
+int		msg(char *err);
 void	msg_error_cmd(char *err, t_cmd cmds);
 void	msg_error(char *err, t_pipex *pipex);
 void	parent_free(t_pipex *pipex);

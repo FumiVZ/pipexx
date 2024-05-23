@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 16:46:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/23 02:03:28 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:26:12 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void	redirect(t_pipex *pipex, t_cmd *cmd)
 	if (cmd->outfiles)
 	{
 		i = 0;
-		while (cmd->outfiles[i] != - 1)
+		while (cmd->outfiles[i] != -1)
 			i++;
 		if (access(cmd->outfiles_name[i - 1], W_OK) == 0)
 		{

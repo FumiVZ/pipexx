@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_ex.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 22:04:48 by vincent           #+#    #+#             */
-/*   Updated: 2024/05/23 00:38:15 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/23 13:20:17 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ static void	get_infiles(t_pipex *pipex, char **cmd, t_cmd *cmds)
 	while (cmd[++i] && !(chre(cmd[i], "&&") || chre(cmd[i], "||")
 			|| chre(cmd[i], "|")))
 	{
-		if (chre(cmd[i], "<") || chre(cmd[i], "<<"))
+		if (ft_strncmp(cmd[i], "<", 2) || ft_strncmp(cmd[i], "<<", 2))
 		{
 			cmds->infiles_name[j] = ft_strdup(cmd[i + 1]);
 			cmds->infiles[j] = open_infiles(pipex, cmd[i], cmd[i + 1],

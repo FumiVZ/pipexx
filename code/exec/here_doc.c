@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:09:04 by vincent           #+#    #+#             */
-/*   Updated: 2024/05/22 21:29:13 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:27:08 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static char *ft_strjoin_free(char *s1, char *s2)
+static char	*ft_strjoin_free(char *s1, char *s2)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = ft_strjoin(s1, s2);
 	free(s1);
@@ -22,10 +22,10 @@ static char *ft_strjoin_free(char *s1, char *s2)
 	return (tmp);
 }
 
-char *collect_heredoc_input(char *delimiter)
+char	*collect_heredoc_input(char *delimiter)
 {
-	char *line;
-	char *tmp;
+	char	*line;
+	char	*tmp;
 
 	tmp = ft_strdup("");
 	if (!tmp)
@@ -51,10 +51,10 @@ char *collect_heredoc_input(char *delimiter)
 	return (tmp);
 }
 
-int here_doc(t_pipex *pipex, char *infile_name)
+int	here_doc(t_pipex *pipex, char *infile_name)
 {
-	int pipefd[2];
-	char *input;
+	int		pipefd[2];
+	char	*input;
 
 	if (pipe(pipefd) == -1)
 	{
@@ -67,6 +67,5 @@ int here_doc(t_pipex *pipex, char *infile_name)
 	write(pipefd[1], input, ft_strlen(input));
 	close(pipefd[1]);
 	free(input);
-
-	return pipefd[0];
+	return (pipefd[0]);
 }

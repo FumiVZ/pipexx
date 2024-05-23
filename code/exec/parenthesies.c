@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parenthesies.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 00:20:39 by vincent           #+#    #+#             */
-/*   Updated: 2024/05/23 01:22:32 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:22:16 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ static	int count_len(char **cmd, int start[2], int end[2])
 	return (len);
 }
  */
+
 void	check_for_parentheses(t_pipex *pipex)
 {
 	(void) pipex;

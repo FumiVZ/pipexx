@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:06 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/23 02:02:02 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/23 13:29:13 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static bool	ft_builtins(t_env *env, t_pipex *pipex, char **args)
 	return (1);
 }
 
-static int is_builtin(char **args)
+static int	is_builtin(char **args)
 {
 	if (!args || !args[0])
 		return (0);
@@ -119,7 +119,7 @@ static void	child_exec(t_pipex *pipex, t_cmd *cmds, char **env)
 		exit (EXIT_FAILURE);
 	}
 	execve(pipex->cmd_paths, cmds->args, env);
-	child_free(pipex, env); 
+	child_free(pipex, env);
 	exit (EXIT_FAILURE);
 }
 
@@ -128,7 +128,7 @@ void	single_command(t_pipex *pipex, t_cmd *cmds, char **env)
 	cmds->args = pattern_matching(cmds->args, env, pipex->env);
 	quote_removal(cmds->args);
 	if (cmds->exec == 1 && !is_builtin(cmds->args))
-	{ 
+	{
 		pipex->pid[0] = fork();
 		if (pipex->pid[0] == -1)
 			msg_error(ERR_FORK, pipex);
