@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/23 00:27:47 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/23 13:38:12 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,6 @@ void		msg_perror(t_env *env, char *err);
 void		init_pipex(t_env *env);
 char		*wildcard_match(const char *pattern);
 void		check_for_parentheses(t_pipex *pipex);
+
 
 #endif
