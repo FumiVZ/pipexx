@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/21 15:59:22 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/23 13:13:58 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,6 @@ char		*ft_getenv(char **envp, char *name);
 void		msg_perror(t_env *env, char *err);
 void		init_pipex(t_env *env);
 char		*wildcard_match(const char *pattern);
+
 
 #endif
