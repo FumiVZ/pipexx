@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 13:30:59 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/23 01:46:18 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/23 14:17:15 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static void	minishell(t_env *env, char *line)
 	env->cmds = ft_word_spliting(line, " \t");
 	if (!(env->cmds))
 		return ;
+	print_tab(env->cmds);
 	init_pipex(env);
 }
 

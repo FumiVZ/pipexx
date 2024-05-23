@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 19:23:42 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/23 02:03:55 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/23 14:08:51 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,11 @@ int	wait_execve(t_pipex *pipex)
 	{
 		waitpid(pipex->pid[i], &status, 0);
 		if (WIFEXITED(status))
-			pipex->env->status = status;
+			pipex->env->status = status % 255;
 		i++;
 	}
 	if (WIFEXITED(status))
-		pipex->env->status = status;
+		pipex->env->status = status % 255;
 	return (status);
 }
 

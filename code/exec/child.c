@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:06 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/23 13:29:13 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/23 13:58:09 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static char	*get_cmd_with_path(t_pipex *pipex, t_cmd *cmds, char **env)
 		if (access(cmds->args[0], X_OK) == 0 || errno == EACCES)
 			return (cmds->args[0]);
 		ft_printf_fd(2, (char *)ERR_FILE, \
-			cmds->args[0], strerror(errno));
+			cmds->args[0	], strerror(errno));
 		child_free(pipex, env);
 		exit (EXIT_FAILURE);
 	}
@@ -135,14 +135,21 @@ void	single_command(t_pipex *pipex, t_cmd *cmds, char **env)
 		if (pipex->pid[0] == 0)
 			child_exec(pipex, cmds, env);
 	}
-	else
+	else if (cmds->exec == 1)
 	{
 		redirect(pipex, cmds);
 		ft_builtins(pipex->env, pipex, cmds->args);
 		close_files(pipex, pipex->cmds);
+		if (pipex->old0 != -1 && pipex->old1 != -1)
+		{
+			dup2(pipex->old0, STDIN_FILENO);
+			dup2(pipex->old1, STDOUT_FILENO);
+		}
 		pipex->pid[0] = -1;
 		return ;
 	}
+	else
+		return ;
 	wait_execve(pipex);
 	close_files(pipex, pipex->cmds);
 }

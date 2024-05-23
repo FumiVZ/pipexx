@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 22:04:48 by vincent           #+#    #+#             */
-/*   Updated: 2024/05/23 13:20:17 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/23 14:24:40 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ static void	get_infiles(t_pipex *pipex, char **cmd, t_cmd *cmds)
 	while (cmd[++i] && !(chre(cmd[i], "&&") || chre(cmd[i], "||")
 			|| chre(cmd[i], "|")))
 	{
-		if (ft_strncmp(cmd[i], "<", 2) || ft_strncmp(cmd[i], "<<", 2))
+		if (chre(cmd[i], "<") || chre(cmd[i], "<<"))
 		{
 			cmds->infiles_name[j] = ft_strdup(cmd[i + 1]);
 			cmds->infiles[j] = open_infiles(pipex, cmd[i], cmd[i + 1],
@@ -134,6 +134,7 @@ int	open_outfiles(t_pipex *pipex, char *cmd, char *file)
 	int	fd;
 
 	(void)pipex;
+
 	if (chre(cmd, ">"))
 		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else
