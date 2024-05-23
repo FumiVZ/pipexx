@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:20:40 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/22 17:39:38 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/23 02:00:45 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,15 @@ typedef struct s_cmd
 
 typedef struct s_pipex
 {
-	pid_t	*pid;
-	int		i;
-	char	**paths; 
-	char	*cmd_paths;
-	char	**cmd;
-	int		cmd_nmbs;
-	int		nb_pipes;
+	pid_t			*pid;
+	int				i;
+	char			**paths; 
+	char			*cmd_paths;
+	char			**cmd;
+	int				cmd_nmbs;
+	int				nb_pipes;
+	int				old0;
+	int				old1;
 	struct s_env 	*env;
 	struct s_cmd	*cmds;
 }	t_pipex;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:09:04 by vincent           #+#    #+#             */
-/*   Updated: 2024/05/22 19:49:09 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/22 21:29:13 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char *collect_heredoc_input(char *delimiter)
 			{
 				ft_printf_fd(2, "minishell: syntax error\n");
 				free(tmp);
-				ft_exit_error(NULL, 1);
+				return (NULL);
 			}
 			free(line);
 			break ;
@@ -47,7 +47,6 @@ char *collect_heredoc_input(char *delimiter)
 		tmp = ft_strjoin_free(tmp, line);
 		if (!tmp)
 			ft_exit_error(NULL, 1);
-		free(line);
 	}
 	return (tmp);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 19:23:42 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/22 17:55:49 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/23 02:03:55 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ int	wait_execve(t_pipex *pipex)
 	status = 0;
 	while (i < pipex->cmd_nmbs)
 	{
-		if (pipex->pid[i] != -1)
-			waitpid(pipex->pid[i], &status, 0);
+		waitpid(pipex->pid[i], &status, 0);
 		if (WIFEXITED(status))
 			pipex->env->status = status;
 		i++;
@@ -81,6 +80,8 @@ void	init_pipex(t_env *env)
 	pipex->pid = NULL;
 	pipex->paths = ft_split(find_path(env->envp), ':');
 	pipex->cmds = NULL;
+	pipex->old0 = -1;
+	pipex->old1 = -1;
 	if (!pipex->paths)
 		pipex->paths = ft_split("/usr/local/bin:\
 			/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:.", ':');
