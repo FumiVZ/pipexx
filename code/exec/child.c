@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:06 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/23 13:34:19 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/23 13:37:47 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,28 @@ static bool	ft_builtins(t_env *env, t_pipex *pipex, char **args)
 	else
 		return (0);
 	return (1);
+}
+
+static int	is_builtin(char **args)
+{
+	if (!args || !args[0])
+		return (0);
+	if (!ft_strncmp(args[0], "echo", 5))
+		return (1);
+	else if (!ft_strncmp(args[0], "exit", 5))
+		return (1);
+	else if (!ft_strncmp(args[0], "cd", 3))
+		return (1);
+	else if (!ft_strncmp(args[0], "env", 4))
+		return (1);
+	else if (!ft_strncmp(args[0], "pwd", 4))
+		return (1);
+	else if (!ft_strncmp(args[0], "export", 7))
+		return (1);
+	else if (!ft_strncmp(args[0], "unset", 6))
+		return (1);
+	else
+		return (0);
 }
 
 static char	*get_cmd(char **paths, char **cmd_args)
@@ -100,27 +122,28 @@ static void	child_exec(t_pipex *pipex, t_cmd *cmds, char **env)
 	exit(EXIT_FAILURE);
 }
 
-int	single_command(t_pipex *pipex, t_cmd *cmds, char **env)
+void	single_command(t_pipex *pipex, t_cmd *cmds, char **env)
 {
-	int	status;
-
 	cmds->args = pattern_matching(cmds->args, env, pipex->env);
 	quote_removal(cmds->args);
-	if (ft_builtins(pipex->env, pipex, cmds->args))
-		return (pipex->env->status);
-	if (cmds->exec == 1)
+	if (cmds->exec == 1 && !is_builtin(cmds->args))
 	{
 		pipex->pid[0] = fork();
 		if (pipex->pid[0] == -1)
 			msg_error(ERR_FORK, pipex);
-		if (pipex->pid[0] == 0 && cmds->exec == 1)
+		if (pipex->pid[0] == 0)
 			child_exec(pipex, cmds, env);
 	}
 	else
+	{
+		redirect(pipex, cmds);
+		ft_builtins(pipex->env, pipex, cmds->args);
+		close_files(pipex, pipex->cmds);
 		pipex->pid[0] = -1;
+		return ;
+	}
+	wait_execve(pipex);
 	close_files(pipex, pipex->cmds);
-	status = wait_execve(pipex);
-	return (status);
 }
 
 void	multiple_command(t_pipex *pipex, t_cmd *cmds, char **env)
@@ -133,9 +156,7 @@ void	multiple_command(t_pipex *pipex, t_cmd *cmds, char **env)
 	{
 		cmds->args = pattern_matching(cmds->args, env, pipex->env);
 		quote_removal(cmds->args);
-		if (ft_builtins(pipex->env, pipex, cmds->args))
-			return ;
-		if (cmds->exec == 1)
+		if (cmds->exec == 1 && !is_builtin(cmds->args))
 		{
 			pipex->pid[i] = fork();
 			if (pipex->pid[i] == -1)
@@ -146,8 +167,19 @@ void	multiple_command(t_pipex *pipex, t_cmd *cmds, char **env)
 				child_exec(pipex, cmds, env);
 			}
 		}
-		else
-			pipex->pid[i] = -1;
+		else if (cmds->exec == 1)
+		{
+			pipex->pid[i] = fork();
+			if (pipex->pid[i] == -1)
+				msg_error(ERR_FORK, pipex);
+			if (pipex->pid[i] == 0)
+			{
+				pipe_handle(pipex, cmds);
+				redirect(pipex, cmds);
+				ft_builtins(pipex->env, pipex, cmds->args);
+				exit (pipex->env->status);
+			}
+		}
 		cmds = cmds->next;
 		i++;
 	}

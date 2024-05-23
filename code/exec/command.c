@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 16:46:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/22 18:03:32 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/23 12:26:12 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	close_files(t_pipex	*pipex, t_cmd *cmd)
 {
 	int	i;
 
-	(void)pipex;
 	i = -1;
 	if (!cmd)
 		return ;
@@ -38,6 +37,11 @@ void	close_files(t_pipex	*pipex, t_cmd *cmd)
 				close(cmd->outfiles[i]);
 		}
 		cmd = cmd->next;
+	}
+	if (pipex->old0 != -1 && pipex->old1 != -1)
+	{
+		dup2(pipex->old0, STDIN_FILENO);
+		dup2(pipex->old1, STDOUT_FILENO);
 	}
 }
 
@@ -70,6 +74,7 @@ void	pipe_handle(t_pipex *pipex, t_cmd *cmd)
 		dup2(pipex->cmds->pipe[1], STDOUT_FILENO);
 		close(cmd->pipe[1]);
 		close(cmd->pipe[0]);
+		ft_printf_fd(2, "pipeid = 0\n");
 	}
 	else if (cmd->pipeid == pipex->cmd_nmbs - 1)
 	{
@@ -91,7 +96,8 @@ void	redirect(t_pipex *pipex, t_cmd *cmd)
 	int		i;
 
 	i = 0;
-	(void)pipex;
+	pipex->old0 = dup(STDIN_FILENO);
+	pipex->old1 = dup(STDOUT_FILENO);
 	if (cmd->infiles)
 	{
 		while (cmd->infiles[i] != -1)
@@ -105,7 +111,7 @@ void	redirect(t_pipex *pipex, t_cmd *cmd)
 	if (cmd->outfiles)
 	{
 		i = 0;
-		while (cmd->outfiles[i] != - 1)
+		while (cmd->outfiles[i] != -1)
 			i++;
 		if (access(cmd->outfiles_name[i - 1], W_OK) == 0)
 		{

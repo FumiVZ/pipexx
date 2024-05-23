@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 22:04:48 by vincent           #+#    #+#             */
-/*   Updated: 2024/05/22 19:10:22 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/23 13:20:17 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ static void	get_infiles(t_pipex *pipex, char **cmd, t_cmd *cmds)
 	while (cmd[++i] && !(chre(cmd[i], "&&") || chre(cmd[i], "||")
 			|| chre(cmd[i], "|")))
 	{
-		if (chre(cmd[i], "<") || chre(cmd[i], "<<"))
+		if (ft_strncmp(cmd[i], "<", 2) || ft_strncmp(cmd[i], "<<", 2))
 		{
 			cmds->infiles_name[j] = ft_strdup(cmd[i + 1]);
 			cmds->infiles[j] = open_infiles(pipex, cmd[i], cmd[i + 1],
@@ -261,27 +261,6 @@ void	create_new_nodes(t_pipex *pipex, t_cmd *cmds)
 		pipex->i++;
 }
 
-bool	delete_parenthesies(t_pipex *pipex)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (pipex->cmd[i])
-	{
-		if (pipex->cmd[i][0] == '(')
-		{
-		}
-		if (j < 0)
-			return (false);
-		i++;
-	}
-	if (j)
-		return (false);
-	return (true);
-}
-
 void	parse_cmd(t_pipex *pipex, t_cmd *cmds)
 {
 	t_cmd	*tmp;
@@ -290,7 +269,7 @@ void	parse_cmd(t_pipex *pipex, t_cmd *cmds)
 		msg_error(ERR_MALLOC, pipex);
 	list_init(cmds);
 	pipex->cmd_nmbs = 0;
-/* 	check_for_parentheses(pipex); */
+	check_for_parentheses(pipex);
 	cmds->args = get_args(pipex, &pipex->cmd[pipex->i]);
 	get_infiles(pipex, &pipex->cmd[pipex->i], cmds);
 	get_outfiles(pipex, &pipex->cmd[pipex->i], cmds);

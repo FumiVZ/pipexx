@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:47 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/23 13:14:07 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/23 13:37:57 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # include <fcntl.h>
 
 void	child_free(t_pipex *pipex, char **env);
-void	open_redir(t_env *env);int		msg(char *err);
-
+void	open_redir(t_env *env);
+int		msg(char *err);
 void	msg_error_cmd(char *err, t_cmd cmds);
 void	msg_error(char *err, t_pipex *pipex);
 void	parent_free(t_pipex *pipex);
