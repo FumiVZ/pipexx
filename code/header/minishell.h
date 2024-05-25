@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/23 15:54:30 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/25 14:12:26 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,9 @@
 # define ERR_CMD_EMPTY "pipex: command not found\n"
 # define ERR_FORK "fork failed"
 # define ERR_MALLOC "malloc failed"
-# define ERR_ACCESS "minishell: %s: permission denied\n"
-# define ERR_ACCESS_EMPTY "minishell: permission denied\n"
+# define ERR_ACCESS "minishell: %s: Permission denied\n"
+# define ERR_ACCESS_EMPTY "minishell: Permission denied\n"
+# define ERR_IS_DIR "minishell: %s: Is a directory\n"
 
 void		ft_exit_error(t_env *env, int status);
 void		ft_env(t_env *env);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:20:40 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/23 02:00:45 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/25 14:04:55 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define STRUCT_H
 
 # include <sys/wait.h>
+# include <stdbool.h>
 
 typedef struct s_cmd
 {
@@ -41,6 +42,7 @@ typedef struct s_pipex
 	int				old1;
 	struct s_env 	*env;
 	struct s_cmd	*cmds;
+	bool			is_dir;
 }	t_pipex;
 
 typedef struct s_env
