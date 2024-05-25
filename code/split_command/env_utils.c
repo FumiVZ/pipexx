@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 05:55:14 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/22 20:33:29 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/25 13:19:48 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ char	**clean_str(char **str, size_t pos)
 	return (new_str);
 }
 
-char	**check_str(char **str, size_t *pos)
+char	**check_str(char **str)
 {
 	size_t	i;
 
@@ -123,7 +123,6 @@ char	**check_str(char **str, size_t *pos)
 			str = clean_str(str, i);
 			if (!str)
 				return (NULL);
-			*pos -= 1;
 			return (str);
 		}
 		i++;
