@@ -3,42 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   quote_removal.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:14:22 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/23 12:40:36 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/25 12:14:46 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parthing.h>
-
-static size_t	len_word(char *str)
-{
-	size_t	i;
-	size_t	len;
-	bool	quote;
-	bool	dquote;
-
-	i = 0;
-	len = 0;
-	quote = false;
-	dquote = false;
-	while (str[i])
-	{
-		if (str[i] == '\'' && !dquote)
-			quote = !quote;
-		if (str[i] == '\"' && !quote)
-			dquote = !dquote;
-		if (str[i] == '\'' || str[i] == '\"')
-			i++;
-		if (str[i])
-		{
-			len++;
-			i++;
-		}
-	}
-	return (len);
-}
 
 static bool	check_quote(char *str, size_t *i, bool *quote, bool *dquote)
 {
@@ -55,6 +27,29 @@ static bool	check_quote(char *str, size_t *i, bool *quote, bool *dquote)
 		return (true);
 	}
 	return (false);
+}
+
+static size_t	len_word(char *str)
+{
+	size_t	i;
+	size_t	len;
+	bool	quote;
+	bool	dquote;
+
+	i = 0;
+	len = 0;
+	quote = false;
+	dquote = false;
+	while (str[i])
+	{
+		check_quote(str, &i, &quote, &dquote);
+		if (str[i])
+		{
+			len++;
+			i++;
+		}
+	}
+	return (len);
 }
 
 static char	*quote_removal_world(char *str, char *tmp)

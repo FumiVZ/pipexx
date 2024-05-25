@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 13:31:29 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/22 20:04:27 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/25 12:42:07 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,21 @@ size_t	get_len_name(char *str)
 	return (len);
 }
 
+char	*exit_value(char *str, t_env *envp)
+{
+	char	*value;
+	char	*tmp;
+
+	value = ft_itoa(envp->status);
+	if (!value)
+		return (NULL);
+	if (str[1] == '\0' || !is_valid_char(str[1]))
+		return (value);
+	tmp = ft_strjoin(value, str + 1);
+	free(value);
+	return (tmp);
+}
+
 char	*get_value(char *str, char **env, t_env *envp)
 {
 	size_t	i;
@@ -51,7 +66,7 @@ char	*get_value(char *str, char **env, t_env *envp)
 
 	i = 0;
 	if (str[0] == '?')
-		return (ft_itoa(envp->status));
+		return (exit_value(str, envp));
 	while (env[i])
 	{
 		if (!ft_strncmp(env[i], str, get_len_name(str)))

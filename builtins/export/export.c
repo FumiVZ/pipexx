@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:45:49 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/21 17:08:46 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/25 12:02:32 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,23 @@ char	**ft_export_env(t_env *env, char *var)
 	return (new_envp(env, var));
 }
 
+static	bool	is_identifier(char *str)
+{
+	size_t	i;
+
+	i = 0;
+	if (!ft_isalpha(str[i]) && str[i] != '_')
+		return (false);
+	i++;
+	while (str[i] && str[i] != '=')
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
 void	ft_export(t_env *env, char **cmd)
 {
 	size_t	i;
@@ -77,6 +94,13 @@ void	ft_export(t_env *env, char **cmd)
 	i = 1;
 	while (cmd[i])
 	{
+		if(!is_identifier(cmd[i]))
+		{
+			ft_putstr_fd("minishell: export: `", 2);
+			ft_putstr_fd(cmd[i], 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
+			env->status = 1;
+		}
 		env->envp = ft_export_env(env, cmd[i]);
 		++i;
 	}

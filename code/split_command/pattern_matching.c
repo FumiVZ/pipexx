@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:39:48 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/22 20:36:10 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/25 12:32:24 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,23 +100,21 @@ static char	**modified_str(char **str, char **envp, t_env *env, size_t i)
 static char	**variable_env(char **str, char **envp, t_env *env)
 {
 	size_t	i;
+	char	*tmp;
 
 	i = 0;
 	while (str[i])
 	{
+		tmp = str[i];
 		str = modified_str(str, envp, env, i);
-		if (!str)
-		{
-			ft_putstr_fd(MALLOC, 2);
-			return (NULL);
-		}
 		str = check_str(str, &i);
 		if (!str)
 		{
 			ft_putstr_fd(MALLOC, 2);
 			return (NULL);
 		}
-		i++;
+		if (tmp == str[i])
+			i++;
 	}
 	return (str);
 }
