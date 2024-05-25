@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 18:06:32 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/21 16:04:52 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/25 18:16:21 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,22 +55,10 @@ static char	**ft_init_pwd(void)
 	return (new);
 }
 
-char	**ft_init_env(char **envp)
+static void	alloc_env(char **new, char **envp)
 {
-	size_t	i;
-	char	**new;
+	int	i;
 
-	if (!envp)
-	{
-		new = ft_init_pwd();
-		return (new);
-	}
-	new = malloc(sizeof(char *) * (ft_strstrlen(envp) + 1));
-	if (!new)
-	{
-		perror("minishell: error malloc");
-		exit(1);
-	}
 	i = 0;
 	while (envp[i])
 	{
@@ -85,5 +73,23 @@ char	**ft_init_env(char **envp)
 		i++;
 	}
 	new[i] = NULL;
+}
+
+char	**ft_init_env(char **envp)
+{
+	char	**new;
+
+	if (!envp)
+	{
+		new = ft_init_pwd();
+		return (new);
+	}
+	new = malloc(sizeof(char *) * (ft_strstrlen(envp) + 1));
+	if (!new)
+	{
+		perror("minishell: error malloc");
+		exit(1);
+	}
+	alloc_env(new, envp);
 	return (new);
 }

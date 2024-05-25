@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote_removal.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 15:14:22 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/25 12:14:46 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/25 17:35:03 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static size_t	len_word(char *str)
 	return (len);
 }
 
-static char	*quote_removal_world(char *str, char *tmp)
+char	*quote_rm_world(char *str, char *tmp)
 {
 	size_t	j;
 	size_t	pos;
@@ -90,7 +90,7 @@ void	quote_removal(char **str)
 	{
 		if (ft_strlen(str[i]) != len_word(str[i]))
 		{
-			tmp = quote_removal_world(str[i], tmp);
+			tmp = quote_rm_world(str[i], tmp);
 			free(str[i]);
 			str[i] = tmp;
 		}

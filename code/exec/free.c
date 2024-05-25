@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:53:23 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/23 16:13:41 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/25 18:39:32 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@ void	parent_free(t_pipex *pipex)
 
 void	child_free(t_pipex *pipex, char **env)
 {
+	close_pipes(pipex, pipex->cmds);
+	close_files(pipex, pipex->cmds);
+	close(pipex->old0);
+	close(pipex->old1);
 	parent_free(pipex);
 	free_split(env, ft_strstrlen(env));
 	close(0);

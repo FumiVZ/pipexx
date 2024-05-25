@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 15:53:07 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/25 13:39:59 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/25 18:43:17 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	execute_command(t_pipex *pipex, t_cmd *cmds, char **env, int i)
 		pipe_handle(pipex, cmds);
 		redirect(pipex, cmds);
 		ft_builtins(pipex->env, pipex, cmds->args);
+		child_free(pipex, env);
 		exit (pipex->env->status);
 	}
 }

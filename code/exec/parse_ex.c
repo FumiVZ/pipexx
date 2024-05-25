@@ -6,181 +6,13 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 22:04:48 by vincent           #+#    #+#             */
-/*   Updated: 2024/05/23 14:24:40 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/25 17:45:11 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
 // function to compare two string char by char and by lenght
-int	chre(char *s1, char *s2)
-{
-	int	i;
-
-	i = 0;
-	while (s1[i])
-	{
-		if (s1[i] == s2[i])
-			i++;
-		else
-			return (0);
-	}
-	if (ft_strlen(s1) == ft_strlen(s2))
-		return (1);
-	return (0);
-}
-
-static void	malloc_infiles(t_pipex *pipex, t_cmd *cmds, char **cmd)
-{
-	int	i;
-	int	j;
-
-	i = -1;
-	j = 0;
-	while (cmd[++i] && !(chre(cmd[i], "&&") || chre(cmd[i], "||")
-			|| chre(cmd[i], "|")))
-		if (chre(cmd[i], "<") || chre(cmd[i], "<<"))
-			j++;
-	if (j)
-	{
-		cmds->infiles = malloc(sizeof(int) * (j + 1));
-		if (!cmds->infiles)
-			msg_error(ERR_MALLOC, pipex);
-		else
-			cmds->infiles_name = malloc(sizeof(char *) * (j + 1));
-		if (!cmds->infiles_name)
-			msg_error(ERR_MALLOC, pipex);
-		cmds->infiles_name[j] = NULL;
-	}
-}
-
-static void	malloc_outfiles(t_pipex *pipex, t_cmd *cmds, char **cmd)
-{
-	int	i;
-	int	j;
-
-	i = -1;
-	j = 0;
-	while (cmd[++i] && !(chre(cmd[i], "&&") || chre(cmd[i], "||")
-			|| chre(cmd[i], "|")))
-		if (chre(cmd[i], ">") || chre(cmd[i], ">>"))
-			j++;
-	if (j)
-	{
-		cmds->outfiles = malloc(sizeof(int) * (j + 1));
-		if (!cmds->outfiles)
-			msg_error(ERR_MALLOC, pipex);
-		cmds->outfiles_name = malloc(sizeof(char *) * (j + 1));
-		if (!cmds->outfiles_name)
-			msg_error(ERR_MALLOC, pipex);
-		cmds->outfiles_name[j] = NULL;
-	}
-}
-
-int	open_infiles(t_pipex *pipex, char *cmd, char *file, char *infile_name)
-{
-	int	fd;
-
-	if (ft_strncmp(cmd, "<<", 2))
-		fd = open(file, O_RDONLY);
-	else
-		fd = here_doc(pipex, infile_name);
-	return (fd);
-}
-
-static void	get_infiles(t_pipex *pipex, char **cmd, t_cmd *cmds)
-{
-	int	i;
-	int	j;
-
-	malloc_infiles(pipex, cmds, cmd);
-	if (!cmds->infiles)
-		return ;
-	i = -1;
-	j = 0;
-	while (cmd[++i] && !(chre(cmd[i], "&&") || chre(cmd[i], "||")
-			|| chre(cmd[i], "|")))
-	{
-		if (chre(cmd[i], "<") || chre(cmd[i], "<<"))
-		{
-			cmds->infiles_name[j] = ft_strdup(cmd[i + 1]);
-			cmds->infiles[j] = open_infiles(pipex, cmd[i], cmd[i + 1],
-					cmds->infiles_name[j]);
-			if (cmds->infiles[j] < 0)
-			{
-				msg_error_infile(ERR_FILE, *pipex, cmds->infiles_name[j]);
-				pipex->env->status = 1;
-				j = -1;
-				while (cmds->infiles[++j] != -1)
-				{
-					close(cmds->infiles[j]);
-					free(cmds->infiles_name[j]);
-				}
-				free(cmds->infiles);
-				free(cmds->infiles_name);
-				cmds->infiles = NULL;
-				cmds->infiles_name = NULL;
-				cmds->exec = 0;
-				break ;
-			}
-			j++;
-		}
-		cmds->infiles[j] = -1;
-	}
-}
-
-int	open_outfiles(t_pipex *pipex, char *cmd, char *file)
-{
-	int	fd;
-
-	(void)pipex;
-
-	if (chre(cmd, ">"))
-		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else
-		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	return (fd);
-}
-
-static void	get_outfiles(t_pipex *pipex, char **cmd, t_cmd *cmds)
-{
-	int	i;
-	int	j;
-
-	malloc_outfiles(pipex, cmds, cmd);
-	if (!cmds->outfiles)
-		return ;
-	i = -1;
-	j = 0;
-	while (cmd[++i] && !(chre(cmd[i], "&&") || chre(cmd[i], "||")
-			|| chre(cmd[i], "|")))
-	{
-		if (chre(cmd[i], ">") || chre(cmd[i], ">>"))
-		{
-			cmds->outfiles_name[j] = ft_strdup(cmd[i + 1]);
-			cmds->outfiles[j] = open_outfiles(pipex, cmd[i], cmd[i + 1]);
-			if (cmds->outfiles[j] < 0)
-			{
-				msg_error_outfile(ERR_FILE, *pipex, cmds->outfiles_name[j]);
-				pipex->env->status = 1;
-				j = -1;
-				while (cmds->outfiles[++j] != -1)
-				{
-					close(cmds->outfiles[j]);
-					free(cmds->outfiles_name[j]);
-				}
-				free(cmds->outfiles);
-				free(cmds->outfiles_name);
-				cmds->outfiles = NULL;
-				cmds->outfiles_name = NULL;
-				cmds->exec = 0;
-				break ;
-			}
-			j++;
-		}
-		cmds->outfiles[j] = -1;
-	}
-}
 
 char	**malloc_args(t_pipex *pipex, char **cmd)
 {
@@ -262,12 +94,10 @@ void	create_new_nodes(t_pipex *pipex, t_cmd *cmds)
 		pipex->i++;
 }
 
-void	parse_cmd(t_pipex *pipex, t_cmd *cmds)
+void	first_node(t_pipex *pipex, t_cmd *cmds)
 {
 	t_cmd	*tmp;
 
-	if (!cmds)
-		msg_error(ERR_MALLOC, pipex);
 	list_init(cmds);
 	pipex->cmd_nmbs = 0;
 	check_for_parentheses(pipex);
@@ -289,6 +119,15 @@ void	parse_cmd(t_pipex *pipex, t_cmd *cmds)
 		pipex->pid = malloc(sizeof(pid_t) * (pipex->cmd_nmbs));
 		return ;
 	}
+}
+
+void	parse_cmd(t_pipex *pipex, t_cmd *cmds)
+{
+	t_cmd	*tmp;
+
+	if (!cmds)
+		msg_error(ERR_MALLOC, pipex);
+	first_node(pipex, cmds);
 	if (pipex->cmd[pipex->i])
 		pipex->i++;
 	while (pipex->cmd[pipex->i] && !(chre(pipex->cmd[pipex->i], "&&")

@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:46:38 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/23 13:35:55 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/25 18:06:15 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-#include <pipex.h>
-#include <struct.h>
-#include <error.h>
 
 static bool	check_digit(char *str)
 {
@@ -29,10 +26,8 @@ static bool	check_digit(char *str)
 	return (true);
 }
 
-void	ft_exit(t_env *env, t_pipex *pipex, char **str)
+void	basic_exit(t_env *env, t_pipex *pipex, char **str)
 {
-	int	status;
-
 	if (!str[1])
 	{
 		parent_free(pipex);
@@ -46,6 +41,13 @@ void	ft_exit(t_env *env, t_pipex *pipex, char **str)
 		free_split(env->envp, ft_strstrlen(env->envp));
 		exit(1);
 	}
+}
+
+void	ft_exit(t_env *env, t_pipex *pipex, char **str)
+{
+	int	status;
+
+	basic_exit(env, pipex, str);
 	if (!check_digit(str[1]))
 	{
 		ft_putstr_fd(" numeric argument required", 2);
@@ -61,7 +63,6 @@ void	ft_exit(t_env *env, t_pipex *pipex, char **str)
 	parent_free(pipex);
 	free_split(env->envp, ft_strstrlen(env->envp));
 	exit(status);
-	
 }
 
 void	ft_exit_error(t_env *env, int status)

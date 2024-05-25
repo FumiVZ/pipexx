@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:51:45 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/01 17:18:26 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/25 18:07:48 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,5 @@
 # define ERROR_H
 
 # include <minishell.h>
-#include <struct.h>
 
 #endif

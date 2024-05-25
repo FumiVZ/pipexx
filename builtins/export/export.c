@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:45:49 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/25 12:02:32 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/25 17:50:07 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	ft_export(t_env *env, char **cmd)
 	i = 1;
 	while (cmd[i])
 	{
-		if(!is_identifier(cmd[i]))
+		if (!is_identifier(cmd[i]))
 		{
 			ft_putstr_fd("minishell: export: `", 2);
 			ft_putstr_fd(cmd[i], 2);

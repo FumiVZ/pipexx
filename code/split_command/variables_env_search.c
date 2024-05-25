@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   variables_env_search.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 13:31:29 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/25 12:42:07 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/25 18:14:26 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parthing.h"
-
-static bool	is_valid_char(char c)
-{
-	return (ft_isalnum(c) || c == '_');
-}
 
 char	*ifs_value(char **env)
 {

@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 19:23:42 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/23 14:08:51 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/25 18:07:24 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,3 @@ void	init_pipex(t_env *env)
 		pipex->i = child_crt(pipex, env->envp);
 	parent_free(pipex);
 }
-

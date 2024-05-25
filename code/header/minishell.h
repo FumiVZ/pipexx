@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/25 14:12:26 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/25 18:15:15 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <errno.h>
 # include <fcntl.h>
-# include <libft.h>
+# include "libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -28,11 +28,10 @@
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
-# include <struct.h>
-# include <pipex.h>
-# include <error.h>
-# include <child.h>
-
+# include "struct.h"
+# include "pipex.h"
+# include "error.h"
+# include "child.h"
 
 # define ERR_FILE "minishell: %s: %s\n"
 # define ERR_INPUT "Invalid number of arguments."
@@ -69,6 +68,13 @@ void		check_for_parentheses(t_pipex *pipex);
 void		child_exec(t_pipex *pipex, t_cmd *cmds, char **env);
 bool		ft_builtins(t_env *env, t_pipex *pipex, char **args);
 int			is_builtin(char **args);
-
+char		*quote_rm_world(char *str, char *tmp);
+void		malloc_infiles(t_pipex *pipex, t_cmd *cmds, char **cmd);
+int			open_infiles(t_pipex *pipex, char *cmd, char *file, char *infile);
+void		get_infiles(t_pipex *pipex, char **cmd, t_cmd *cmds);
+int			open_outfiles(t_pipex *pipex, char *cmd, char *file);
+void		get_outfiles(t_pipex *pipex, char **cmd, t_cmd *cmds);
+void		malloc_outfiles(t_pipex *pipex, t_cmd *cmds, char **cmd);
+bool		is_valid_char(char c);
 
 #endif

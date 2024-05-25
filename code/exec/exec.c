@@ -3,59 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:06 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/25 14:28:26 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/25 18:23:44 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-bool	ft_builtins(t_env *env, t_pipex *pipex, char **args)
-{
-	if (!args || !args[0])
-		return (0);
-	if (!ft_strncmp(args[0], "echo", 5))
-		ft_echo(env, args);
-	else if (!ft_strncmp(args[0], "exit", 5))
-		ft_exit(env, pipex, args);
-	else if (!ft_strncmp(args[0], "cd", 3))
-		ft_cd(env, args);
-	else if (!ft_strncmp(args[0], "env", 4))
-		ft_env(env);
-	else if (!ft_strncmp(args[0], "pwd", 4))
-		ft_pwd(env);
-	else if (!ft_strncmp(args[0], "export", 7))
-		ft_export(env, args);
-	else if (!ft_strncmp(args[0], "unset", 6))
-		ft_unset(env, args);
-	else
-		return (0);
-	return (1);
-}
-
-int	is_builtin(char **args)
-{
-	if (!args || !args[0])
-		return (0);
-	if (!ft_strncmp(args[0], "echo", 5))
-		return (1);
-	else if (!ft_strncmp(args[0], "exit", 5))
-		return (1);
-	else if (!ft_strncmp(args[0], "cd", 3))
-		return (1);
-	else if (!ft_strncmp(args[0], "env", 4))
-		return (1);
-	else if (!ft_strncmp(args[0], "pwd", 4))
-		return (1);
-	else if (!ft_strncmp(args[0], "export", 7))
-		return (1);
-	else if (!ft_strncmp(args[0], "unset", 6))
-		return (1);
-	else
-		return (0);
-}
 
 static int	is_dir(const char *path, t_pipex *pipex)
 {
@@ -117,6 +72,27 @@ static char	*get_cmd_with_path(t_pipex *pipex, t_cmd *cmds, char **env)
 		return (get_cmd(pipex->paths, cmds->args, pipex));
 }
 
+static void	exec_error(t_pipex *pipex, t_cmd *cmds, char **env)
+{
+	if (pipex->is_dir)
+	{
+		if (errno == EACCES)
+			msg_error_cmd(ERR_ACCESS, *cmds);
+		else
+			msg_error_cmd(ERR_IS_DIR, *cmds);
+		child_free(pipex, env);
+		exit(126);
+	}
+	if (errno == EACCES)
+	{
+		msg_error_cmd(ERR_ACCESS, *cmds);
+		child_free(pipex, env);
+		exit(127);
+	}
+	else
+		msg_error_cmd(ERR_CMD, *cmds);
+}
+
 void	child_exec(t_pipex *pipex, t_cmd *cmds, char **env)
 {
 	redirect(pipex, cmds);
@@ -130,23 +106,7 @@ void	child_exec(t_pipex *pipex, t_cmd *cmds, char **env)
 	pipex->cmd_paths = get_cmd_with_path(pipex, cmds, env);
 	if (!pipex->cmd_paths || errno == EACCES || pipex->is_dir)
 	{
-		if (pipex->is_dir)
-		{
-			if (errno == EACCES)
-				msg_error_cmd(ERR_ACCESS, *cmds);
-			else
-				msg_error_cmd(ERR_IS_DIR, *cmds);
-			child_free(pipex, env);
-			exit(126);
-		}
-		if (errno == EACCES)
-		{
-			msg_error_cmd(ERR_ACCESS, *cmds);
-			child_free(pipex, env);
-			exit(127);
-		}
-		else
-			msg_error_cmd(ERR_CMD, *cmds);
+		exec_error(pipex, cmds, env);
 		child_free(pipex, env);
 		exit(127);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:20:40 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/25 14:04:55 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/25 18:08:25 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@ typedef struct s_pipex
 {
 	pid_t			*pid;
 	int				i;
-	char			**paths; 
+	char			**paths;
 	char			*cmd_paths;
 	char			**cmd;
 	int				cmd_nmbs;
 	int				nb_pipes;
 	int				old0;
 	int				old1;
-	struct s_env 	*env;
+	struct s_env	*env;
 	struct s_cmd	*cmds;
 	bool			is_dir;
 }	t_pipex;
