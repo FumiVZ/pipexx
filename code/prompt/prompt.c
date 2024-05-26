@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:08:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/25 18:08:55 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/26 15:46:09 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ int	main(int ac, char **av, char **envp)
 {
 	t_env				env;
 	struct sigaction	sa;
+	char				**tmp;
+	size_t				i;
 
-	(void)ac;
-	(void)av;
 	sa.sa_sigaction = &signal_handler;
 	sa.sa_flags = SA_SIGINFO;
 	sigemptyset(&sa.sa_mask);
@@ -75,6 +75,21 @@ int	main(int ac, char **av, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	env.status = 0;
 	env.envp = ft_init_env(envp);
+	// tester minishell -c  https://minishell-test.readthedocs.io/en/latest/
+	if (ac == 3 && !ft_strncmp(av[1], "-c", 3))
+	{
+		tmp = ft_split(av[2], ';');
+		i = 0;
+		tmp[ft_strstrlen(tmp) - 1][ft_strlen(tmp[ft_strstrlen(tmp) - 1])
+			- 1] = '\0';
+		while (tmp[i])
+		{
+			minishell(&env, tmp[i]);
+			i++;
+		}
+		free_split(tmp, ft_strstrlen(tmp));
+		return (env.status);
+	}
 	ft_readline(&env);
 	return (0);
 }

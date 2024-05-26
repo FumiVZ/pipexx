@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:19:20 by machrist          #+#    #+#             */
-/*   Updated: 2024/04/25 17:44:19 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/26 14:59:37 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,12 @@ static void	cd_no_args(t_env *env, char **args)
 	char	*tmp;
 	char	**new;
 
+	if (!ft_getenv(env->envp, "HOME"))
+	{
+		ft_putstr_fd("minishell: cd: HOME not set\n", 2);
+		env->status = 1;
+		return ;
+	}
 	if (chdir(ft_getenv(env->envp, "HOME")) == -1)
 		msg_perror(env, "minishell: cd");
 	tmp = ft_strdup(ft_getenv(env->envp, "HOME"));
