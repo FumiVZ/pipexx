@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:08:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/26 15:46:09 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/26 15:48:07 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,10 @@ int	main(int ac, char **av, char **envp)
 	{
 		tmp = ft_split(av[2], ';');
 		i = 0;
-		tmp[ft_strstrlen(tmp) - 1][ft_strlen(tmp[ft_strstrlen(tmp) - 1])
-			- 1] = '\0';
+		if (tmp[ft_strstrlen(tmp) - 1][ft_strlen(tmp[ft_strstrlen(tmp) - 1])
+			- 1] == '\n')
+			tmp[ft_strstrlen(tmp) - 1][ft_strlen(tmp[ft_strstrlen(tmp) - 1])
+				- 1] = '\0';
 		while (tmp[i])
 		{
 			minishell(&env, tmp[i]);
