@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:06 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/25 18:23:44 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/26 14:27:35 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ static int	is_dir(const char *path, t_pipex *pipex)
 {
 	struct stat	statbuf;
 
+	if (!path)
+		return (false);
 	if (stat(path, &statbuf) != 0)
 	{
 		pipex->is_dir = false;
@@ -74,7 +76,8 @@ static char	*get_cmd_with_path(t_pipex *pipex, t_cmd *cmds, char **env)
 
 static void	exec_error(t_pipex *pipex, t_cmd *cmds, char **env)
 {
-	if (pipex->is_dir)
+	if (pipex->is_dir && (cmds->args[0][0] == '/' || !ft_strncmp(*cmds->args,
+				"./", 2)))
 	{
 		if (errno == EACCES)
 			msg_error_cmd(ERR_ACCESS, *cmds);
@@ -82,12 +85,6 @@ static void	exec_error(t_pipex *pipex, t_cmd *cmds, char **env)
 			msg_error_cmd(ERR_IS_DIR, *cmds);
 		child_free(pipex, env);
 		exit(126);
-	}
-	if (errno == EACCES)
-	{
-		msg_error_cmd(ERR_ACCESS, *cmds);
-		child_free(pipex, env);
-		exit(127);
 	}
 	else
 		msg_error_cmd(ERR_CMD, *cmds);
@@ -112,5 +109,5 @@ void	child_exec(t_pipex *pipex, t_cmd *cmds, char **env)
 	}
 	execve(pipex->cmd_paths, cmds->args, env);
 	child_free(pipex, env);
-	exit(12);
+	exit(EXIT_FAILURE);
 }

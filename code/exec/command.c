@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 16:46:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/25 18:31:42 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/26 14:01:15 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	close_files(t_pipex	*pipex, t_cmd *cmd)
 	int	i;
 
 	i = -1;
-	(void) pipex;
 	if (!cmd)
 		return ;
 	if (pipex->old0 != -1 && pipex->old1 != -1)
