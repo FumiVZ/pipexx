@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_ex.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 22:04:48 by vincent           #+#    #+#             */
-/*   Updated: 2024/05/25 17:45:11 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/27 17:35:09 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ void	first_node(t_pipex *pipex, t_cmd *cmds)
 			cmds = cmds->next;
 		pipex->nb_pipes = 2 * (pipex->cmd_nmbs - 1);
 		cmds = tmp;
-		pipex->pid = malloc(sizeof(pid_t) * (pipex->cmd_nmbs));
 		return ;
 	}
 }

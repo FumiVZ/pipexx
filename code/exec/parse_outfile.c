@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_outfile.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:36:24 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/25 17:39:59 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/27 19:02:07 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,44 @@
 int	open_outfiles(t_pipex *pipex, char *cmd, char *file)
 {
 	int		fd;
-	char	*tmp;
+	char	**tmp;
 
 	(void)pipex;
-	tmp = NULL;
-	file = quote_rm_world(file, tmp);
+	tmp = malloc(sizeof(char *) * 2);
+	if (!tmp)
+		return (-1);
+	tmp[0] = ft_strdup(file);
+	if (!tmp[0])
+		return (-1);
+	tmp[1] = NULL;
+	tmp = pattern_matching(tmp, pipex->env->envp, pipex->env);
+	quote_removal(tmp);
+	if (ft_strstrlen(tmp) != 1)
+	{
+		ft_printf_fd(2, "pipex: ambiguous redirect\n");
+		free_split(tmp, ft_strstrlen(tmp));
+		return (-1);
+	}
 	if (chre(cmd, ">"))
-		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		fd = open(tmp[0], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else
-		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		fd = open(tmp[0], O_WRONLY | O_CREAT | O_APPEND, 0644);
+	free_split(tmp, ft_strstrlen(tmp));
 	return (fd);
 }
 
 void	error_outfile(t_pipex *pipex, t_cmd *cmds, char *file)
 {
 	int	j;
-
-	msg_error_outfile(ERR_FILE, *pipex, file);
+	if (errno != 0)
+		msg_error_outfile(ERR_FILE, *pipex, file);
 	pipex->env->status = 1;
 	j = -1;
 	while (cmds->outfiles_name[++j])
 	{
-		close(cmds->outfiles[j]);
+		if (cmds->outfiles[j] > 0)
+			close(cmds->outfiles[j]);
+		cmds->outfiles[j] = -1;
 		free(cmds->outfiles_name[j]);
 	}
 	free(cmds->outfiles);
@@ -62,7 +78,7 @@ void	get_outfiles(t_pipex *pipex, char **cmd, t_cmd *cmds)
 		if (chre(cmd[i], ">") || chre(cmd[i], ">>"))
 		{
 			cmds->outfiles_name[j] = \
-				quote_rm_world(ft_strdup(cmd[i + 1]), NULL);
+				quote_rm_world(cmd[i + 1], NULL);
 			cmds->outfiles[j] = open_outfiles(pipex, cmd[i], cmd[i + 1]);
 			if (cmds->outfiles[j] < 0)
 			{

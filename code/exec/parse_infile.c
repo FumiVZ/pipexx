@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_infile.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:27:05 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/25 17:38:54 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/27 19:01:35 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,24 @@ void	malloc_infiles(t_pipex *pipex, t_cmd *cmds, char **cmd)
 int	open_infiles(t_pipex *pipex, char *cmd, char *file, char *infile_name)
 {
 	int		fd;
-	char	*tmp;
+	char 	**tmp;
 
-	tmp = NULL;
 	if (ft_strncmp(cmd, "<<", 2))
 	{
-		file = quote_rm_world(file, tmp);
-		fd = open(file, O_RDONLY);
+		tmp = malloc(sizeof(char *) * 2);
+		if (!tmp)
+			return (-1);
+		tmp[0] = ft_strdup(file);
+		if (!tmp[0])
+			return (-1);
+		tmp[1] = NULL;
+		tmp = pattern_matching(tmp, pipex->env->envp, pipex->env);
+		quote_removal(tmp);
+		fd = open(tmp[0], O_RDONLY);
 	}
 	else
 		fd = here_doc(pipex, infile_name);
+	free_split(tmp, ft_strstrlen(tmp));
 	return (fd);
 }
 
@@ -56,12 +64,16 @@ void	error_infile(t_pipex *pipex, t_cmd *cmds, char *file)
 {
 	int	j;
 
-	msg_error_infile(ERR_FILE, *pipex, file);
+	if (errno != 0)
+		msg_error_infile(ERR_FILE, *pipex, file);
 	pipex->env->status = 1;
 	j = -1;
-	while (cmds->infiles[++j] != -1)
+
+	while (cmds->infiles_name[++j])
 	{
-		close(cmds->infiles[j]);
+		cmds->infiles[j] = -1;
+		if (cmds->infiles[j] > 0)
+			close(cmds->infiles[j]);
 		free(cmds->infiles_name[j]);
 	}
 	free(cmds->infiles);
@@ -86,7 +98,7 @@ void	get_infiles(t_pipex *pipex, char **cmd, t_cmd *cmds)
 	{
 		if (chre(cmd[i], "<") || chre(cmd[i], "<<"))
 		{
-			cmds->infiles_name[j] = quote_rm_world(ft_strdup(cmd[i + 1]), NULL);
+			cmds->infiles_name[j] = quote_rm_world(cmd[i + 1], NULL);
 			cmds->infiles[j] = open_infiles(pipex, cmd[i], cmd[i + 1],
 					cmds->infiles_name[j]);
 			if (cmds->infiles[j] < 0)
