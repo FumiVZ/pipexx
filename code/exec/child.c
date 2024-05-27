@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 15:53:07 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/25 18:43:17 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/27 18:03:14 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void	single_command(t_pipex *pipex, t_cmd *cmds, char **env)
 
 void	execute_command(t_pipex *pipex, t_cmd *cmds, char **env, int i)
 {
+	int	status;
+	
 	pipex->pid[i] = fork();
 	if (pipex->pid[i] == -1)
 		msg_error(ERR_FORK, pipex);
@@ -56,8 +58,9 @@ void	execute_command(t_pipex *pipex, t_cmd *cmds, char **env, int i)
 		pipe_handle(pipex, cmds);
 		redirect(pipex, cmds);
 		ft_builtins(pipex->env, pipex, cmds->args);
+		status = pipex->env->status;
 		child_free(pipex, env);
-		exit (pipex->env->status);
+		exit (status);
 	}
 }
 

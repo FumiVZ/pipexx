@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:06 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 16:54:03 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:13:17 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ static char	*get_cmd(char **paths, char **cmd_args, t_pipex *pipex)
 		free(tmp);
 		if (!command)
 			return (NULL);
-		if (access(command, X_OK) == 0 || errno == EACCES)
-			return (command);
 		if (is_dir(command, pipex))
+			return (command);
+		if (access(command, X_OK) == 0 || errno == EACCES)
 			return (command);
 		free(command);
 		paths++;
@@ -62,9 +62,9 @@ static char	*get_cmd_with_path(t_pipex *pipex, t_cmd *cmds, char **env)
 {
 	if (cmds->args[0][0] == '/' || !ft_strncmp(*cmds->args, "./", 2))
 	{
-		if (access(cmds->args[0], X_OK) == 0 || errno == EACCES)
-			return (cmds->args[0]);
 		if (is_dir(cmds->args[0], pipex))
+			return (cmds->args[0]);
+		if (access(cmds->args[0], X_OK) == 0 || errno == EACCES)
 			return (cmds->args[0]);
 		ft_printf_fd(2, (char *)ERR_FILE, cmds->args[0], strerror(errno));
 		child_free(pipex, env);
