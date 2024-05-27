@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 22:30:50 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 23:47:31 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/28 00:11:08 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	init_shlvl(t_env *env)
 	int		lvl;
 
 	shlvl = ft_getenv(env->envp, "SHLVL");
-	if (!shlvl)
+	if (!shlvl || !ft_is_int(shlvl) || !ft_check_num(shlvl))
 	{
 		tmp = ft_strdup("SHLVL=1");
 		if (!tmp)

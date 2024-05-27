@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 23:09:16 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/28 00:10:45 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,6 @@ void	init_last_param(t_env *env);
 void	set_last_param(t_env *env, char *last_param);
 void	add_value_to_env(t_env *env, char *var);
 void	set_default_env(t_env *env);
+bool	ft_check_num(char *nptr);
 
 #endif

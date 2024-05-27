@@ -6,13 +6,13 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:46:38 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 18:02:08 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/28 00:10:33 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static bool	ft_check_num(char *nptr)
+bool	ft_check_num(char *nptr)
 {
 	int	i;
 
