@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:06 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/26 14:27:35 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/27 16:54:03 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ static char	*get_cmd_with_path(t_pipex *pipex, t_cmd *cmds, char **env)
 
 static void	exec_error(t_pipex *pipex, t_cmd *cmds, char **env)
 {
-	if (pipex->is_dir && (cmds->args[0][0] == '/' || !ft_strncmp(*cmds->args,
-				"./", 2)))
+	if ((pipex->is_dir && (cmds->args[0][0] == '/' || !ft_strncmp(*cmds->args,
+				"./", 2))) || errno == EACCES)
 	{
 		if (errno == EACCES)
 			msg_error_cmd(ERR_ACCESS, *cmds);

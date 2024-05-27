@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:46:38 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 14:28:40 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/27 17:09:52 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,12 @@ void	ft_exit(t_env *env, t_pipex *pipex, char **str)
 {
 	int	status;
 
+	if (!str[1])
+	{
+		parent_free(pipex);
+		free_split(env->envp, ft_strstrlen(env->envp));
+		exit(0);
+	}
 	if (!ft_is_int(str[1]))
 	{
 		ft_printf_fd(2, "minishell: exit: %s: numeric argument required\n",

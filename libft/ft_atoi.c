@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 10:52:51 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 14:30:44 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/27 17:02:59 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,26 +46,29 @@ int	ft_atoi(const char *str)
 
 int	ft_is_int(const char *nptr)
 {
-	long int	res;
-	int			i;
+	long long int	res;
+	int				i;
+	int				sign;
 
 	res = 0;
 	i = 0;
+	sign = 1;
 	while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
 		i++;
 	if (nptr[i] == '+' || nptr[i] == '-')
-		i++;
+		if (nptr[i++] == '-')
+			s = -1;
 	while (nptr[i] >= '0' && nptr[i] <= '9')
 	{
-		if (res != (res * 10 + nptr[i] - '0') / 10)
-			return (0);
 		res = res * 10 + nptr[i++] - '0';
-		while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
-		{
-			i++;
-			if ((nptr[i] != ' ' || (nptr[i] >= 9 && nptr[i] <= 13)) && !nptr[i])
-				return (0);
-		}
+		if ((sign == 1 && res > INT_MAX) || (sign == -1 && -res < INT_MIN))
+			return (0);
+	}
+	while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
+	{
+		i++;
+		if ((nptr[i] != ' ' || (nptr[i] >= 9 && nptr[i] <= 13)) && !nptr[i])
+			return (0);
 	}
 	if (nptr[i])
 		return (0);

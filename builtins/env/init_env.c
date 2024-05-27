@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 18:06:32 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 16:08:31 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/27 17:08:26 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ char	**ft_init_pwd(char **envp)
 	new = malloc(sizeof(char *) * (ft_strstrlen(envp) + 2));
 	if (!new)
 		exit(1);
-	alloc_env(new, envp);
 	tmp = ft_strjoin("PWD=", pwd);
 	if (!tmp)
 		exit(1);
@@ -141,6 +140,5 @@ char	**ft_init_env(char **envp)
 		exit(1);
 	}
 	alloc_env(new, envp);
-	new = ft_init_pwd(new);
 	return (new);
 }
