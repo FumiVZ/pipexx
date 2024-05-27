@@ -6,7 +6,7 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:06 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 18:13:17 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/27 19:07:29 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static char	*get_cmd(char **paths, char **cmd_args, t_pipex *pipex)
 	char	*tmp;
 	char	*command;
 
+	(void) pipex;
 	if (!paths || !cmd_args)
 		return (NULL);
 	if (access(cmd_args[0], X_OK) == 0 || errno == EACCES)
@@ -48,8 +49,8 @@ static char	*get_cmd(char **paths, char **cmd_args, t_pipex *pipex)
 		free(tmp);
 		if (!command)
 			return (NULL);
-		if (is_dir(command, pipex))
-			return (command);
+/* 		if (is_dir(command, pipex))
+			return (command); */
 		if (access(command, X_OK) == 0 || errno == EACCES)
 			return (command);
 		free(command);
@@ -92,6 +93,7 @@ static void	exec_error(t_pipex *pipex, t_cmd *cmds, char **env)
 
 void	child_exec(t_pipex *pipex, t_cmd *cmds, char **env)
 {
+	pipex->is_dir = false;
 	redirect(pipex, cmds);
 	close_files(pipex, pipex->cmds);
 	close_pipes(pipex, pipex->cmds);
