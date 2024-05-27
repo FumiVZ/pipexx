@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 10:52:51 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 17:13:12 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:02:46 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,29 +48,21 @@ int	ft_is_int(const char *nptr)
 {
 	long long int	res;
 	int				i;
-	int				sign;
 
 	res = 0;
 	i = 0;
-	sign = 1;
 	while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
 		i++;
 	if (nptr[i] == '+' || nptr[i] == '-')
-		if (nptr[i++] == '-')
-			sign = -1;
+		i++;
 	while (nptr[i] >= '0' && nptr[i] <= '9')
 	{
-		res = res * 10 + nptr[i++] - '0';
-		if ((sign == 1 && res > INT_MAX) || (sign == -1 && -res < INT_MIN))
+		if (res != (res * 10 + nptr[i] - '0') / 10)
 			return (0);
+		res = res * 10 + nptr[i++] - '0';
 	}
 	while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
-	{
-		i++;
-		if ((nptr[i] != ' ' || (nptr[i] >= 9 && nptr[i] <= 13)) && !nptr[i])
+		if ((nptr[i++] != ' ' || (nptr[i] >= 9 && nptr[i] <= 13)) && !nptr[i])
 			return (0);
-	}
-	if (nptr[i])
-		return (0);
 	return (1);
 }

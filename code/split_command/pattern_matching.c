@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:39:48 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/25 13:20:30 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/27 22:08:51 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static char	**add_str_env(char **str, t_env *env, size_t i, size_t pos)
 	char	*tmp;
 	char	**new_str;
 
-	tmp = get_value(str[i] + pos, env->envp, env);
+	tmp = full_str(str[i], get_value(str[i] + pos, env->envp, env), pos);
 	free(str[i]);
 	if (!tmp)
 	{

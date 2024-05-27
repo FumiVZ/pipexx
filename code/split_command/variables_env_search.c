@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   variables_env_search.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 13:31:29 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/25 18:14:26 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/27 22:11:43 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,6 @@ size_t	get_len_name(char *str)
 	return (len);
 }
 
-char	*exit_value(char *str, t_env *envp)
-{
-	char	*value;
-	char	*tmp;
-
-	value = ft_itoa(envp->status);
-	if (!value)
-		return (NULL);
-	if (str[1] == '\0' || !is_valid_char(str[1]))
-		return (value);
-	tmp = ft_strjoin(value, str + 1);
-	free(value);
-	return (tmp);
-}
-
 char	*get_value(char *str, char **env, t_env *envp)
 {
 	size_t	i;
@@ -61,7 +46,7 @@ char	*get_value(char *str, char **env, t_env *envp)
 
 	i = 0;
 	if (str[0] == '?')
-		return (exit_value(str, envp));
+		return (ft_itoa(envp->status));
 	while (env[i])
 	{
 		if (!ft_strncmp(env[i], str, get_len_name(str)))
@@ -101,6 +86,33 @@ char	*add_var_env(char *str, char *value, size_t len, size_t pos)
 			ft_strlcpy(new + i, value, ft_strlen(value) + 1);
 			j += ft_strlen(value);
 			i += len;
+		}
+		else
+			new[j++] = str[i++];
+	}
+	new[j] = '\0';
+	free(value);
+	return (new);
+}
+
+char	*full_str(char *str, char *value, size_t pos)
+{
+	char	*new;
+	size_t	i;
+	size_t	j;
+
+	new = malloc(ft_strlen(str) + ft_strlen(value) - get_len_name(str + pos));
+	if (!new)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (i == pos - 1)
+		{
+			ft_strlcpy(new + j, value, ft_strlen(value) + 1);
+			j += ft_strlen(value);
+			i += get_len_name(str + pos) + 1;
 		}
 		else
 			new[j++] = str[i++];

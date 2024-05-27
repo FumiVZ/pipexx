@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parthing.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:44:21 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/25 17:35:03 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/27 22:08:00 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,6 @@ char	*check_pattern_word(char *str);
 char	**clean_str(char **str, size_t pos);
 char	**check_str(char **str);
 char	*quote_rm_world(char *str, char *tmp);
+char	*full_str(char *str, char *value, size_t pos);
 
 #endif
