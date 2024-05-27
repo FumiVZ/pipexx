@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 18:06:32 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 17:08:26 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/27 23:16:17 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,87 +52,10 @@ static void	alloc_env(char **new, char **envp)
 	new[i] = NULL;
 }
 
-// char	**ft_add_env(char **envp, char *name, char *value)
-// {
-// 	char	**new;
-// 	char	*tmp;
-// 	size_t	i;
-// 	size_t	len;
-
-// 	new = malloc(sizeof(char *) * (ft_strstrlen(envp) + 2));
-// 	if (!new)
-// 	{
-// 		perror("minishell: error malloc");
-// 		free_split(envp, ft_strstrlen(envp));
-// 		return (NULL);
-// 	}
-// 	tmp = malloc(ft_strlen(name) + ft_strlen(value) + 2);
-// 	if (!tmp)
-// 	{
-// 		free(new);
-// 		free_split(envp, ft_strstrlen(envp));
-// 		perror("minishell: error malloc");
-// 		return (NULL);
-// 	}
-// 	tmp = ft_strlcpy(tmp, name, ft_strlen(name) + 1);
-// 	tmp[ft_strlen(name) + 1] = '=';
-// 	tmp[ft_strlen(name) + 2] = '\0';
-// 	tmp = ft_strlcat(tmp, value, ft_strlen(name) + ft_strlen(value) + 2);
-// 	i = 0;
-// 	j = 0;
-// 	while (envp[i])
-// 	{
-// 		new[j] = envp[i];
-// 		if (!ft_strncmp(envp[i], name, ft_strlen(name) - 1))
-// 		{
-// 			free(envp[i]);
-// 			new[i] = ft_strlcpy(new[i], tmp, ft_strlen(tmp) + 1);
-// 			j++;
-// 		}
-// 		i++;
-// 		j++;
-// 	}
-// 	new[i] = NULL;
-// 	free(envp);
-// 	return (new);
-// }
-
-char	**ft_init_pwd(char **envp)
-{
-	char	*pwd;
-	char	*tmp;
-	char	**new;
-
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		perror("getcwd");
-		exit(1);
-	}
-	new = malloc(sizeof(char *) * (ft_strstrlen(envp) + 2));
-	if (!new)
-		exit(1);
-	tmp = ft_strjoin("PWD=", pwd);
-	if (!tmp)
-		exit(1);
-	new[ft_strstrlen(envp)] = tmp;
-	if (!new[ft_strstrlen(envp)])
-		exit(1);
-	new[ft_strstrlen(envp) + 1] = NULL;
-	free(pwd);
-	return (new);
-}
-
-char	**ft_init_env(char **envp)
+void	ft_init_env(t_env *env, char **envp)
 {
 	char	**new;
 
-	if (!envp || !*envp)
-	{
-		new = ft_init_pwd(envp);
-		return (new);
-	}
 	new = malloc(sizeof(char *) * (ft_strstrlen(envp) + 1));
 	if (!new)
 	{
@@ -140,5 +63,48 @@ char	**ft_init_env(char **envp)
 		exit(1);
 	}
 	alloc_env(new, envp);
-	return (new);
+	env->envp = new;
+	set_default_env(env);
+}
+
+void	add_value_to_env(t_env *env, char *var)
+{
+	char	**new;
+	size_t	i;
+	size_t	j;
+	bool	check;
+
+	check = false;
+	if (!var)
+		return (free_envp(env->envp));
+	new = malloc(sizeof(char *) * (ft_strstrlen(env->envp) + 2));
+	if (!new)
+		return (free_envp(env->envp));
+	i = 0;
+	j = 0;
+	while (env->envp[i])
+	{
+		if (!ft_strncmp(env->envp[i], var, ft_strlen_c(var, '=')))
+		{
+			free(env->envp[i++]);
+			new[j++] = var;
+			check = true;
+		}
+		else
+			new[j++] = env->envp[i++];
+	}
+	if (check == false)
+		new[j++] = var;
+	new[j] = NULL;
+	free(env->envp);
+	env->envp = new;
+}
+
+void	set_default_env(t_env *env)
+{
+	if (!env->envp)
+		return ;
+	init_pwd(env);
+	init_shlvl(env);
+	init_last_param(env);
 }

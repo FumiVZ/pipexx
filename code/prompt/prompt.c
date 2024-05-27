@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:08:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/27 12:47:57 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/27 23:24:25 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	minishell(t_env *env, char *line)
 {
 	if (!check_syntax(line))
 	{
-		ft_putstr_fd("minishell: syntax error\n", 2);
+		env->status = 1;
 		return ;
 	}
 	env->cmds = ft_word_spliting(line, " \t");
@@ -74,7 +74,9 @@ int	main(int ac, char **av, char **envp)
 		printf("Error: signal\n");
 	signal(SIGQUIT, SIG_IGN);
 	env.status = 0;
-	env.envp = ft_init_env(envp);
+	ft_init_env(&env, envp);
+	if (!env.envp)
+		ft_exit_error(&env, 1);
 	// tester minishell -c  https://minishell-test.readthedocs.io/en/latest/
 	if (ac == 3 && !ft_strncmp(av[1], "-c", 3))
 	{

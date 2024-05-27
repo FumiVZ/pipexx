@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 18:24:29 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 14:24:46 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/27 22:44:32 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 size_t		ft_strstrlen(char **s);
 void		free_split(char **str, size_t pos);
 int			ft_is_int(const char *nptr);
+size_t		ft_strlen_c(const char *s, char c);
 
 int			ft_printf_fd(int fd, const char *format, ...);
 char		*get_next_line(int fd);

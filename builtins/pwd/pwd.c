@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:15:47 by machrist          #+#    #+#             */
-/*   Updated: 2024/04/25 14:47:28 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/28 00:02:40 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,15 @@ void	ft_pwd(t_env *env)
 {
 	char	*pwd;
 
-	pwd = getcwd(NULL, 0);
+	pwd = ft_getenv(env->envp, "PWD");
 	if (!pwd)
 	{
-		perror("minishell: pwd");
 		env->status = 1;
+		printf("\n");
+		init_pwd(env);
 		return ;
 	}
 	printf("%s\n", pwd);
-	free(pwd);
+	init_pwd(env);
 	env->status = 0;
 }
