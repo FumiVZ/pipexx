@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 10:52:51 by machrist          #+#    #+#             */
-/*   Updated: 2023/11/11 16:35:56 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/27 14:30:44 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,32 @@ static long int	ft_strtol(const char *nptr)
 int	ft_atoi(const char *str)
 {
 	return ((int)ft_strtol(str));
+}
+
+int	ft_is_int(const char *nptr)
+{
+	long int	res;
+	int			i;
+
+	res = 0;
+	i = 0;
+	while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
+		i++;
+	if (nptr[i] == '+' || nptr[i] == '-')
+		i++;
+	while (nptr[i] >= '0' && nptr[i] <= '9')
+	{
+		if (res != (res * 10 + nptr[i] - '0') / 10)
+			return (0);
+		res = res * 10 + nptr[i++] - '0';
+		while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
+		{
+			i++;
+			if ((nptr[i] != ' ' || (nptr[i] >= 9 && nptr[i] <= 13)) && !nptr[i])
+				return (0);
+		}
+	}
+	if (nptr[i])
+		return (0);
+	return (1);
 }

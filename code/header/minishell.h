@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/25 18:15:15 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/27 16:07:00 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,6 @@ int			open_outfiles(t_pipex *pipex, char *cmd, char *file);
 void		get_outfiles(t_pipex *pipex, char **cmd, t_cmd *cmds);
 void		malloc_outfiles(t_pipex *pipex, t_cmd *cmds, char **cmd);
 bool		is_valid_char(char c);
+void		ft_env_export(t_env *env);
 
 #endif

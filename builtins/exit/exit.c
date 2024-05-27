@@ -6,29 +6,37 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:46:38 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/26 15:33:15 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/27 14:28:40 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static bool	check_digit(char *str)
-{
-	size_t	i;
+// static bool	check_digit(char *str)
+// {
+// 	size_t	i;
 
-	i = 0;
-	while (str[i] == ' ' || str[i] == '\t')
-	{
-		i++;
-	}
-	while (str[i])
-	{
-		if (!ft_isdigit(str[i]) && str[i] != '-' && str[i] != '+')
-			return (false);
-		i++;
-	}
-	return (true);
-}
+// 	i = 0;
+// 	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\r' || str[i] == '\f')
+// 		i++;
+// 	if (str[i] == '-' || str[i] == '+')
+// 		i++;
+// 	while (str[i])
+// 	{
+// 		if (!ft_isdigit(str[i]))
+// 			return (false);
+// 		i++;
+// 		while (str[i] == ' ' || str[i] == '\t' || str[i] == '\r'
+// 			|| str[i] == '\f')
+// 		{
+// 			i++;
+// 			if ((str[i] != ' ' || str[i] != '\t' || str[i] != '\r'
+// 			|| str[i] != '\f') && !str[i])
+// 				return (true);
+// 		}
+// 	}
+// 	return (true);
+// }
 
 void	basic_exit(t_env *env, t_pipex *pipex, char **str)
 {
@@ -40,7 +48,7 @@ void	basic_exit(t_env *env, t_pipex *pipex, char **str)
 	}
 	if (str[2])
 	{
-		ft_putstr_fd("exit: too many arguments", 2);
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		parent_free(pipex);
 		free_split(env->envp, ft_strstrlen(env->envp));
 		exit(1);
@@ -51,14 +59,15 @@ void	ft_exit(t_env *env, t_pipex *pipex, char **str)
 {
 	int	status;
 
-	basic_exit(env, pipex, str);
-	if (!check_digit(str[1]))
+	if (!ft_is_int(str[1]))
 	{
-		ft_printf_fd(2, "minishell: exit: %s: numeric argument required", str[1]);
+		ft_printf_fd(2, "minishell: exit: %s: numeric argument required\n",
+			str[1]);
 		parent_free(pipex);
 		free_split(env->envp, ft_strstrlen(env->envp));
 		exit(2);
 	}
+	basic_exit(env, pipex, str);
 	status = ft_atoi(str[1]);
 	while (status > 255)
 		status -= 256;

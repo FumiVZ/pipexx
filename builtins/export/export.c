@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:45:49 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/25 17:50:07 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/27 16:08:48 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,11 @@ void	ft_export(t_env *env, char **cmd)
 	size_t	i;
 
 	i = 1;
+	if (!cmd[1])
+	{
+		ft_env_export(env);
+		return ;
+	}
 	while (cmd[i])
 	{
 		if (!is_identifier(cmd[i]))
