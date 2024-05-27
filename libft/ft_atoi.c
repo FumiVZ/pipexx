@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 10:52:51 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 17:02:59 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/27 17:13:12 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	ft_is_int(const char *nptr)
 		i++;
 	if (nptr[i] == '+' || nptr[i] == '-')
 		if (nptr[i++] == '-')
-			s = -1;
+			sign = -1;
 	while (nptr[i] >= '0' && nptr[i] <= '9')
 	{
 		res = res * 10 + nptr[i++] - '0';
