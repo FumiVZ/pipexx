@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:18:11 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/25 18:12:09 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/28 14:38:44 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,6 @@ void	redirect(t_pipex *pipex, t_cmd *cmd);
 void	close_pipes(t_pipex *pipex, t_cmd *cmd);
 int		wait_execve(t_pipex *pipex);
 char	*remove_quotes(char *str);
+void	close_reset(int fd, int fd2);
 
 #endif

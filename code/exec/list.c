@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 17:20:05 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/27 18:09:21 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/28 14:35:55 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,12 @@ void	list_init(t_cmd *head)
 	head->pipe = NULL;
 	head->pipeid = 0;
 	head->exec = 1;
+}
+
+void	close_reset(int fd, int fd2)
+{
+	close(fd);
+	close(fd2);
+	fd = -1;
+	fd2 = -1;
 }
