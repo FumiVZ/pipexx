@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:46:38 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/28 00:10:33 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:46:10 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	basic_exit(t_env *env, t_pipex *pipex, char **str)
 {
 	int	exit_status;
 
+	(void)env;
 	exit_status = 500;
 	if (!str[1])
 		exit_status = 0;
@@ -51,7 +52,10 @@ void	basic_exit(t_env *env, t_pipex *pipex, char **str)
 	if (exit_status != 500)
 	{
 		parent_free(pipex);
-		free_split(env->envp, ft_strstrlen(env->envp));
+		if (env->envp)
+			free_split(env->envp, ft_strstrlen(env->envp));
+		if (env->cmds)
+			free_split(env->cmds, ft_strstrlen(env->cmds));
 		exit(exit_status);
 	}
 }
@@ -67,12 +71,16 @@ void	ft_exit(t_env *env, t_pipex *pipex, char **str)
 	while (status < 0)
 		status += 256;
 	parent_free(pipex);
-	free_split(env->envp, ft_strstrlen(env->envp));
+	if (env->cmds)
+		free_split(env->cmds, ft_strstrlen(env->cmds));
+	if (env->envp)
+		free_split(env->envp, ft_strstrlen(env->envp));
 	exit(status);
 }
 
 void	ft_exit_error(t_env *env, int status)
 {
+	(void)env;
 	ft_putendl_fd("exit", 1);
 	if (env->envp)
 		free_split(env->envp, ft_strstrlen(env->envp));

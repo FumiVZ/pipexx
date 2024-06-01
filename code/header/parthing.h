@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parthing.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:44:21 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/28 14:28:02 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/31 15:55:29 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 # define ERR_OPEN "open failed"
 # define ERR_READ "read failed"
 # define ERR_CLOSE "close failed"
-# define ERR_DUP2 "dup2 failed"
 # define ERR_PIPE "pipe failed"
 # define ERR_FORK "fork failed"
 # define ERR_EXECVE "execve failed"

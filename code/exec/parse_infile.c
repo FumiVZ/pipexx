@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_infile.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:27:05 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/28 14:02:46 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/06/01 14:21:11 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,12 @@ void	malloc_infiles(t_pipex *pipex, t_cmd *cmds, char **cmd)
 		cmds->infiles = malloc(sizeof(int) * (j + 1));
 		if (!cmds->infiles)
 			msg_error(ERR_MALLOC, pipex);
-		else
-			cmds->infiles_name = malloc(sizeof(char *) * (j + 1));
+		cmds->infiles_name = malloc(sizeof(char *) * (j + 1));
 		if (!cmds->infiles_name)
+		{
+			free(cmds->infiles);
 			msg_error(ERR_MALLOC, pipex);
+		}
 		cmds->infiles_name[j] = NULL;
 	}
 }

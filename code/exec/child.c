@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 15:53:07 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/28 15:50:22 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/06/01 14:14:41 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ void	single_command(t_pipex *pipex, t_cmd *cmds, char **env)
 		close_files(pipex, pipex->cmds);
 		if (pipex->old0 != -1 && pipex->old1 != -1)
 		{
-			dup2(pipex->old0, STDIN_FILENO);
-			dup2(pipex->old1, STDOUT_FILENO);
+			secure_dup2(pipex->old0, STDIN_FILENO, pipex);
+			secure_dup2(pipex->old1, STDOUT_FILENO, pipex);
 		}
 		pipex->pid[0] = -1;
 		return ;
@@ -86,6 +86,8 @@ void	multiple_command(t_pipex *pipex, t_cmd *cmds, char **env)
 	{
 		cmds->args = pattern_matching(cmds->args, env, pipex->env);
 		quote_removal(cmds->args);
+		if (!cmds->args)
+			msg_error(ERR_MALLOC, pipex);
 		if (cmds->exec == 1)
 			execute_command(pipex, cmds, env, i);
 		else
@@ -103,14 +105,16 @@ int	child_crt(t_pipex *pipex, char **env)
 	t_cmd	*cmds;
 
 	cmds = malloc(sizeof(t_cmd));
-	parse_cmd(pipex, cmds);
 	pipex->cmds = cmds;
+	parse_cmd(pipex, cmds);
 	if (cmds->next)
 		multiple_command(pipex, cmds, env);
 	else
 	{
 		cmds->args = pattern_matching(cmds->args, env, pipex->env);
 		quote_removal(cmds->args);
+		if (!cmds->args)
+			msg_error(ERR_MALLOC, pipex);
 		single_command(pipex, cmds, env);
 	}
 	if (pipex->cmd[pipex->i])

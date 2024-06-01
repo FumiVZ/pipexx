@@ -6,7 +6,7 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 19:23:42 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 18:13:00 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/31 13:55:04 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,15 @@ void	close_pipes(t_pipex *pipex, t_cmd *cmd)
 	int	i;
 
 	i = 0;
+	if (!cmd)
+		return ;
 	if (!cmd->pipe)
 		return ;
 	while (i < 2 * (pipex->cmd_nmbs - 1))
-		close(cmd->pipe[i++]);
+	{
+		if (cmd->pipe[i] != -1)
+			close(cmd->pipe[i++]);
+	}
 }
 
 int	wait_execve(t_pipex *pipex)
@@ -82,6 +87,7 @@ void	init_pipex(t_env *env)
 	pipex->cmds = NULL;
 	pipex->old0 = -1;
 	pipex->old1 = -1;
+	pipex->cmds = NULL;
 	if (!pipex->paths)
 		pipex->paths = ft_split("/usr/local/bin:\
 			/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:.", ':');

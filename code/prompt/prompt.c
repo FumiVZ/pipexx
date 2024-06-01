@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:08:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/27 23:24:25 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:31:11 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ int	main(int ac, char **av, char **envp)
 	if (ac == 3 && !ft_strncmp(av[1], "-c", 3))
 	{
 		tmp = ft_split(av[2], ';');
+		if (!tmp)
+			ft_exit_error(&env, 1);
 		i = 0;
 		if (tmp[ft_strstrlen(tmp) - 1][ft_strlen(tmp[ft_strstrlen(tmp) - 1])
 			- 1] == '\n')

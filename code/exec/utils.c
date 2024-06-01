@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/13 16:27:22 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/25 18:07:39 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/06/01 15:12:29 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,13 @@ bool	ft_builtins(t_env *env, t_pipex *pipex, char **args)
 	else if (!ft_strncmp(args[0], "exit", 5))
 		ft_exit(env, pipex, args);
 	else if (!ft_strncmp(args[0], "cd", 3))
-		ft_cd(env, args);
+		ft_cd(env, args, pipex);
 	else if (!ft_strncmp(args[0], "env", 4))
 		ft_env(env);
 	else if (!ft_strncmp(args[0], "pwd", 4))
 		ft_pwd(env);
 	else if (!ft_strncmp(args[0], "export", 7))
-		ft_export(env, args);
+		ft_export(env, args, pipex);
 	else if (!ft_strncmp(args[0], "unset", 6))
 		ft_unset(env, args);
 	else
