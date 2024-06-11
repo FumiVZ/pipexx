@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:46:38 by machrist          #+#    #+#             */
-/*   Updated: 2024/06/11 19:38:22 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/11 20:42:15 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	basic_exit(t_env *env, t_pipex *pipex, char **str)
 {
 	int	exit_status;
 
-	exit_status = 500;
+	exit_status = 0;
 	if (!str[1])
 		exit_status = 0;
 	else if (ft_check_num(str[1]) == false || !ft_is_int(str[1]))
@@ -48,7 +48,7 @@ void	basic_exit(t_env *env, t_pipex *pipex, char **str)
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		exit_status = 1;
 	}
-	if (exit_status != 500)
+	if (exit_status == 1 || exit_status == 2)
 	{
 		parent_free(pipex);
 		if (env->envp)
@@ -64,7 +64,10 @@ void	ft_exit(t_env *env, t_pipex *pipex, char **str)
 	int	status;
 
 	basic_exit(env, pipex, str);
-	status = ft_atoi(str[1]);
+	if (!str[1])
+		status = 0;
+	else
+		status = ft_atoi(str[1]);
 	while (status > 255)
 		status -= 256;
 	while (status < 0)
@@ -74,6 +77,7 @@ void	ft_exit(t_env *env, t_pipex *pipex, char **str)
 		free_split(env->cmds, ft_strstrlen(env->cmds));
 	if (env->envp)
 		free_split(env->envp, ft_strstrlen(env->envp));
+	ft_putendl_fd("exit", 1);
 	exit(status);
 }
 
