@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:08:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/06/11 17:38:02 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/11 20:32:49 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ static void	minishell(t_env *env, char *line)
 	init_pipex(env);
 }
 
-static void	signal_handler(int signal, siginfo_t *info, void *context)
+static void	signal_handler(int sig, siginfo_t *info, void *context)
 {
 	(void)context;
-	if (signal == SIGINT)
+	if (sig == SIGINT)
 	{
 		if (info->si_pid != 0)
 		{
@@ -40,6 +40,17 @@ static void	signal_handler(int signal, siginfo_t *info, void *context)
 		}
 		else
 			write(1, "\n", 1);
+	}
+	if (sig == SIGQUIT)
+	{
+		if (info->si_pid == 0)
+			write(1, "Quit\n", 6);
+		else
+		{
+			rl_on_new_line();
+			rl_redisplay();
+			printf("  \b\b");
+		}
 	}
 }
 
@@ -70,9 +81,12 @@ int	main(int ac, char **av, char **envp)
 	sa.sa_sigaction = &signal_handler;
 	sa.sa_flags = SA_SIGINFO;
 	sigemptyset(&sa.sa_mask);
-	if (sigaction(SIGINT, &sa, NULL) == -1)
+	if (sigaction(SIGINT, &sa, NULL) == -1 ||
+		sigaction(SIGQUIT, &sa, NULL) == -1)
+	{
 		printf("Error: signal\n");
-	signal(SIGQUIT, SIG_IGN);
+		return (1);
+	}
 	env.status = 0;
 	ft_init_env(&env, envp);
 	init_last_param(&env, ac, av);
