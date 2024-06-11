@@ -3,23 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   child.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 15:53:07 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/06/11 18:07:14 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/06/11 18:39:03 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-void	signal_handler(int sig)
-{
-	if (sig == SIGQUIT)
-	{
-		ft_printf_fd(2, "Quit: 3\n");
-		exit(131);
-	}
-}
 
 void	single_command(t_pipex *pipex, t_cmd *cmds, char **env)
 {
@@ -41,11 +32,12 @@ void	single_command(t_pipex *pipex, t_cmd *cmds, char **env)
 	{
 		redirect(pipex, cmds);
 		ft_builtins(pipex->env, pipex, cmds->args);
-		if (STDIN_FILENO != pipex->old0)
-			secure_dup2(pipex->old0, STDIN_FILENO, pipex);
-		if (STDOUT_FILENO != pipex->old1)
-			secure_dup2(pipex->old1, STDOUT_FILENO, pipex);
 		close_files(pipex, pipex->cmds);
+		if (pipex->old0 != -1 && pipex->old1 != -1)
+		{
+			secure_dup2(pipex->old0, STDIN_FILENO, pipex);
+			secure_dup2(pipex->old1, STDOUT_FILENO, pipex);
+		}
 		pipex->pid[0] = -1;
 		return ;
 	}
