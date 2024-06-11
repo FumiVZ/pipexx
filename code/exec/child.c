@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 15:53:07 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/06/11 17:55:53 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/06/11 18:07:14 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void	single_command(t_pipex *pipex, t_cmd *cmds, char **env)
 		parent_free(pipex);
 		exit (1);
 	} */
-	signal(SIGINT, signal_handler);
 	if (cmds->exec == 1 && !is_builtin(cmds->args))
 	{
 		pipex->pid[0] = fork();
@@ -72,7 +71,6 @@ void	execute_command(t_pipex *pipex, t_cmd *cmds, char **env, int i)
 	if (pipex->pid[i] == 0 && !is_builtin(cmds->args))
 	{
 		pipe_handle(pipex, cmds);
-/* 		signal(SIGINT, SIG_DFL); */
 		child_exec(pipex, cmds, env);
 	}
 	else if (pipex->pid[i] == 0)
