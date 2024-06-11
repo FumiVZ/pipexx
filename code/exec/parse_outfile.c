@@ -6,7 +6,7 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:36:24 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/27 19:02:07 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/31 15:04:45 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,10 @@ void	malloc_outfiles(t_pipex *pipex, t_cmd *cmds, char **cmd)
 			msg_error(ERR_MALLOC, pipex);
 		cmds->outfiles_name = malloc(sizeof(char *) * (j + 1));
 		if (!cmds->outfiles_name)
+		{
+			free(cmds->outfiles);
 			msg_error(ERR_MALLOC, pipex);
+		}
 		cmds->outfiles_name[j] = NULL;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 17:20:05 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/27 18:09:21 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/31 14:32:12 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ void	free_l(t_cmd *head)
 	t_cmd	*tmp;
 	int		i;
 
-	if (!(head))
-		return ;
 	while (head)
 	{
 		i = -1;
@@ -63,6 +61,7 @@ void	free_l(t_cmd *head)
 		head = head->next;
 		free(tmp);
 	}
+	free(head);
 }
 
 void	list_init(t_cmd *head)
@@ -76,4 +75,12 @@ void	list_init(t_cmd *head)
 	head->pipe = NULL;
 	head->pipeid = 0;
 	head->exec = 1;
+}
+
+void	close_reset(int fd, int fd2)
+{
+	close(fd);
+	close(fd2);
+	fd = -1;
+	fd2 = -1;
 }

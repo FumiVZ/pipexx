@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parthing.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:44:21 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 22:08:00 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/31 15:55:29 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,14 @@
 # define ERR_OPEN "open failed"
 # define ERR_READ "read failed"
 # define ERR_CLOSE "close failed"
-# define ERR_DUP2 "dup2 failed"
 # define ERR_PIPE "pipe failed"
 # define ERR_FORK "fork failed"
 # define ERR_EXECVE "execve failed"
 # define ERR_WAITPID "waitpid failed"
 
-# define ERR_PAR "minishell: syntax error near unexpected token `('"
+# define ERR_PAR "minishell: syntax error near unexpected token `('\n"
 # define ERR_UNDEFINE "syntax error undefine behavior\n"
-# define ERR_TOKEN "minishell: syntax error near unexpected token"
+# define ERR_TOKEN "minishell: syntax error near unexpected token\n"
 
 char	*wildcard_match(const char *pattern);
 char	**ft_word_spliting(char const *s, char *arg);

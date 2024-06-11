@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 18:19:20 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/26 14:59:37 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/01 15:14:14 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static bool	update_env(t_env *env, char **oldpwd, char **pwd)
+static bool	update_env(t_env *env, char **oldpwd, char **pwd, t_pipex *pipex)
 {
 	char	*tmp_pwd;
 	char	*tmp_oldpwd;
@@ -23,7 +23,7 @@ static bool	update_env(t_env *env, char **oldpwd, char **pwd)
 		perror("minishell: error malloc");
 		return (false);
 	}
-	env->envp = ft_export_env(env, tmp_oldpwd);
+	env->envp = ft_export_env(env, tmp_oldpwd, pipex);
 	free(tmp_oldpwd);
 	tmp_pwd = ft_strjoin("PWD=", *pwd);
 	if (!tmp_pwd)
@@ -31,7 +31,7 @@ static bool	update_env(t_env *env, char **oldpwd, char **pwd)
 		perror("minishell: error malloc");
 		return (false);
 	}
-	env->envp = ft_export_env(env, tmp_pwd);
+	env->envp = ft_export_env(env, tmp_pwd, pipex);
 	free(tmp_pwd);
 	return (true);
 }
@@ -63,7 +63,7 @@ static bool	init_cd(t_env *env, char **args, char **oldpwd, char **pwd)
 	return (true);
 }
 
-static void	cd_no_args(t_env *env, char **args)
+static void	cd_no_args(t_env *env, char **args, t_pipex *pipex)
 {
 	char	*tmp;
 	char	**new;
@@ -88,12 +88,12 @@ static void	cd_no_args(t_env *env, char **args)
 	new[0] = args[0];
 	new[1] = tmp;
 	new[2] = NULL;
-	ft_cd(env, new);
+	ft_cd(env, new, pipex);
 	free(tmp);
 	free(new);
 }
 
-static bool	cd_special(t_env *env, char **args)
+static bool	cd_special(t_env *env, char **args, t_pipex *pipex)
 {
 	char	*tmp;
 
@@ -114,30 +114,30 @@ static bool	cd_special(t_env *env, char **args)
 		}
 		free(args[1]);
 		args[1] = tmp;
-		ft_cd(env, args);
+		ft_cd(env, args, pipex);
 		return (true);
 	}
 	return (false);
 }
 
-void	ft_cd(t_env *env, char **args)
+void	ft_cd(t_env *env, char **args, t_pipex *pipex)
 {
 	char	*oldpwd;
 	char	*pwd;
 
 	if (!args[1])
-		return (cd_no_args(env, args));
+		return (cd_no_args(env, args, pipex));
 	if (args[2])
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
 		env->status = 1;
 		return ;
 	}
-	if (cd_special(env, args))
+	if (cd_special(env, args, pipex))
 		return ;
 	if (!init_cd(env, args, &oldpwd, &pwd))
 		return ;
-	if (!update_env(env, &oldpwd, &pwd))
+	if (!update_env(env, &oldpwd, &pwd, pipex))
 	{
 		free(oldpwd);
 		free(pwd);

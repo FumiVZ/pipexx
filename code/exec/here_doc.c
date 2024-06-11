@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:09:04 by vincent           #+#    #+#             */
-/*   Updated: 2024/05/23 12:27:08 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/05/31 16:29:45 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ int	here_doc(t_pipex *pipex, char *infile_name)
 		ft_exit_error(pipex->env, 1);
 	write(pipefd[1], input, ft_strlen(input));
 	close(pipefd[1]);
+	close(pipefd[0]);
 	free(input);
 	return (pipefd[0]);
 }

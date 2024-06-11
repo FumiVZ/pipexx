@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 18:42:59 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 22:19:27 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/28 14:18:38 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,9 @@ static bool	check_par(char *str, bool quote, bool dquote)
 static bool	check_special(char *str, bool quote, bool dquote)
 {
 	size_t	i;
+	bool	flag;
 
+	flag = false;
 	if (str[0] == '|' || str[0] == '&')
 		return (false);
 	i = 0;
@@ -64,8 +66,12 @@ static bool	check_special(char *str, bool quote, bool dquote)
 	{
 		if (is_special_no_par(str[i]) && !quote && !dquote)
 		{
-			if (str[i] == '&' && str[i + 1] != '&')
+			if (str[i] == '&' && str[i + 1] != '&' && !flag)
 				return (msg_err(ERR_TOKEN));
+			else if (str[i] == '&' && str[i + 1] == '&')
+				flag = true;
+			else
+				flag = false;
 			if (is_special_no_par(str[i + 1]))
 				if (str[i] != str[i + 1] || is_special_no_par(str[i + 2]))
 					return (msg_err(ERR_TOKEN));

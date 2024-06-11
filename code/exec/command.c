@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 16:46:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/26 14:01:15 by machrist         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:57:43 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,8 @@ void	close_files(t_pipex	*pipex, t_cmd *cmd)
 	i = -1;
 	if (!cmd)
 		return ;
-	if (pipex->old0 != -1 && pipex->old1 != -1)
-	{
-		close(pipex->old0);
-		close(pipex->old1);
-	}
+	if (pipex->old0 != -1 || pipex->old1 != -1)
+		close_reset(pipex->old0, pipex->old1);
 	while (cmd)
 	{
 		if (cmd->infiles)
@@ -77,20 +74,20 @@ void	pipe_handle(t_pipex *pipex, t_cmd *cmd)
 		ft_printf_fd(2, "pipe is NULL\n");
 	if (cmd->pipeid == 0)
 	{
-		dup2(pipex->cmds->pipe[1], STDOUT_FILENO);
+		secure_dup2(pipex->cmds->pipe[1], STDOUT_FILENO, pipex);
 		close(cmd->pipe[1]);
 		close(cmd->pipe[0]);
 	}
 	else if (cmd->pipeid == pipex->cmd_nmbs - 1)
 	{
-		dup2(pipex->cmds->pipe[2 * cmd->pipeid - 2], STDIN_FILENO);
+		secure_dup2(pipex->cmds->pipe[2 * cmd->pipeid - 2], STDIN_FILENO, pipex);
 		close(pipex->cmds->pipe[2 * cmd->pipeid - 2]);
 		close(pipex->cmds->pipe[2 * cmd->pipeid - 1]);
 	}
 	else
 	{
-		dup2(pipex->cmds->pipe[2 * cmd->pipeid - 2], STDIN_FILENO);
-		dup2(pipex->cmds->pipe[2 * cmd->pipeid + 1], STDOUT_FILENO);
+		secure_dup2(pipex->cmds->pipe[2 * cmd->pipeid - 2], STDIN_FILENO, pipex);
+		secure_dup2(pipex->cmds->pipe[2 * cmd->pipeid + 1], STDOUT_FILENO, pipex);
 		close(pipex->cmds->pipe[2 * cmd->pipeid - 2]);
 		close(pipex->cmds->pipe[2 * cmd->pipeid + 1]);
 	}
@@ -108,7 +105,7 @@ void	redirect(t_pipex *pipex, t_cmd *cmd)
 			i++;
 		if (access(cmd->infiles_name[i - 1], R_OK) == 0)
 		{
-			dup2(cmd->infiles[i - 1], STDIN_FILENO);
+			secure_dup2(cmd->infiles[i - 1], STDIN_FILENO, pipex);
 			close(cmd->infiles[i - 1]);
 		}
 	}
@@ -119,7 +116,7 @@ void	redirect(t_pipex *pipex, t_cmd *cmd)
 			i++;
 		if (access(cmd->outfiles_name[i - 1], W_OK) == 0)
 		{
-			dup2(cmd->outfiles[i - 1], STDOUT_FILENO);
+			secure_dup2(cmd->outfiles[i - 1], STDOUT_FILENO, pipex);
 			close(cmd->outfiles[i - 1]);
 		}
 	}

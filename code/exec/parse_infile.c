@@ -6,7 +6,7 @@
 /*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:27:05 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/27 19:01:35 by vincent          ###   ########.fr       */
+/*   Updated: 2024/06/01 14:21:11 by vincent          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,12 @@ void	malloc_infiles(t_pipex *pipex, t_cmd *cmds, char **cmd)
 		cmds->infiles = malloc(sizeof(int) * (j + 1));
 		if (!cmds->infiles)
 			msg_error(ERR_MALLOC, pipex);
-		else
-			cmds->infiles_name = malloc(sizeof(char *) * (j + 1));
+		cmds->infiles_name = malloc(sizeof(char *) * (j + 1));
 		if (!cmds->infiles_name)
+		{
+			free(cmds->infiles);
 			msg_error(ERR_MALLOC, pipex);
+		}
 		cmds->infiles_name[j] = NULL;
 	}
 }
@@ -39,7 +41,7 @@ void	malloc_infiles(t_pipex *pipex, t_cmd *cmds, char **cmd)
 int	open_infiles(t_pipex *pipex, char *cmd, char *file, char *infile_name)
 {
 	int		fd;
-	char 	**tmp;
+	char	**tmp;
 
 	if (ft_strncmp(cmd, "<<", 2))
 	{
@@ -53,10 +55,10 @@ int	open_infiles(t_pipex *pipex, char *cmd, char *file, char *infile_name)
 		tmp = pattern_matching(tmp, pipex->env->envp, pipex->env);
 		quote_removal(tmp);
 		fd = open(tmp[0], O_RDONLY);
+		free_split(tmp, ft_strstrlen(tmp));
 	}
 	else
 		fd = here_doc(pipex, infile_name);
-	free_split(tmp, ft_strstrlen(tmp));
 	return (fd);
 }
 

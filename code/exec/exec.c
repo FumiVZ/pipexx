@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:06 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 19:07:29 by vincent          ###   ########.fr       */
+/*   Updated: 2024/05/28 15:53:58 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ void	child_exec(t_pipex *pipex, t_cmd *cmds, char **env)
 		exit(127);
 	}
 	execve(pipex->cmd_paths, cmds->args, env);
+	ft_printf_fd(2, "test");
 	child_free(pipex, env);
 	exit(EXIT_FAILURE);
 }

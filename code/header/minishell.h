@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/06/02 18:44:14 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/11 17:37:58 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,14 @@
 # define ERR_ACCESS "minishell: %s: Permission denied\n"
 # define ERR_ACCESS_EMPTY "minishell: Permission denied\n"
 # define ERR_IS_DIR "minishell: %s: Is a directory\n"
+# define ERR_DUP2  "minishell: dup2 failed\n"
 
 void	ft_exit_error(t_env *env, int status);
 void	ft_env(t_env *env);
 void	ft_echo(t_env *env, char **args);
 void	ft_pwd(t_env *env);
-void	ft_cd(t_env *env, char **args);
-void	ft_export(t_env *env, char **cmd);
+void	ft_cd(t_env *env, char **args, t_pipex *pipex);
+void	ft_export(t_env *env, char **cmd, t_pipex *pipex);
 void	ft_unset(t_env *env, char **cmd);
 char	**pattern_matching(char **str, char **env, t_env *envp);
 char	**ft_word_spliting(char const *s, char *arg);
@@ -57,7 +58,7 @@ void	quote_removal(char **str);
 void	ft_free_child(t_env *env);
 void	ft_free_parent(t_env *env);
 void	ft_init_env(t_env *env, char **envp);
-char	**ft_export_env(t_env *env, char *var);
+char	**ft_export_env(t_env *env, char *var, t_pipex *pipex);
 bool	check_syntax(char *str);
 void	ft_readline(t_env *env);
 char	*ft_getenv(char **envp, char *name);
@@ -85,5 +86,6 @@ void	set_last_param(t_env *env, char *last_param);
 void	add_value_to_env(t_env *env, char *var);
 void	set_default_env(t_env *env);
 bool	ft_check_num(char *nptr);
+void    secure_dup2(int oldfd, int newfd, t_pipex *pipex);
 
 #endif
