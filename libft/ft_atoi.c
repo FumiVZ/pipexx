@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 10:52:51 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 18:02:46 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/11 19:37:04 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,27 @@ int	ft_atoi(const char *str)
 	return ((int)ft_strtol(str));
 }
 
+static int is_min_long_long(const char *nptr)
+{
+	int i;
+	const char *min_val = "-9223372036854775808";
+
+	i = 0;
+	while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
+		i++;
+	if (nptr[i] == '-')
+		i++;
+	else
+		return (0);
+	while(nptr[i] == min_val[i])
+	{
+		i++;
+		if (min_val[i] == '\0')
+			return (1);
+	}
+	return (0);
+}
+
 int	ft_is_int(const char *nptr)
 {
 	long long int	res;
@@ -51,6 +72,8 @@ int	ft_is_int(const char *nptr)
 
 	res = 0;
 	i = 0;
+	if (is_min_long_long(nptr))
+		return (1);
 	while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
 		i++;
 	if (nptr[i] == '+' || nptr[i] == '-')
@@ -61,8 +84,5 @@ int	ft_is_int(const char *nptr)
 			return (0);
 		res = res * 10 + nptr[i++] - '0';
 	}
-	while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
-		if ((nptr[i++] != ' ' || (nptr[i] >= 9 && nptr[i] <= 13)) && !nptr[i])
-			return (0);
 	return (1);
 }

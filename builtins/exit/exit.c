@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:46:38 by machrist          #+#    #+#             */
-/*   Updated: 2024/06/11 18:43:37 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/11 19:38:22 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ bool	ft_check_num(char *nptr)
 		i++;
 	while (nptr[i] >= '0' && nptr[i] <= '9')
 		i++;
-	if (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
+	if (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] < 13))
 		i++;
 	if (nptr[i] != '\0')
 		return (false);
@@ -34,7 +34,6 @@ void	basic_exit(t_env *env, t_pipex *pipex, char **str)
 {
 	int	exit_status;
 
-	(void)env;
 	exit_status = 500;
 	if (!str[1])
 		exit_status = 0;
