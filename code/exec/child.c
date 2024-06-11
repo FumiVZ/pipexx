@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 15:53:07 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/06/11 18:39:03 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/11 18:56:59 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ void	single_command(t_pipex *pipex, t_cmd *cmds, char **env)
 	{
 		redirect(pipex, cmds);
 		ft_builtins(pipex->env, pipex, cmds->args);
-		close_files(pipex, pipex->cmds);
 		if (pipex->old0 != -1 && pipex->old1 != -1)
 		{
 			secure_dup2(pipex->old0, STDIN_FILENO, pipex);
 			secure_dup2(pipex->old1, STDOUT_FILENO, pipex);
 		}
+		close_files(pipex, pipex->cmds);
 		pipex->pid[0] = -1;
 		return ;
 	}

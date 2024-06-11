@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:06 by machrist          #+#    #+#             */
-/*   Updated: 2024/06/11 17:34:00 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/06/11 18:54:44 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void	child_exec(t_pipex *pipex, t_cmd *cmds, char **env)
 	if (!pipex->cmd_paths || errno == EACCES || pipex->is_dir)
 	{
 		exec_error(pipex, cmds, env);
+		free_split(pipex->env->envp, ft_strstrlen(pipex->env->envp));
 		child_free(pipex, env);
 		exit(127);
 	}
