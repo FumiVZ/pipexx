@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:08:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/27 23:24:25 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/02 18:40:56 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int	main(int ac, char **av, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	env.status = 0;
 	ft_init_env(&env, envp);
+	init_last_param(&env, ac, av);
 	if (!env.envp)
 		ft_exit_error(&env, 1);
 	// tester minishell -c  https://minishell-test.readthedocs.io/en/latest/

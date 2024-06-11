@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 22:30:50 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/28 00:11:08 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/02 19:00:07 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	init_shlvl(t_env *env)
 	add_value_to_env(env, shlvl);
 }
 
-void	init_last_param(t_env *env)
+void	init_last_param(t_env *env, int ac, char **av)
 {
 	char	*last_param;
 	char	*tmp;
@@ -76,7 +76,7 @@ void	init_last_param(t_env *env)
 	last_param = ft_getenv(env->envp, "_");
 	if (!last_param)
 	{
-		tmp = ft_strdup("_=/bin/bash");
+		tmp = ft_strjoin("_=", av[ac - 1]);
 		if (!tmp)
 			return (free_envp(env->envp));
 		add_value_to_env(env, tmp);
@@ -85,7 +85,6 @@ void	init_last_param(t_env *env)
 	tmp = ft_strjoin("_=", last_param);
 	if (!tmp)
 		return (free_envp(env->envp));
-	free(last_param);
 	add_value_to_env(env, tmp);
 }
 
@@ -108,7 +107,3 @@ void	set_last_param(t_env *env, char *last_param)
 		return (free_envp(env->envp));
 	add_value_to_env(env, tmp);
 }
-
-
-
-

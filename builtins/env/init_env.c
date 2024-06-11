@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 18:06:32 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/27 23:16:17 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/02 19:00:12 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_getenv(char **envp, char *name)
 	len = ft_strlen(name);
 	while (envp[i])
 	{
-		if (!ft_strncmp(envp[i], name, len - 1))
+		if (!ft_strncmp(envp[i], name, len))
 		{
 			if (envp[i][len] != '=')
 				return (NULL);
@@ -106,5 +106,4 @@ void	set_default_env(t_env *env)
 		return ;
 	init_pwd(env);
 	init_shlvl(env);
-	init_last_param(env);
 }

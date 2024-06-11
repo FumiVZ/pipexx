@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/28 00:10:45 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/02 18:44:14 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	ft_env_export(t_env *env);
 void	free_envp(char **envp);
 void	init_pwd(t_env *env);
 void	init_shlvl(t_env *env);
-void	init_last_param(t_env *env);
+void	init_last_param(t_env *env, int ac, char **av);
 void	set_last_param(t_env *env, char *last_param);
 void	add_value_to_env(t_env *env, char *var);
 void	set_default_env(t_env *env);
