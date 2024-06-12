@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/06/11 21:15:21 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/12 17:34:51 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,6 @@ void	set_default_env(t_env *env);
 bool	ft_check_num(char *nptr);
 void    secure_dup2(int oldfd, int newfd, t_pipex *pipex);
 bool	check_syntax_split(char **str);
+long	check_shlvl(char *shlvl);
 
 #endif

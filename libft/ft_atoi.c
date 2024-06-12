@@ -6,13 +6,13 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 10:52:51 by machrist          #+#    #+#             */
-/*   Updated: 2024/06/11 19:37:04 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/12 17:28:20 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static long int	ft_strtol(const char *nptr)
+long int	ft_strtol(const char *nptr)
 {
 	long int	res;
 	int			i;

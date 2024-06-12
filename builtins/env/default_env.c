@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 22:30:50 by machrist          #+#    #+#             */
-/*   Updated: 2024/06/11 17:37:50 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/12 17:34:40 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	init_shlvl(t_env *env)
 {
 	char	*shlvl;
 	char	*tmp;
-	int		lvl;
+	long	lvl;
 
 	shlvl = ft_getenv(env->envp, "SHLVL");
 	if (!shlvl || !ft_is_int(shlvl) || !ft_check_num(shlvl))
@@ -54,10 +54,7 @@ void	init_shlvl(t_env *env)
 		add_value_to_env(env, tmp);
 		return ;
 	}
-	if (ft_strlen(shlvl) > 6)
-		return ;
-	lvl = ft_atoi(shlvl);
-	lvl++;
+	lvl = check_shlvl(shlvl);
 	tmp = ft_itoa(lvl);
 	if (!tmp)
 		return (free_envp(env->envp));
