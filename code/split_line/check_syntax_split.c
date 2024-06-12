@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 21:15:01 by machrist          #+#    #+#             */
-/*   Updated: 2024/06/12 15:43:56 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/12 17:51:13 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,19 @@
 
 static	bool	check_double_special(char **str)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
+	if (str[i][0] == '|' || str[i][0] == '&')
+		return (msg_err_syntax(ERR_TOKEN, str[i][0]));
 	while (str[i])
 	{
 		if (is_special_no_par(str[i][0]))
 		{
 			if (!str[i + 1])
-				return (msg_err(ERR_TOKEN));
+				return (msg_err_syntax(ERR_TOKEN, str[i][0]));
 			else if (is_special_no_par(str[i + 1][0]))
-				return (msg_err(ERR_TOKEN));
+				return (msg_err_syntax(ERR_TOKEN, str[i + 1][0]));
 		}
 		i++;
 	}

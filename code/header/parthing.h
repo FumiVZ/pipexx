@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:44:21 by machrist          #+#    #+#             */
-/*   Updated: 2024/06/11 21:16:04 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/12 17:49:56 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 
 # define ERR_PAR "minishell: syntax error near unexpected token `('\n"
 # define ERR_UNDEFINE "syntax error undefine behavior\n"
-# define ERR_TOKEN "minishell: syntax error near unexpected token\n"
+# define ERR_TOKEN "minishell: syntax error near unexpected token "
 
 char	*wildcard_match(const char *pattern);
 char	**ft_word_spliting(char const *s, char *arg);
