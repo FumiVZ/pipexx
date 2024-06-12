@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/06/12 17:34:51 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/12 17:44:09 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 # define ERR_ACCESS "minishell: %s: Permission denied\n"
 # define ERR_ACCESS_EMPTY "minishell: Permission denied\n"
 # define ERR_IS_DIR "minishell: %s: Is a directory\n"
-# define ERR_DUP2  "minishell: dup2 failed\n"
+# define ERR_DUP2 "minishell: dup2 failed\n"
 
 void	ft_exit_error(t_env *env, int status);
 void	ft_env(t_env *env);
@@ -86,8 +86,9 @@ void	set_last_param(t_env *env, char *last_param);
 void	add_value_to_env(t_env *env, char *var);
 void	set_default_env(t_env *env);
 bool	ft_check_num(char *nptr);
-void    secure_dup2(int oldfd, int newfd, t_pipex *pipex);
+void	secure_dup2(int oldfd, int newfd, t_pipex *pipex);
 bool	check_syntax_split(char **str);
 long	check_shlvl(char *shlvl);
+int		msg_err_syntax(char *err, char c);
 
 #endif
