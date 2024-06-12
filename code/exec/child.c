@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 15:53:07 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/06/12 17:40:45 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/06/12 20:13:12 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int	child_crt(t_pipex *pipex, char **env)
 	cmds = malloc(sizeof(t_cmd));
 	pipex->cmds = cmds;
 	parse_cmd(pipex, cmds);
+/* 	print_list(pipex->cmds); */
 	if (cmds->next)
 		multiple_command(pipex, cmds, env);
 	else

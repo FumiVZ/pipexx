@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 17:20:05 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/06/12 18:13:08 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/06/12 20:08:40 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,26 @@ void	close_reset(int fd, int fd2)
 	close(fd2);
 	fd = -1;
 	fd2 = -1;
+}
+
+void	print_list(t_cmd *head)
+{
+	int i;
+	int count = 0;
+	t_cmd *tmp;
+
+	i = 0;
+	tmp = head;
+	while (tmp)
+	{
+		ft_printf_fd(2, "count = %d\n", count);
+		i = -1;
+		ft_printf_fd(2, "id: %d\n", tmp->id);
+		ft_printf_fd(2, "args: ");
+		while (tmp->args[++i])
+			ft_printf_fd(2, "%s ", tmp->args[i]);
+		ft_printf_fd(2, "\n");
+		count++;
+		tmp = tmp->next;
+	}
 }
