@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 15:53:07 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/06/11 18:56:59 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/06/12 17:40:45 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	execute_command(t_pipex *pipex, t_cmd *cmds, char **env, int i)
 		redirect(pipex, cmds);
 		ft_builtins(pipex->env, pipex, cmds->args);
 		status = pipex->env->status;
+		free_split(pipex->env->envp, ft_strstrlen(pipex->env->envp));
 		child_free(pipex, env);
 		exit (status);
 	}
@@ -78,7 +79,8 @@ void	execute_command(t_pipex *pipex, t_cmd *cmds, char **env, int i)
 
 void	multiple_command(t_pipex *pipex, t_cmd *cmds, char **env)
 {
-	int	i;
+	int		i;
+	t_cmd	*tmp;
 
 	i = 0;
 	crt_pipes(pipex, cmds);
@@ -92,12 +94,15 @@ void	multiple_command(t_pipex *pipex, t_cmd *cmds, char **env)
 			execute_command(pipex, cmds, env, i);
 		else
 			pipex->pid[i] = -1;
+		tmp = cmds;
 		cmds = cmds->next;
 		i++;
 	}
 	close_files(pipex, pipex->cmds);
 	close_pipes(pipex, pipex->cmds);
 	wait_execve(pipex);
+	if (tmp->exec == 0)
+		pipex->env->status = 1;
 }
 
 int	child_crt(t_pipex *pipex, char **env)

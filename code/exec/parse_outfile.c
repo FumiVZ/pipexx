@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_outfile.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:36:24 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/31 15:04:45 by vincent          ###   ########.fr       */
+/*   Updated: 2024/06/12 18:13:45 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	open_outfiles(t_pipex *pipex, char *cmd, char *file)
 void	error_outfile(t_pipex *pipex, t_cmd *cmds, char *file)
 {
 	int	j;
+
 	if (errno != 0)
 		msg_error_outfile(ERR_FILE, *pipex, file);
 	pipex->env->status = 1;
@@ -54,6 +55,7 @@ void	error_outfile(t_pipex *pipex, t_cmd *cmds, char *file)
 			close(cmds->outfiles[j]);
 		cmds->outfiles[j] = -1;
 		free(cmds->outfiles_name[j]);
+		cmds->outfiles_name[j] = NULL;
 	}
 	free(cmds->outfiles);
 	free(cmds->outfiles_name);

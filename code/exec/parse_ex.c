@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_ex.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 22:04:48 by vincent           #+#    #+#             */
-/*   Updated: 2024/05/31 15:08:40 by vincent          ###   ########.fr       */
+/*   Updated: 2024/06/12 18:00:33 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	create_new_nodes(t_pipex *pipex, t_cmd *cmds)
 	if (!tmp)
 		msg_error(ERR_MALLOC, pipex);
 	tmp->args = get_args(pipex, &pipex->cmd[pipex->i]);
-	tmp->pipeid = cmds->pipeid + 1;
+	tmp->id = cmds->id + 1;
 	get_infiles(pipex, &pipex->cmd[pipex->i], tmp);
 	if (pipex->env->status == 0)
 		get_outfiles(pipex, &pipex->cmd[pipex->i], tmp);

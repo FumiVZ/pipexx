@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_infile.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:27:05 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/06/01 14:21:11 by vincent          ###   ########.fr       */
+/*   Updated: 2024/06/12 18:12:34 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ void	error_infile(t_pipex *pipex, t_cmd *cmds, char *file)
 		if (cmds->infiles[j] > 0)
 			close(cmds->infiles[j]);
 		free(cmds->infiles_name[j]);
+		cmds->infiles_name[j] = NULL;
 	}
 	free(cmds->infiles);
 	free(cmds->infiles_name);

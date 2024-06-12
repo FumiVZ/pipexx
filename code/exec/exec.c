@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:06 by machrist          #+#    #+#             */
-/*   Updated: 2024/06/11 20:28:03 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/12 17:37:20 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ static char	*get_cmd_with_path(t_pipex *pipex, t_cmd *cmds, char **env)
 		if (access(cmds->args[0], X_OK) == 0 || errno == EACCES)
 			return (cmds->args[0]);
 		ft_printf_fd(2, (char *)ERR_FILE, cmds->args[0], strerror(errno));
+		free_split(pipex->env->envp, ft_strstrlen(pipex->env->envp));
 		child_free(pipex, env);
 		exit(127);
 	}
@@ -99,6 +100,7 @@ void	child_exec(t_pipex *pipex, t_cmd *cmds, char **env)
 	close_pipes(pipex, pipex->cmds);
 	if (!cmds->args || !cmds->args[0])
 	{
+		free_split(pipex->env->envp, ft_strstrlen(pipex->env->envp));
 		child_free(pipex, env);
 		exit(0);
 	}
@@ -111,6 +113,7 @@ void	child_exec(t_pipex *pipex, t_cmd *cmds, char **env)
 		exit(127);
 	}
 	execve(pipex->cmd_paths, cmds->args, env);
+	free_split(pipex->env->envp, ft_strstrlen(pipex->env->envp));
 	child_free(pipex, env);
 	exit(EXIT_FAILURE);
 }

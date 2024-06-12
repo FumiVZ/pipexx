@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 17:20:05 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/05/31 14:32:12 by vincent          ###   ########.fr       */
+/*   Updated: 2024/06/12 18:13:08 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,12 @@ void	free_files(t_cmd *head)
 		while (head->infiles_name[i])
 		{
 			free(head->infiles_name[i]);
+			head->infiles[i] = -1;
 			i++;
 		}
 		free(head->infiles_name);
 		free(head->infiles);
+		head->infiles_name = NULL;
 	}
 	i = 0;
 	if (head->outfiles_name)
@@ -33,10 +35,12 @@ void	free_files(t_cmd *head)
 		while (head->outfiles_name[i])
 		{
 			free(head->outfiles_name[i]);
+			head->outfiles[i] = -1;
 			i++;
 		}
 		free(head->outfiles_name);
 		free(head->outfiles);
+		head->outfiles_name = NULL;
 	}
 }
 
@@ -73,7 +77,7 @@ void	list_init(t_cmd *head)
 	head->outfiles_name = NULL;
 	head->next = NULL;
 	head->pipe = NULL;
-	head->pipeid = 0;
+	head->id = 0;
 	head->exec = 1;
 }
 

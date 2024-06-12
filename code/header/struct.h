@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:20:40 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/25 18:08:25 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/06/12 18:00:33 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ typedef struct s_cmd
 	char			**infiles_name;
 	int				*outfiles;
 	char			**outfiles_name;
-	int				pipeid;
+	int				id;
 	int				*pipe;
 	int				exec;
 	struct s_cmd	*next;
