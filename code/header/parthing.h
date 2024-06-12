@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parthing.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:44:21 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/31 15:55:29 by vincent          ###   ########.fr       */
+/*   Updated: 2024/06/11 21:16:04 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,6 @@ char	**clean_str(char **str, size_t pos);
 char	**check_str(char **str);
 char	*quote_rm_world(char *str, char *tmp);
 char	*full_str(char *str, char *value, size_t pos);
+bool	is_special_no_par(char c);
 
 #endif

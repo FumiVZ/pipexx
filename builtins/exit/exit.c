@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:46:38 by machrist          #+#    #+#             */
-/*   Updated: 2024/06/11 20:42:15 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/12 15:50:48 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	ft_exit(t_env *env, t_pipex *pipex, char **str)
 		free_split(env->cmds, ft_strstrlen(env->cmds));
 	if (env->envp)
 		free_split(env->envp, ft_strstrlen(env->envp));
-	ft_putendl_fd("exit", 1);
+	ft_putendl_fd("exit", 2);
 	exit(status);
 }
 

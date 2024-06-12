@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   check_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 18:42:59 by machrist          #+#    #+#             */
-/*   Updated: 2024/05/28 14:18:38 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/06/12 15:43:33 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parthing.h>
 
-static bool	is_special_no_par(char c)
+bool	is_special_no_par(char c)
 {
 	return (c == '|' || c == '&' || c == '<' || c == '>');
 }
@@ -60,7 +60,7 @@ static bool	check_special(char *str, bool quote, bool dquote)
 
 	flag = false;
 	if (str[0] == '|' || str[0] == '&')
-		return (false);
+		return (msg_err(ERR_TOKEN));
 	i = 0;
 	while (str[i])
 	{
@@ -79,8 +79,6 @@ static bool	check_special(char *str, bool quote, bool dquote)
 		check_quote(str[i], &quote, &dquote);
 		i++;
 	}
-	if (is_special_no_par(str[i - 1]) && !quote && !dquote)
-		return (msg_err(ERR_TOKEN));
 	return (true);
 }
 

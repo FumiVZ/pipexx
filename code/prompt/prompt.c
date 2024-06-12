@@ -6,7 +6,7 @@
 /*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:08:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/06/11 20:32:49 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/12 15:41:55 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@ static void	minishell(t_env *env, char *line)
 	env->cmds = ft_word_spliting(line, " \t");
 	if (!(env->cmds))
 		return ;
+	if (!check_syntax_split(env->cmds))
+	{
+		env->status = 1;
+		free_split(env->cmds, ft_strstrlen(env->cmds));
+		return ;
+	}
 	init_pipex(env);
 }
 
