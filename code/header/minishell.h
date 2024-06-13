@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/21 18:18:44 by machrist          #+#    #+#             */
-/*   Updated: 2024/06/12 17:44:09 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/12 20:05:58 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@
 # define ERR_IS_DIR "minishell: %s: Is a directory\n"
 # define ERR_DUP2 "minishell: dup2 failed\n"
 
+void	print_list(t_cmd *head);
 void	ft_exit_error(t_env *env, int status);
 void	ft_env(t_env *env);
 void	ft_echo(t_env *env, char **args);
