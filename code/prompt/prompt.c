@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:08:51 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/06/13 15:53:53 by machrist         ###   ########.fr       */
+/*   Updated: 2024/06/13 18:40:40 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static void	signal_handler(int sig, siginfo_t *info, void *context)
 	{
 		if (info->si_pid != 0)
 		{
+			exit(0);
 			printf("\n");
 			rl_on_new_line();
 			rl_replace_line("", 0);

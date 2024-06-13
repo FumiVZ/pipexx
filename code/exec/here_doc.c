@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vincent <vincent@student.42.fr>            +#+  +:+       +#+        */
+/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/14 17:09:04 by vincent           #+#    #+#             */
-/*   Updated: 2024/05/31 16:29:45 by vincent          ###   ########.fr       */
+/*   Updated: 2024/06/13 18:42:43 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+global pid_t	g_child_pid;
 
 static char	*ft_strjoin_free(char *s1, char *s2)
 {
@@ -39,7 +41,7 @@ char	*collect_heredoc_input(char *delimiter)
 			{
 				ft_printf_fd(2, "minishell: syntax error\n");
 				free(tmp);
-				return (NULL);
+				ft_exit_error(NULL, 1);
 			}
 			free(line);
 			break ;
@@ -53,20 +55,36 @@ char	*collect_heredoc_input(char *delimiter)
 
 int	here_doc(t_pipex *pipex, char *infile_name)
 {
-	int		pipefd[2];
-	char	*input;
+	int					pipefd[2];
+	char				*input;
+	pid_t				pid;
 
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe");
 		ft_exit_error(pipex->env, 1);
 	}
-	input = collect_heredoc_input(infile_name);
-	if (!input)
+	ft_printf_fd(2, "TEST\n");
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
 		ft_exit_error(pipex->env, 1);
-	write(pipefd[1], input, ft_strlen(input));
+	}
+	if (pid == 0)
+	{
+		g_child_pid = getpid();
+		input = collect_heredoc_input(infile_name);
+		if (!input)
+			ft_exit_error(pipex->env, 1);
+		write(pipefd[1], input, ft_strlen(input));
+		close(pipefd[1]);
+		close(pipefd[0]);
+		free(input);
+		exit(0);
+	}
+	waitpid(pid, &pipex->env->status, 0);
 	close(pipefd[1]);
 	close(pipefd[0]);
-	free(input);
 	return (pipefd[0]);
 }
