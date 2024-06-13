@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:06 by machrist          #+#    #+#             */
-/*   Updated: 2024/06/12 17:37:20 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/06/13 15:31:52 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	*get_cmd(char **paths, char **cmd_args, t_pipex *pipex)
 	(void) pipex;
 	if (!paths || !cmd_args)
 		return (NULL);
-	if (access(cmd_args[0], X_OK) == 0 || errno == EACCES)
+	if (access(cmd_args[0], X_OK) == 0)
 		return (cmd_args[0]);
 	while (*paths)
 	{

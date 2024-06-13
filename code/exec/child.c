@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 15:53:07 by vzuccare          #+#    #+#             */
-/*   Updated: 2024/06/12 20:13:12 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/06/13 16:04:56 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ int	child_crt(t_pipex *pipex, char **env)
 	cmds = malloc(sizeof(t_cmd));
 	pipex->cmds = cmds;
 	parse_cmd(pipex, cmds);
-/* 	print_list(pipex->cmds); */
 	if (cmds->next)
 		multiple_command(pipex, cmds, env);
 	else
@@ -123,14 +122,13 @@ int	child_crt(t_pipex *pipex, char **env)
 			msg_error(ERR_MALLOC, pipex);
 		single_command(pipex, cmds, env);
 	}
-	if (pipex->cmd[pipex->i])
-		pipex->i++;
 	if (pipex->cmd[pipex->i] && !(((pipex->env->status == 0
-					&& chre(pipex->cmd[pipex->i - 1], "&&")))
-			|| (pipex->env->status != 0 && chre(pipex->cmd[pipex->i - 1],
-					"||"))))
-		while (pipex->cmd[pipex->i] && (!(chre(pipex->cmd[pipex->i], "&&"))
-				|| !(chre(pipex->cmd[pipex->i], "||"))))
+					&& ft_strncmp(pipex->cmd[pipex->i - 1], "&&", 2) == 0))
+			|| (pipex->env->status != 0 && ft_strncmp(pipex->cmd[pipex->i - 1],
+					"||", 2) == 0)))
+		while (pipex->cmd[pipex->i] && \
+			(!(ft_strncmp(pipex->cmd[pipex->i], "&&", 2) == 0)
+				|| !(ft_strncmp(pipex->cmd[pipex->i], "||", 2) == 0)))
 			pipex->i++;
 	return (pipex->i);
 }

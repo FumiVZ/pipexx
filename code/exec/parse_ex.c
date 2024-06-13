@@ -6,7 +6,7 @@
 /*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 22:04:48 by vincent           #+#    #+#             */
-/*   Updated: 2024/06/12 20:13:44 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/06/13 15:58:42 by vzuccare         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,9 @@ void	parse_cmd(t_pipex *pipex, t_cmd *cmds)
 	first_node(pipex, cmds);
 	if (pipex->cmd[pipex->i])
 		pipex->i++;
-	while (pipex->cmd[pipex->i] && (!(chre(pipex->cmd[pipex->i], "&&")) \
-			|| !(chre(pipex->cmd[pipex->i], "||"))))
+	while (pipex->cmd[pipex->i] && \
+		(ft_strncmp(pipex->cmd[pipex->i - 1], "&&", 2) != 0) && \
+			(ft_strncmp(pipex->cmd[pipex->i - 1], "||", 2) != 0))
 		create_new_nodes(pipex, cmds);
 	tmp = cmds;
 	while (cmds->next)
