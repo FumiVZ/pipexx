@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vzuccare <vzuccare@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: machrist <machrist@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/21 17:28:06 by machrist          #+#    #+#             */
-/*   Updated: 2024/06/12 17:37:20 by vzuccare         ###   ########lyon.fr   */
+/*   Updated: 2024/06/13 15:34:44 by machrist         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	*get_cmd(char **paths, char **cmd_args, t_pipex *pipex)
 	(void) pipex;
 	if (!paths || !cmd_args)
 		return (NULL);
-	if (access(cmd_args[0], X_OK) == 0 || errno == EACCES)
+	if (access(cmd_args[0], X_OK) == 0)
 		return (cmd_args[0]);
 	while (*paths)
 	{
@@ -49,9 +49,7 @@ static char	*get_cmd(char **paths, char **cmd_args, t_pipex *pipex)
 		free(tmp);
 		if (!command)
 			return (NULL);
-/* 		if (is_dir(command, pipex))
-			return (command); */
-		if (access(command, X_OK) == 0 || errno == EACCES)
+		if (access(command, X_OK) == 0)
 			return (command);
 		free(command);
 		paths++;
